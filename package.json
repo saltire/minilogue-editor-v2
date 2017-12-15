@@ -1,0 +1,17 @@
+{
+	"name": "babel-webpack-boilerplate",
+	"version": "0.0.0",
+	"description": "Boilerplate app with Babel and Webpack.",
+	"license": "ISC",
+	"scripts": {
+		"clean": "rm -rf public/dist/",
+		"build": "webpack -p",
+		"watch": "webpack -w"
+	},
+	"devDependencies": {
+		"babel-core": "^6.24.0",
+		"babel-loader": "^6.4.1",
+		"babel-preset-env": "^1.6.1",
+		"webpack": "^2.3.2"
+	}
+}
