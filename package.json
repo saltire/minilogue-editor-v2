@@ -6,12 +6,13 @@
 	"scripts": {
 		"clean": "rm -rf public/dist/",
 		"build": "webpack -p",
-		"watch": "webpack -w"
+		"watch": "webpack -w --mode=development"
 	},
 	"devDependencies": {
-		"babel-core": "^6.24.0",
-		"babel-loader": "^6.4.1",
-		"babel-preset-env": "^1.6.1",
-		"webpack": "^2.3.2"
+		"@babel/core": "^7.11.6",
+		"@babel/preset-env": "^7.11.5",
+		"babel-loader": "^8.1.0",
+		"webpack": "^4.44.1",
+		"webpack-cli": "^3.3.12"
 	}
 }
