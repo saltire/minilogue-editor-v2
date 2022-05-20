@@ -1,18 +1,25 @@
 {
 	"name": "babel-webpack-boilerplate",
 	"version": "0.0.0",
-	"description": "Boilerplate app with Babel and Webpack.",
+	"description": "Boilerplate app with Babel, Webpack and SCSS.",
 	"license": "ISC",
 	"scripts": {
 		"clean": "rm -rf public/dist/",
-		"build": "webpack -p",
-		"watch": "webpack -w --mode=development"
+		"build": "webpack --config webpack.prod.js",
+		"watch": "webpack serve --config webpack.dev.js"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.11.6",
-		"@babel/preset-env": "^7.11.5",
-		"babel-loader": "^8.1.0",
-		"webpack": "^4.44.1",
-		"webpack-cli": "^3.3.12"
+		"@babel/core": "^7.18.0",
+		"@babel/preset-env": "^7.18.0",
+		"babel-loader": "^8.2.5",
+		"css-loader": "^6.7.1",
+		"html-webpack-plugin": "^5.5.0",
+		"mini-css-extract-plugin": "^2.6.0",
+		"sass": "^1.52.0",
+		"sass-loader": "^13.0.0",
+		"webpack": "^5.72.1",
+		"webpack-cli": "^4.9.2",
+		"webpack-dev-server": "^4.9.0",
+		"webpack-merge": "^5.8.0"
 	}
 }

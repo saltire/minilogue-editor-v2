@@ -1,5 +1,3 @@
-export default {
-  test() {
-    console.log('Imported successfully.');
-  }
+export function test() {
+  console.log('Imported successfully.');
 }
