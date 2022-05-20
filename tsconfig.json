@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "lib": ["ES2020", "dom"],
+    "module": "ES2020",
+    "moduleResolution": "node",
+    "outDir": "./built",
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2015"
+  }
+}

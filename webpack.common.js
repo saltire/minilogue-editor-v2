@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 
 module.exports = {
+  entry: './src/index.ts',
 	output: {
 		clean: true,
 		filename: '[name].[contenthash].js',
@@ -13,7 +14,7 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				test: /\.js$/,
+				test: /\.[jt]s$/,
 				exclude: /node_modules/,
 				use: 'babel-loader',
 			},
@@ -27,6 +28,9 @@ module.exports = {
       },
 		],
 	},
+  resolve: {
+    extensions: ['.js', '.ts'],
+  },
 	plugins: [
 		new HtmlPlugin(),
 	],
