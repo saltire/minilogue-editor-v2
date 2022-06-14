@@ -1,0 +1,16 @@
+.App {
+  > header {
+    margin-bottom: 2rem;
+    padding: 1em 0;
+    background: #ccc;
+    text-align: center;
+
+    h1 {
+      margin: 0;
+    }
+  }
+
+  > main {
+    text-align: center;
+  }
+}

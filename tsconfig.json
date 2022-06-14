@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
     "esModuleInterop": true,
+    "jsx": "preserve",
     "lib": ["ES2020", "dom"],
     "module": "ES2020",
     "moduleResolution": "node",
-    "outDir": "./built",
+    "outDir": "../built",
     "skipLibCheck": true,
     "strict": true,
     "target": "ES2015"
