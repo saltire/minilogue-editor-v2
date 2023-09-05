@@ -1,7 +1,9 @@
 'use strict';
 
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const HtmlPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 
 module.exports = {
@@ -19,17 +21,20 @@ module.exports = {
 				use: 'babel-loader',
 			},
       {
-        test: /\.s?css$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          { loader: 'sass-loader', options: { sassOptions: { quietDeps: true } } },
-        ],
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
       },
 		],
 	},
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
+  },
+  optimization: {
+    minimizer: [
+      new TerserPlugin(),
+      new CssMinimizerPlugin(),
+    ],
+    splitChunks: { chunks: 'all' },
   },
 	plugins: [
 		new HtmlPlugin(),

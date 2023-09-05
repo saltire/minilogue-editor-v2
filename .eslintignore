@@ -2,4 +2,5 @@
 /dist
 
 .eslintrc.js
+postcss.config.js
 webpack.*.js
