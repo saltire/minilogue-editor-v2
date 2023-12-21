@@ -44,7 +44,9 @@
 		"webpack-merge": "^5.10.0"
 	},
 	"dependencies": {
+		"@reduxjs/toolkit": "^2.0.1",
 		"react": "^18.2.0",
-		"react-dom": "^18.2.0"
+		"react-dom": "^18.2.0",
+		"react-redux": "^9.0.4"
 	}
 }
