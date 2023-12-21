@@ -1,19 +1,11 @@
 import './App.css';
+import Panel from './components/Panel';
 
 
-type AppProps = {
-  name?: string,
-};
-
-export default function App({ name }: AppProps) {
+export default function App() {
   return (
     <div className='App'>
-      <header>
-        <h1>{name || 'React TypeScript Boilerplate App'}</h1>
-      </header>
-      <main>
-        Edit <code>App.jsx</code> and save to hot reload your changes.
-      </main>
+      <Panel />
     </div>
   );
 }

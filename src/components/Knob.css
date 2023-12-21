@@ -1,0 +1,16 @@
+.Knob {
+  .knob-value {
+    width: 40px;
+    height: 40px;
+    margin: 0 auto;
+    border-radius: 100%;
+    background: var(--control-value-background);
+
+    .knob-value-inner {
+      width: 4px;
+      height: 40%;
+      margin: 0 auto;
+      background: var(--value-color);
+    }
+  }
+}
