@@ -1,7 +1,10 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
+
+export type Program = { [param: number]: number };
+
 export type ProgramState = {
-  currentProgram: { [param: string]: number | undefined },
+  currentProgram: Program,
 };
 
 const initialState: ProgramState = {
@@ -13,7 +16,7 @@ const programSlice = createSlice({
   initialState,
   reducers: {
     setPanelParameter: (
-      state, { payload: { parameter, value } }: PayloadAction<{ parameter: string, value: number }>,
+      state, { payload: { parameter, value } }: PayloadAction<{ parameter: number, value: number }>,
     ) => ({ ...state, currentProgram: { ...state.currentProgram, [parameter]: value } }),
   },
 });

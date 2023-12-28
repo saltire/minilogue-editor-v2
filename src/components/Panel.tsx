@@ -1,5 +1,6 @@
 import './Panel.css';
 import { useAppSelector } from '../store';
+import * as programLib from '../minilogue/program';
 import Knob from './Knob';
 import ParameterKnob from './ParameterKnob';
 
@@ -25,8 +26,7 @@ export default function Panel() {
           </div>
 
           <ParameterKnob
-            parameter='BPM'
-            label='Tempo'
+            parameter={programLib.BPM}
             min={100}
             max={3000}
           />
