@@ -197,37 +197,37 @@ const translateLFORate = (value: number, program: Program) => {
   );
 };
 
-type BaseDisplayOption = {
+type BaseDisplayOptions = {
   title: string,
   label?: string,
 };
 
-type ChoiceDisplayOption = BaseDisplayOption & {
+type ChoiceDisplayOptions = BaseDisplayOptions & {
   type: 'choice',
   choices: { [index: number]: string },
   unit?: string,
 };
 
-type IntegerDisplayOption = BaseDisplayOption & {
+type IntegerDisplayOptions = BaseDisplayOptions & {
   type: 'integer',
   func?: (value: number) => number,
   unit?: string,
 };
 
-type NumberDisplayOption = BaseDisplayOption & {
+type NumberDisplayOptions = BaseDisplayOptions & {
   type: 'number',
   func?: (value: number) => number,
 };
 
-type StringDisplayOption = BaseDisplayOption & {
+type StringDisplayOptions = BaseDisplayOptions & {
   type: 'string',
   func?: (value: number, program: Program) => string,
 };
 
-type DisplayOption = ChoiceDisplayOption | IntegerDisplayOption | NumberDisplayOption
-| StringDisplayOption;
+type DisplayOptions = ChoiceDisplayOptions | IntegerDisplayOptions | NumberDisplayOptions
+| StringDisplayOptions;
 
-const DISPLAY_OPTIONS: { [index: number]: DisplayOption } = {
+const DISPLAY_OPTIONS: { [index: number]: DisplayOptions } = {
   [types.PROGRAM_NAME]: {
     title: 'Program Name',
     type: 'string',

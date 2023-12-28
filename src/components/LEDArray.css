@@ -1,0 +1,32 @@
+.led-array {
+  display: table;
+  position: absolute;
+  z-index: 100;
+  top: 0;
+  left: 65px;
+  height: 60px;
+  margin: 0;
+  padding: 0;
+
+  .led-array-value {
+    display: table-row;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    .led-array-light {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border: 0;
+      border-radius: 6px;
+      background: var(--control-value-background);
+      cursor: pointer;
+
+      &.led-array-light-active {
+        border: 1px solid #644;
+        background: #D03445;
+      }
+    }
+  }
+}

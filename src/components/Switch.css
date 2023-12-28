@@ -1,0 +1,28 @@
+.switch-range {
+  display: inline-block;
+  position: relative;
+  margin: 0 auto;
+  border-radius: 10px;
+  background: var(--control-value-background);
+
+  &.switch-range-vertical {
+    width: 20px;
+    height: 56px;
+  }
+
+  &.switch-range-horizontal {
+    width: 56px;
+    height: 20px;
+    margin: 34px 0 12px;
+  }
+
+  .switch-value {
+    position: absolute;
+    box-sizing: border-box;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--control-value-background);
+    border-radius: 50%;
+    background: var(--value-color);
+  }
+}

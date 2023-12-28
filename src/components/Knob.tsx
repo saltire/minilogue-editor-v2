@@ -4,9 +4,8 @@ import {
 } from 'react';
 
 import './Knob.css';
+import { clamp } from '../utils';
 
-
-const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(value, max));
 
 const mapToRange = (
   value: number, inLow: number, inHigh: number, outLow: number, outHigh: number,
@@ -45,32 +44,42 @@ export default function Knob({ value: initValue, onChange, ...props }: KnobProps
   const { min, max, angleOffset, arc, step } = { ...defaults, ...props };
 
   const [value, setValue] = useState(initValue);
-  const knobElement = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    setValue(initValue);
+  }, [initValue]);
+
+  useEffect(() => {
+    onChange?.(value);
+  }, [value]);
+
+  const knobElement = useRef<HTMLDivElement>(null);
   const angle = mapToRange(value, min, max, angleOffset, angleOffset + arc);
 
   const move = useCallback((clientX: number, clientY: number) => {
-    const bbox = knobElement.current?.getBoundingClientRect();
-    const centerX = bbox ? bbox.left + (bbox.width / 2) : 0;
-    const centerY = bbox ? bbox.top + (bbox.height / 2) : 0;
-    const dX = clientX - centerX;
-    const dY = clientY - centerY;
+    if (knobElement.current) {
+      const { width, height, top, left } = knobElement.current.getBoundingClientRect();
+      const centerX = left + (width / 2);
+      const centerY = top + (height / 2);
+      const dX = clientX - centerX;
+      const dY = clientY - centerY;
 
-    let newAngle = Math.atan2(dY, dX) * (180 / Math.PI);
-    if (dX <= 0 && dY >= 0) {
-      newAngle -= 270;
-    }
-    else {
-      newAngle += 90;
-    }
-    const minAngle = angleOffset;
-    const maxAngle = angleOffset + arc;
-    const clamped = clamp(newAngle, minAngle, maxAngle);
-    const mapped = mapToRange(clamped, minAngle, maxAngle, min, max);
-    const newValue = coerceToStep(mapped, min, max, step);
+      let newAngle = Math.atan2(dY, dX) * (180 / Math.PI);
+      if (dX <= 0 && dY >= 0) {
+        newAngle -= 270;
+      }
+      else {
+        newAngle += 90;
+      }
+      const minAngle = angleOffset;
+      const maxAngle = angleOffset + arc;
+      const clamped = clamp(newAngle, minAngle, maxAngle);
+      const mapped = mapToRange(clamped, minAngle, maxAngle, min, max);
+      const newValue = coerceToStep(mapped, min, max, step);
 
-    setValue(newValue);
-  }, []);
+      setValue(newValue);
+    }
+  }, [knobElement]);
 
   const onMouseMove = useCallback((e: MouseEvent) => {
     move(e.clientX, e.clientY);
@@ -99,10 +108,6 @@ export default function Knob({ value: initValue, onChange, ...props }: KnobProps
       return newValue;
     });
   }, []);
-
-  useEffect(() => {
-    onChange?.(value);
-  }, [value]);
 
   return (
     <div

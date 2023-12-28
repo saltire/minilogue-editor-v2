@@ -51,4 +51,17 @@
       }
     }
   }
+
+  .keyboard-octave-leds {
+    position: absolute;
+
+    .led-array {
+      display: flex;
+      position: relative;
+      left: 3px;
+      justify-content: space-between;
+      width: 72px;
+      height: 12px;
+    }
+  }
 }

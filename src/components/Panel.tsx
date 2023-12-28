@@ -1,13 +1,12 @@
 import './Panel.css';
-import { useAppSelector } from '../store';
 import * as programLib from '../minilogue/program';
 import Knob from './Knob';
 import ParameterKnob from './ParameterKnob';
+import LEDArray from './LEDArray';
+import ParameterSwitch from './ParameterSwitch';
 
 
 export default function Panel() {
-  const currentProgram = useAppSelector(({ program }) => program.currentProgram);
-
   return (
     <div className='panel'>
       <header>
@@ -30,10 +29,14 @@ export default function Panel() {
             min={100}
             max={3000}
           />
+
+          <div className='keyboard-octave-leds'>
+            <LEDArray parameter={programLib.KEYBOARD_OCTAVE} />
+          </div>
+
+          <ParameterSwitch parameter={programLib.KEYBOARD_OCTAVE} />
         </div>
       </div>
-
-      {JSON.stringify(currentProgram)}
     </div>
   );
 }
