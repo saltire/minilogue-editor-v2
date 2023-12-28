@@ -1,4 +1,7 @@
-import { MouseEvent as ReactMouseEvent, useCallback, useRef, useState } from 'react';
+import {
+  MouseEvent as ReactMouseEvent, WheelEvent as ReactWheelEvent,
+  useCallback, useEffect, useRef, useState,
+} from 'react';
 
 import './Knob.css';
 
@@ -20,7 +23,7 @@ const coerceToStep = (value: number, low: number, high: number, step: number) =>
   return Math.max(low, Math.min(high, low + nearestStep));
 };
 
-type KnobProps = {
+export type KnobProps = {
   value: number,
   min?: number,
   max?: number,
@@ -47,30 +50,26 @@ export default function Knob({ value: initValue, onChange, ...props }: KnobProps
   const angle = mapToRange(value, min, max, angleOffset, angleOffset + arc);
 
   const move = useCallback((clientX: number, clientY: number) => {
-    setValue(prev => {
-      const bbox = knobElement.current?.getBoundingClientRect();
-      const centerX = bbox ? bbox.left + (bbox.width / 2) : 0;
-      const centerY = bbox ? bbox.top + (bbox.height / 2) : 0;
-      const dX = clientX - centerX;
-      const dY = clientY - centerY;
+    const bbox = knobElement.current?.getBoundingClientRect();
+    const centerX = bbox ? bbox.left + (bbox.width / 2) : 0;
+    const centerY = bbox ? bbox.top + (bbox.height / 2) : 0;
+    const dX = clientX - centerX;
+    const dY = clientY - centerY;
 
-      let newAngle = Math.atan2(dY, dX) * (180 / Math.PI);
-      if (dX <= 0 && dY >= 0) {
-        newAngle -= 270;
-      }
-      else {
-        newAngle += 90;
-      }
-      const minAngle = angleOffset;
-      const maxAngle = angleOffset + arc;
-      const clamped = clamp(newAngle, minAngle, maxAngle);
-      const mapped = mapToRange(clamped, minAngle, maxAngle, min, max);
-      const newValue = coerceToStep(mapped, min, max, step);
-      if (newValue !== prev) {
-        onChange?.(newValue);
-      }
-      return newValue;
-    });
+    let newAngle = Math.atan2(dY, dX) * (180 / Math.PI);
+    if (dX <= 0 && dY >= 0) {
+      newAngle -= 270;
+    }
+    else {
+      newAngle += 90;
+    }
+    const minAngle = angleOffset;
+    const maxAngle = angleOffset + arc;
+    const clamped = clamp(newAngle, minAngle, maxAngle);
+    const mapped = mapToRange(clamped, minAngle, maxAngle, min, max);
+    const newValue = coerceToStep(mapped, min, max, step);
+
+    setValue(newValue);
   }, []);
 
   const onMouseMove = useCallback((e: MouseEvent) => {
@@ -89,29 +88,32 @@ export default function Knob({ value: initValue, onChange, ...props }: KnobProps
     document.addEventListener('mouseup', onMouseUp);
   }, []);
 
+  const onWheel = useCallback((e: ReactWheelEvent) => {
+    e.preventDefault();
+    const { deltaY } = e;
+
+    setValue(prev => {
+      let delta = step;
+      delta = (deltaY >= 0) ? -delta : delta;
+      const newValue = clamp(prev + delta, min, max);
+      return newValue;
+    });
+  }, []);
+
+  useEffect(() => {
+    onChange?.(value);
+  }, [value]);
+
   return (
     <div
-      className='Knob'
+      className='knob-container'
       role='slider'
       title={`${value}`}
       aria-label={`${value}`}
       aria-valuenow={value}
       tabIndex={-1}
       onMouseDown={onMouseDown}
-      onWheel={e => {
-        e.preventDefault();
-        const { deltaY } = e;
-
-        setValue(prev => {
-          let delta = step;
-          delta = (deltaY >= 0) ? -delta : delta;
-          const newValue = clamp(prev + delta, min, max);
-          if (newValue !== prev) {
-            onChange?.(newValue);
-          }
-          return newValue;
-        });
-      }}
+      onWheel={onWheel}
     >
       <div
         className='knob-value'

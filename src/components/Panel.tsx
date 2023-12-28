@@ -1,10 +1,14 @@
 import './Panel.css';
+import { useAppSelector } from '../store';
 import Knob from './Knob';
+import ParameterKnob from './ParameterKnob';
 
 
 export default function Panel() {
+  const currentProgram = useAppSelector(({ program }) => program.currentProgram);
+
   return (
-    <div className='Panel'>
+    <div className='panel'>
       <header>
         <h1 className='program-title'>
           Program
@@ -17,9 +21,19 @@ export default function Panel() {
             <div className='control-wrapper'>
               <Knob value={1023} />
             </div>
+            <p className='control-label label'>Master</p>
           </div>
+
+          <ParameterKnob
+            parameter='BPM'
+            label='Tempo'
+            min={100}
+            max={3000}
+          />
         </div>
       </div>
+
+      {JSON.stringify(currentProgram)}
     </div>
   );
 }

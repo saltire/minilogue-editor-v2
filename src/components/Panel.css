@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Raleway:500,600,700');
 @import url('https://fonts.googleapis.com/css?family=Inconsolata');
 
-.Panel {
+.panel {
   width: 1300px;
   margin: 1em auto;
   padding: 1em 3em;
@@ -42,6 +42,12 @@
         margin: auto;
         padding-bottom: 10px;
         vertical-align: top;
+      }
+
+      .control-label {
+        width: 100%;
+        margin: 0;
+        padding: 0;
       }
     }
   }
