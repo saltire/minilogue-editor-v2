@@ -15,7 +15,7 @@ type SwitchProps = {
 };
 
 export default function Switch({
-  value: initValue, numPositions, vertical, onChange,
+  value: initValue, numPositions, vertical = true, onChange,
 }: SwitchProps) {
   const [value, setValue] = useState(initValue);
 

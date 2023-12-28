@@ -1,0 +1,35 @@
+.switch-label-wrapper {
+  display: inline-block;
+  width: 10px;
+  height: 56px;
+
+  .switch-labels {
+    display: table;
+    height: 100%;
+    margin: 0;
+    margin-left: 3px;
+    padding: 0;
+    overflow: visible;
+    font-size: 8px;
+    text-align: left;
+
+    .switch-label {
+      display: table-row;
+      width: 10px;
+      margin: 0;
+      padding: 0;
+      overflow: visible;
+      list-style: none;
+
+      .switch-value-label {
+        display: table-cell;
+        vertical-align: middle;
+
+        svg {
+          width: 10px;
+          height: 10px;
+        }
+      }
+    }
+  }
+}

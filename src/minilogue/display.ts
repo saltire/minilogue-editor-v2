@@ -1,5 +1,5 @@
 import { Program } from '../slices/programSlice';
-import * as types from './program';
+import * as params from './program';
 
 
 const mapToRange = (
@@ -101,7 +101,7 @@ const cutoffEGIntToPercent = (value: number) => {
 };
 
 const translateVoiceModeDepth = (value: number, program: Program) => {
-  switch (program[types.VOICE_MODE]) {
+  switch (program[params.VOICE_MODE]) {
     case 0: // POLY
       return `${Math.round(mapToRange(value, 0, 1023, 0, 8))}`;
     case 1: // DUO
@@ -171,7 +171,7 @@ const translateVoiceModeDepth = (value: number, program: Program) => {
 };
 
 const translateLFORate = (value: number, program: Program) => {
-  if (!program[types.LFO_BPM_SYNC]) {
+  if (!program[params.LFO_BPM_SYNC]) {
     return `${value}`;
   }
   return rangeToChoice(
@@ -228,174 +228,174 @@ type DisplayOptions = ChoiceDisplayOptions | IntegerDisplayOptions | NumberDispl
 | StringDisplayOptions;
 
 const DISPLAY_OPTIONS: { [index: number]: DisplayOptions } = {
-  [types.PROGRAM_NAME]: {
+  [params.PROGRAM_NAME]: {
     title: 'Program Name',
     type: 'string',
   },
-  [types.VCO1_PITCH]: {
+  [params.VCO1_PITCH]: {
     title: 'VCO1 Pitch',
     label: 'Pitch',
     type: 'integer',
     func: pitchToCents,
     unit: 'Cents',
   },
-  [types.VCO1_SHAPE]: {
+  [params.VCO1_SHAPE]: {
     title: 'VCO1 Shape',
     label: 'Shape',
     type: 'integer',
   },
-  [types.VCO2_PITCH]: {
+  [params.VCO2_PITCH]: {
     title: 'VCO2 Pitch',
     label: 'Pitch',
     type: 'integer',
     func: pitchToCents,
     unit: 'Cents',
   },
-  [types.VCO2_SHAPE]: {
+  [params.VCO2_SHAPE]: {
     title: 'VCO2 Shape',
     label: 'Shape',
     type: 'integer',
   },
-  [types.CROSS_MOD_DEPTH]: {
+  [params.CROSS_MOD_DEPTH]: {
     title: 'Cross Mod Depth',
     label: 'Cross Mod Depth',
     type: 'integer',
   },
-  [types.VCO2_PITCH_EG_INT]: {
+  [params.VCO2_PITCH_EG_INT]: {
     title: 'VCO2 Pitch EG Int',
     label: 'Pitch EG Int',
     type: 'integer',
     func: pitchEGIntToCents,
     unit: 'Cents',
   },
-  [types.VCO1_LEVEL]: {
+  [params.VCO1_LEVEL]: {
     title: 'VCO1 Level',
     label: 'VCO1',
     type: 'integer',
   },
-  [types.VCO2_LEVEL]: {
+  [params.VCO2_LEVEL]: {
     title: 'VCO2 Level',
     label: 'VCO2',
     type: 'integer',
   },
-  [types.NOISE_LEVEL]: {
+  [params.NOISE_LEVEL]: {
     title: 'Noise Level',
     label: 'Noise',
     type: 'integer',
   },
-  [types.CUTOFF]: {
+  [params.CUTOFF]: {
     title: 'Cutoff',
     label: 'Cutoff',
     type: 'integer',
   },
-  [types.RESONANCE]: {
+  [params.RESONANCE]: {
     title: 'Resonance',
     label: 'Resonance',
     type: 'integer',
   },
-  [types.CUTOFF_EG_INT]: {
+  [params.CUTOFF_EG_INT]: {
     title: 'Cutoff EG Int',
     label: 'EG Int',
     type: 'integer',
     func: cutoffEGIntToPercent,
     unit: '%',
   },
-  [types.AMP_VELOCITY]: {
+  [params.AMP_VELOCITY]: {
     title: 'Amp Velocity',
     label: 'Velocity',
     type: 'integer',
   },
-  [types.AMP_EG_ATTACK]: {
+  [params.AMP_EG_ATTACK]: {
     title: 'Amp EG Attack',
     label: 'Attack',
     type: 'integer',
   },
-  [types.AMP_EG_DECAY]: {
+  [params.AMP_EG_DECAY]: {
     title: 'Amp EG Decay',
     label: 'Decay',
     type: 'integer',
   },
-  [types.AMP_EG_SUSTAIN]: {
+  [params.AMP_EG_SUSTAIN]: {
     title: 'Amp EG Sustain',
     label: 'Sustain',
     type: 'integer',
   },
-  [types.AMP_EG_RELEASE]: {
+  [params.AMP_EG_RELEASE]: {
     title: 'Amp EG Release',
     label: 'Release',
     type: 'integer',
   },
-  [types.EG_ATTACK]: {
+  [params.EG_ATTACK]: {
     title: 'EG Attack',
     label: 'Attack',
     type: 'integer',
   },
-  [types.EG_DECAY]: {
+  [params.EG_DECAY]: {
     title: 'EG Decay',
     label: 'Decay',
     type: 'integer',
   },
-  [types.EG_SUSTAIN]: {
+  [params.EG_SUSTAIN]: {
     title: 'EG Sustain',
     label: 'Sustain',
     type: 'integer',
   },
-  [types.EG_RELEASE]: {
+  [params.EG_RELEASE]: {
     title: 'EG Release',
     label: 'Release',
     type: 'integer',
   },
-  [types.LFO_RATE]: {
+  [params.LFO_RATE]: {
     title: 'LFO Rate',
     label: 'Rate',
     type: 'string',
     func: translateLFORate,
   },
-  [types.LFO_INT]: {
+  [params.LFO_INT]: {
     title: 'LFO Int',
     label: 'Int',
     type: 'integer',
   },
-  [types.DELAY_HI_PASS_CUTOFF]: {
+  [params.DELAY_HI_PASS_CUTOFF]: {
     title: 'Delay Hi Pass Cutoff',
     label: 'Hi Pass Cutoff',
     type: 'integer',
   },
-  [types.DELAY_TIME]: {
+  [params.DELAY_TIME]: {
     title: 'Delay Time',
     label: 'Time',
     type: 'integer',
   },
-  [types.DELAY_FEEDBACK]: {
+  [params.DELAY_FEEDBACK]: {
     title: 'Delay Feedback',
     label: 'Feedback',
     type: 'integer',
   },
-  [types.VCO1_OCTAVE]: {
+  [params.VCO1_OCTAVE]: {
     title: 'VCO1 Octave',
     label: 'Octave',
     type: 'choice',
     choices: OCTAVE_CHOICES,
   },
-  [types.VCO1_WAVE]: {
+  [params.VCO1_WAVE]: {
     title: 'VCO1 Wave',
     label: 'Wave',
     type: 'choice',
     choices: WAVE_CHOICES,
   },
-  [types.VCO2_OCTAVE]: {
+  [params.VCO2_OCTAVE]: {
     title: 'VCO2 Octave',
     label: 'Octave',
     type: 'choice',
     choices: OCTAVE_CHOICES,
   },
-  [types.VCO2_WAVE]: {
+  [params.VCO2_WAVE]: {
     title: 'VCO2 Wave',
     label: 'Wave',
     type: 'choice',
     choices: WAVE_CHOICES,
   },
-  [types.SYNC]: {
+  [params.SYNC]: {
     title: 'Oscillator Sync',
     label: 'Sync',
     type: 'choice',
@@ -404,7 +404,7 @@ const DISPLAY_OPTIONS: { [index: number]: DisplayOptions } = {
       1: 'On',
     },
   },
-  [types.RING]: {
+  [params.RING]: {
     title: 'Ring Modulation',
     label: 'Ring',
     type: 'choice',
@@ -413,7 +413,7 @@ const DISPLAY_OPTIONS: { [index: number]: DisplayOptions } = {
       1: 'On',
     },
   },
-  [types.CUTOFF_VELOCITY]: {
+  [params.CUTOFF_VELOCITY]: {
     title: 'Cutoff Velocity',
     label: 'Velocity',
     type: 'choice',
@@ -424,7 +424,7 @@ const DISPLAY_OPTIONS: { [index: number]: DisplayOptions } = {
     },
     unit: '%',
   },
-  [types.CUTOFF_KEYBOARD_TRACK]: {
+  [params.CUTOFF_KEYBOARD_TRACK]: {
     title: 'Cutoff Keyboard Track',
     label: 'Key Track',
     type: 'choice',
@@ -435,7 +435,7 @@ const DISPLAY_OPTIONS: { [index: number]: DisplayOptions } = {
     },
     unit: '%',
   },
-  [types.CUTOFF_TYPE]: {
+  [params.CUTOFF_TYPE]: {
     title: 'Filter Type',
     label: '2-Pole',
     type: 'choice',
@@ -444,7 +444,7 @@ const DISPLAY_OPTIONS: { [index: number]: DisplayOptions } = {
       1: '4-Pole',
     },
   },
-  [types.LFO_TARGET]: {
+  [params.LFO_TARGET]: {
     title: 'LFO Target',
     label: 'Target',
     type: 'choice',
@@ -454,7 +454,7 @@ const DISPLAY_OPTIONS: { [index: number]: DisplayOptions } = {
       2: 'Pitch',
     },
   },
-  [types.LFO_EG]: {
+  [params.LFO_EG]: {
     title: 'LFO EG',
     label: 'EG Mod',
     type: 'choice',
@@ -464,13 +464,13 @@ const DISPLAY_OPTIONS: { [index: number]: DisplayOptions } = {
       2: 'Int',
     },
   },
-  [types.LFO_WAVE]: {
+  [params.LFO_WAVE]: {
     title: 'LFO Wave',
     label: 'Wave',
     type: 'choice',
     choices: WAVE_CHOICES,
   },
-  [types.DELAY_OUTPUT_ROUTING]: {
+  [params.DELAY_OUTPUT_ROUTING]: {
     title: 'Delay Output Routing',
     label: 'Output Routing',
     type: 'choice',
@@ -480,13 +480,13 @@ const DISPLAY_OPTIONS: { [index: number]: DisplayOptions } = {
       2: 'Post-Filter',
     },
   },
-  [types.PORTAMENTO_TIME]: {
+  [params.PORTAMENTO_TIME]: {
     title: 'Portamento Time',
     label: 'Portamento Time',
     type: 'string',
     func: value => (value === 0 ? 'Off' : `${value}`), // 0,1-127 => Off,1-127
   },
-  [types.VOICE_MODE]: {
+  [params.VOICE_MODE]: {
     title: 'Voice Mode',
     label: 'Voice Mode',
     type: 'choice',
@@ -501,23 +501,23 @@ const DISPLAY_OPTIONS: { [index: number]: DisplayOptions } = {
       7: 'Sidechain',
     },
   },
-  [types.VOICE_MODE_DEPTH]: {
+  [params.VOICE_MODE_DEPTH]: {
     title: 'Voice Mode Depth',
     label: 'Voice Mode Depth',
     type: 'string',
     func: translateVoiceModeDepth,
   },
-  [types.BEND_RANGE_POSITIVE]: {
+  [params.BEND_RANGE_POSITIVE]: {
     title: 'Bend Range Positive',
     label: 'Bend Range (+)',
     type: 'integer',
   },
-  [types.BEND_RANGE_NEGATIVE]: {
+  [params.BEND_RANGE_NEGATIVE]: {
     title: 'Bend Range Negative',
     label: 'Bend Range (-)',
     type: 'integer',
   },
-  [types.LFO_KEY_SYNC]: {
+  [params.LFO_KEY_SYNC]: {
     title: 'LFO Key Sync',
     label: 'LFO Key Sync',
     type: 'choice',
@@ -526,7 +526,7 @@ const DISPLAY_OPTIONS: { [index: number]: DisplayOptions } = {
       1: 'On',
     },
   },
-  [types.LFO_BPM_SYNC]: {
+  [params.LFO_BPM_SYNC]: {
     title: 'LFO BPM Sync',
     label: 'LFO BPM Sync',
     type: 'choice',
@@ -535,7 +535,7 @@ const DISPLAY_OPTIONS: { [index: number]: DisplayOptions } = {
       1: 'On',
     },
   },
-  [types.LFO_VOICE_SYNC]: {
+  [params.LFO_VOICE_SYNC]: {
     title: 'LFO Voice Sync',
     label: 'LFO Voice Sync',
     type: 'choice',
@@ -544,7 +544,7 @@ const DISPLAY_OPTIONS: { [index: number]: DisplayOptions } = {
       1: 'On',
     },
   },
-  [types.PORTAMENTO_BPM]: {
+  [params.PORTAMENTO_BPM]: {
     title: 'Portamento BPM',
     label: 'Portamento BPM',
     type: 'choice',
@@ -553,7 +553,7 @@ const DISPLAY_OPTIONS: { [index: number]: DisplayOptions } = {
       1: 'On',
     },
   },
-  [types.PORTAMENTO_MODE]: {
+  [params.PORTAMENTO_MODE]: {
     title: 'Portamento Mode',
     label: 'Portamento Mode',
     type: 'choice',
@@ -562,7 +562,7 @@ const DISPLAY_OPTIONS: { [index: number]: DisplayOptions } = {
       1: 'On',
     },
   },
-  [types.PROGRAM_LEVEL]: {
+  [params.PROGRAM_LEVEL]: {
     title: 'Program Level',
     label: 'Program Level',
     type: 'integer',
@@ -570,7 +570,7 @@ const DISPLAY_OPTIONS: { [index: number]: DisplayOptions } = {
       ((value >= 77) && (value <= 127)) ? mapToRange(value, 77, 127, -25, 25) : 0
     ), // 77~127=-25~+25
   },
-  [types.SLIDER_ASSIGN]: {
+  [params.SLIDER_ASSIGN]: {
     title: 'Slider Assign',
     label: 'Slider Assign',
     type: 'choice',
@@ -606,7 +606,7 @@ const DISPLAY_OPTIONS: { [index: number]: DisplayOptions } = {
       71: 'Voice Mode Depth',
     },
   },
-  [types.KEYBOARD_OCTAVE]: {
+  [params.KEYBOARD_OCTAVE]: {
     title: 'Keyboard Octave',
     label: 'Octave',
     type: 'choice',
@@ -618,28 +618,28 @@ const DISPLAY_OPTIONS: { [index: number]: DisplayOptions } = {
       4: '2',
     },
   },
-  [types.BPM]: {
+  [params.BPM]: {
     title: 'BPM',
     label: 'Tempo',
     type: 'number',
     func: value => value, // 100~3000=10.0~300.0
   },
-  [types.STEP_LENGTH]: {
+  [params.STEP_LENGTH]: {
     title: 'Step Length',
     type: 'integer',
   },
-  [types.SWING]: {
+  [params.SWING]: {
     title: 'Swing',
     type: 'integer', // -75 +75
     func: value => mapToRange(value, 0, 127, -75, 75),
   },
-  [types.DEFAULT_GATE_TIME]: {
+  [params.DEFAULT_GATE_TIME]: {
     title: 'Default Gate Time',
     type: 'integer',
     func: value => mapToRange(value, 0, 71, 0, 100), // 0-71 -> 0-100%
     unit: '%',
   },
-  [types.STEP_RESOLUTION]: {
+  [params.STEP_RESOLUTION]: {
     title: 'Step Resolution',
     type: 'choice',
     choices: {

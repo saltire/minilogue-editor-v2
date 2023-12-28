@@ -24,6 +24,10 @@ module.exports = {
         test: /\.css$/,
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
       },
+      {
+        test: /\.svg$/,
+        use: '@svgr/webpack',
+      },
 		],
 	},
   resolve: {
