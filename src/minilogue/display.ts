@@ -1,5 +1,5 @@
-import { Program } from '../slices/programSlice';
 import * as params from './program';
+import { Program } from './types';
 
 
 const mapToRange = (
@@ -669,7 +669,8 @@ const makeDisplayConversion = (parameter: number) => {
 
   const unit = ('unit' in options && options.unit) ? ` ${options.unit}` : '';
 
-  return (program: Program) => `${formatter(program[parameter], program)}${unit}`;
+  // Fudging the types a bit in this function.
+  return (program: Program) => `${formatter(program[parameter] as number, program)}${unit}`;
 };
 
 const getParameterDisplayValue = (program: Program, parameter: number) => (

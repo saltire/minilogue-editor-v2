@@ -13,7 +13,7 @@ type ParameterKnobProps = Omit<KnobProps, 'value' | 'onChange'> & {
 export default function ParameterKnob({ className, parameter, ...props }: ParameterKnobProps) {
   const dispatch = useAppDispatch();
   const currentProgram = useAppSelector(({ program }) => program.currentProgram);
-  const value = currentProgram[parameter];
+  const value = currentProgram[parameter] as number;
 
   return (
     <div

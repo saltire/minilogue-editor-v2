@@ -1,14 +1,15 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
+import { INIT_PROGRAM } from '../minilogue/program';
+import { Program } from '../minilogue/types';
 
-export type Program = { [param: number]: number };
 
 export type ProgramState = {
   currentProgram: Program,
 };
 
 const initialState: ProgramState = {
-  currentProgram: {},
+  currentProgram: INIT_PROGRAM,
 };
 
 const programSlice = createSlice({

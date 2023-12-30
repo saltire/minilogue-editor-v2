@@ -3,7 +3,7 @@
 	"private": true,
 	"scripts": {
 		"build": "webpack --config webpack.prod.js",
-		"watch": "webpack serve --config webpack.dev.js",
+		"watch": "webpack serve --config webpack.dev.js --port 7070",
 		"check": "tsc --noEmit",
 		"eslint": "eslint ./src",
 		"stylelint": "stylelint ./src",
