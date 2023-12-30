@@ -1,6 +1,6 @@
 // http://www.korg.com/us/support/download/manual/0/544/2890
 
-import { Program } from './types';
+import { IntegerSpec, ParamData, Program } from './types';
 
 
 const INIT_PATCH_STRING = 'UFJPR0luaXQgUHJvZ3JhbSAgICCAAIAAAID/AAD/AIAAAACA/wAAgAAAgAD/////AED//5CQMDDAMAAgPQDw/MgPIv//5QBmTfr/////////////////////////////U0VRRLAEAhAANgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==';
@@ -72,34 +72,6 @@ export const STEP_RESOLUTION = 58;
 const INTEGER = 0;
 const STRING = 1;
 // const BYTES = 2;
-
-type BaseParamData = {
-  parameter: number,
-};
-
-type IntegerSpec = {
-  upperByteOffset?: number,
-  upperBitsOffset?: number,
-  upperBitsWidth?: number,
-  lowerByteOffset?: number,
-  lowerBitsOffset?: number,
-  lowerBitsWidth?: number,
-};
-
-type IntegerParamData = BaseParamData & {
-  type: 0,
-  spec: IntegerSpec,
-};
-
-type StringParamData = BaseParamData & {
-  type: 1,
-  spec: {
-    start: number,
-    end: number,
-  },
-};
-
-type ParamData = IntegerParamData | StringParamData;
 
 export const PARAMETERS: ParamData[] = [
   {
