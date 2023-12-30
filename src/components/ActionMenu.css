@@ -1,0 +1,29 @@
+.action-menu {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+
+  li {
+    display: inline-block;
+    padding: 0 1em;
+
+    .menu-button {
+      border: 0;
+      background: none;
+      cursor: pointer;
+
+      svg {
+        width: 30px;
+        height: 30px;
+      }
+
+      &:hover svg {
+        transform: scale(1.1);
+      }
+
+      &:active svg {
+        transform: scale(.9);
+      }
+    }
+  }
+}

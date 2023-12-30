@@ -16,6 +16,10 @@ const programSlice = createSlice({
   name: 'program',
   initialState,
   reducers: {
+    setCurrentProgram: (state, { payload: program }: PayloadAction<Program>) => ({
+      ...state, currentProgram: program,
+    }),
+
     setPanelParameter: (
       state, { payload: { parameter, value } }: PayloadAction<{ parameter: number, value: number }>,
     ) => ({ ...state, currentProgram: { ...state.currentProgram, [parameter]: value } }),
@@ -23,4 +27,4 @@ const programSlice = createSlice({
 });
 
 export default programSlice;
-export const { setPanelParameter } = programSlice.actions;
+export const { setCurrentProgram, setPanelParameter } = programSlice.actions;
