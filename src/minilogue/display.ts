@@ -1,15 +1,7 @@
 import * as params from './program';
 import { Program } from './types';
+import { mapToRange } from '../utils';
 
-
-const mapToRange = (
-  value: number, inLow: number, inHigh: number, outLow: number, outHigh: number,
-) => {
-  const fromRange = inHigh - inLow;
-  const toRange = outHigh - outLow;
-  const scalar = (value - inLow) / fromRange;
-  return (toRange * scalar) + outLow;
-};
 
 const splitRanges = (
   value: number, ranges: { fromRange: [number, number], toRange: [number, number] }[],

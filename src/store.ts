@@ -1,6 +1,7 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 
+import midiMiddleware from './middleware/midi';
 import programSlice from './slices/programSlice';
 
 
@@ -8,6 +9,8 @@ export const store = configureStore({
   reducer: {
     program: programSlice.reducer,
   },
+  middleware: getDefaultMiddleware => getDefaultMiddleware()
+    .concat(midiMiddleware),
 });
 
 export type AppStore = typeof store;

@@ -4,17 +4,8 @@ import {
 } from 'react';
 
 import './Knob.css';
-import { clamp } from '../utils';
+import { clamp, mapToRange } from '../utils';
 
-
-const mapToRange = (
-  value: number, inLow: number, inHigh: number, outLow: number, outHigh: number,
-) => {
-  const fromRange = inHigh - inLow;
-  const toRange = outHigh - outLow;
-  const scale = (value - inLow) / fromRange;
-  return Math.round((toRange * scale) + outLow);
-};
 
 const coerceToStep = (value: number, low: number, high: number, step: number) => {
   const adjusted = value - low;
@@ -54,7 +45,7 @@ export default function Knob({ value: initValue, onChange, ...props }: KnobProps
   }, [value]);
 
   const knobElement = useRef<HTMLDivElement>(null);
-  const angle = mapToRange(value, min, max, angleOffset, angleOffset + arc);
+  const angle = Math.round(mapToRange(value, min, max, angleOffset, angleOffset + arc));
 
   const move = useCallback((clientX: number, clientY: number) => {
     if (knobElement.current) {
@@ -74,7 +65,7 @@ export default function Knob({ value: initValue, onChange, ...props }: KnobProps
       const minAngle = angleOffset;
       const maxAngle = angleOffset + arc;
       const clamped = clamp(newAngle, minAngle, maxAngle);
-      const mapped = mapToRange(clamped, minAngle, maxAngle, min, max);
+      const mapped = Math.round(mapToRange(clamped, minAngle, maxAngle, min, max));
       const newValue = coerceToStep(mapped, min, max, step);
 
       setValue(newValue);
