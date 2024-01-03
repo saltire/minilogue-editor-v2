@@ -3,6 +3,7 @@ import { Middleware } from '@reduxjs/toolkit';
 import { messageToParameter } from '../minilogue/midi';
 import { setPanelParameter } from '../slices/programSlice';
 import { DISPLAY_OPTIONS } from '../minilogue/display';
+import { connectPort, disconnectPort, receiveMessage } from '../slices/midiSlice';
 
 
 /* eslint-disable no-param-reassign, no-bitwise */
@@ -15,16 +16,15 @@ const midiMiddleware: Middleware = ({ dispatch }) => {
   accessPromise
     .then(access => {
       // console.log({ access });
+      // dispatch(storeAccess(access));
 
       const handleMessage = (event: Event) => {
-        const { data } = event as MIDIMessageEvent;
-        // const { data, timeStamp, target } = event as MIDIMessageEvent;
-        // const copy = { data: [...data], timeStamp, target: target.id };
+        const { data, timeStamp, target } = event as MIDIMessageEvent;
+        const targetId = (target as MIDIPort).id;
 
         // Ignore clock messages for now.
         if (data[0] !== 0xF8) {
           // console.log('message', event);
-
           const [status, code, value] = data;
           const messageType = status >>> 4;
           const channel = status & 0b00001111;
@@ -43,47 +43,44 @@ const midiMiddleware: Middleware = ({ dispatch }) => {
           //   console.log({ program: code + 1 });
           // }
 
-          // dispatch(receiveMIDIMessage(copy));
+          dispatch(receiveMessage({
+            targetId, messageType, channel, code, value, timeStamp,
+          }));
         }
       };
 
-      // Send access granted message
-      // dispatch(grantMIDIAccess(access));
-
-      // Send connected messages for all accessible MIDI ports
       access.inputs.forEach(input => {
-        console.log(input);
-        // const { id, name, manufacturer, state, type } = input;
-        // dispatch(connectMIDIPort({ id, name, manufacturer, state, type }));
+        console.log({ input });
+        const { id, name, manufacturer, state, type } = input;
+        dispatch(connectPort({ id, name, manufacturer, state, type }));
         input.addEventListener('midimessage', handleMessage);
       });
 
-      // access.outputs.forEach(output => {
-      //   const { id, name, manufacturer, state, type } = output;
-      //   dispatch(connectMIDIPort({ id, name, manufacturer, state, type }));
-      // });
+      access.outputs.forEach(output => {
+        console.log({ output });
+        const { id, name, manufacturer, state, type } = output;
+        dispatch(connectPort({ id, name, manufacturer, state, type }));
+      });
 
-      // Attach a listener that will dispatch connected or disconnected messages
-      // for any MIDI port changes
-      // access.addEventListener('statechange', event => {
-      //   console.log('statechange', event);
+      access.addEventListener('statechange', event => {
+        console.log('statechange', event);
 
-      //   const { port } = event as MIDIConnectionEvent;
-      //   const { id, name, manufacturer, state, type } = port;
+        const { port } = event as MIDIConnectionEvent;
+        const { id, name, manufacturer, state, type } = port;
 
-      //   const copy = {
-      //     id, name, manufacturer, state, type,
-      //   };
-      //   if (copy.state === 'connected') {
-      //     // dispatch(connectMIDIPort({ id, name, manufacturer, state, type }));
-      //     if (type === 'input') {
-      //       port.addEventListener('midimessage', handleMessage);
-      //     }
-      //   }
-      //   else {
-      //     // dispatch(disconnectMIDIPort({ id, name, manufacturer, state, type }));
-      //   }
-      // });
+        const copy = {
+          id, name, manufacturer, state, type,
+        };
+        if (copy.state === 'connected') {
+          dispatch(connectPort({ id, name, manufacturer, state, type }));
+          if (type === 'input') {
+            port.addEventListener('midimessage', handleMessage);
+          }
+        }
+        else {
+          dispatch(disconnectPort({ id, name, manufacturer, state, type }));
+        }
+      });
     })
     .catch(console.error);
 

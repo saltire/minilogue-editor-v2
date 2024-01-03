@@ -1,4 +1,7 @@
 .App {
+  width: 1360px;
+  margin: auto;
+
   > header {
     margin-bottom: 2rem;
     padding: 1em 0;
@@ -10,7 +13,15 @@
     }
   }
 
-  > main {
-    text-align: center;
+  .status {
+    display: flex;
+
+    .ports {
+      width: 25%;
+    }
+
+    .message-log {
+      flex-grow: 1;
+    }
   }
 }

@@ -1,0 +1,8 @@
+.message-log {
+  height: 100px;
+  overflow: auto;
+
+  p {
+    margin: 0;
+  }
+}
