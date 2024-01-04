@@ -11,7 +11,7 @@ export const store = configureStore({
     midi: midiSlice.reducer,
     program: programSlice.reducer,
   },
-  middleware: getDefaultMiddleware => getDefaultMiddleware()
+  middleware: getDefaultMiddleware => getDefaultMiddleware({ serializableCheck: false })
     .concat(midiMiddleware),
 });
 

@@ -31,6 +31,7 @@ module.exports = {
       'newlines-between': 'always',
     }],
     'jsx-quotes': [2, 'prefer-single'],
+    'no-bitwise': 0,
     'no-cond-assign': [2, 'except-parens'],
     'no-console': 0,
     'no-multi-assign': 0,

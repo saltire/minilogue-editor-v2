@@ -219,7 +219,7 @@ type StringDisplayOptions = BaseDisplayOptions & {
 type DisplayOptions = ChoiceDisplayOptions | IntegerDisplayOptions | NumberDisplayOptions
 | StringDisplayOptions;
 
-const DISPLAY_OPTIONS: { [index: number]: DisplayOptions } = {
+export const DISPLAY_OPTIONS: { [index: number]: DisplayOptions } = {
   [params.PROGRAM_NAME]: {
     title: 'Program Name',
     type: 'string',
@@ -665,16 +665,9 @@ const makeDisplayConversion = (parameter: number) => {
   return (program: Program) => `${formatter(program[parameter] as number, program)}${unit}`;
 };
 
-const getParameterDisplayValue = (program: Program, parameter: number) => (
+export const getParameterDisplayValue = (program: Program, parameter: number) => (
   makeDisplayConversion(parameter)(program));
 
-const getParameterPanelLabel = (parameter: number) => (DISPLAY_OPTIONS[parameter].label || '');
+export const getParameterPanelLabel = (parameter: number) => (DISPLAY_OPTIONS[parameter].label || '');
 
-const getParameterDisplayName = (parameter: number) => (DISPLAY_OPTIONS[parameter].title || '');
-
-export {
-  getParameterDisplayValue,
-  getParameterPanelLabel,
-  getParameterDisplayName,
-  DISPLAY_OPTIONS,
-};
+export const getParameterDisplayName = (parameter: number) => (DISPLAY_OPTIONS[parameter].title || '');

@@ -2,7 +2,7 @@ import * as params from './program';
 import { mapToRange } from '../utils';
 
 
-const CODE_TO_PARAMETER: { [index: number]: number } = {
+export const CODE_TO_PARAMETER: { [index: number]: number } = {
   16: params.AMP_EG_ATTACK,
   17: params.AMP_EG_DECAY,
   18: params.AMP_EG_SUSTAIN,
@@ -93,12 +93,10 @@ const CODE_TO_CONVERSIONS: { [index: number]: Conversions } = {
   92: THREE_CHOICE_CONVERSIONS,
 };
 
-const messageToParameter = (code: number, value: number) => {
+export const messageToParameter = (code: number, value: number) => {
   const parameterValue = code in CODE_TO_CONVERSIONS
     ? CODE_TO_CONVERSIONS[code].to(value)
     : Math.round(mapToRange(value, 0, 127, 0, 1023));
 
   return [CODE_TO_PARAMETER[code], parameterValue];
 };
-
-export { CODE_TO_PARAMETER, messageToParameter };

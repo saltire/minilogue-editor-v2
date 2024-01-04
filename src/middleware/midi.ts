@@ -1,8 +1,10 @@
 import { Middleware } from '@reduxjs/toolkit';
 
-import { messageToParameter } from '../minilogue/midi';
-import { setPanelParameter } from '../slices/programSlice';
 import { DISPLAY_OPTIONS } from '../minilogue/display';
+import { messageToParameter } from '../minilogue/midi';
+import { decodeProgram } from '../minilogue/program';
+import { isSysexMessage, parseSysexMessage } from '../minilogue/sysex';
+import { setCurrentProgram, setPanelParameter } from '../slices/programSlice';
 import { connectPort, disconnectPort, receiveMessage } from '../slices/midiSlice';
 
 
@@ -22,15 +24,23 @@ const midiMiddleware: Middleware = ({ dispatch }) => {
         const { data, timeStamp, target } = event as MIDIMessageEvent;
         const targetId = (target as MIDIPort).id;
 
+        // Sysex message
+        if (isSysexMessage(data)) {
+          const program = parseSysexMessage(data);
+          if (program) {
+            dispatch(setCurrentProgram(decodeProgram(program)));
+          }
+        }
+
         // Ignore clock messages for now.
-        if (data[0] !== 0xF8) {
-          // console.log('message', event);
+        else if (data[0] !== 0xf8) {
+          console.log('message', event);
           const [status, code, value] = data;
           const messageType = status >>> 4;
           const channel = status & 0b00001111;
-          console.log({ messageType, channel, code, value });
+          // console.log({ messageType, channel, code, value });
 
-          if (messageType === 0xB) {
+          if (messageType === 0xb) {
             const [parameter, translated] = messageToParameter(code, value);
             if (parameter !== undefined && translated !== undefined) {
               const options = DISPLAY_OPTIONS[parameter];
@@ -39,7 +49,7 @@ const midiMiddleware: Middleware = ({ dispatch }) => {
               dispatch(setPanelParameter({ parameter, value: translated }));
             }
           }
-          // else if (messageType === 0xC) {
+          // else if (messageType === 0xc) {
           //   console.log({ program: code + 1 });
           // }
 
@@ -51,34 +61,27 @@ const midiMiddleware: Middleware = ({ dispatch }) => {
 
       access.inputs.forEach(input => {
         console.log({ input });
-        const { id, name, manufacturer, state, type } = input;
-        dispatch(connectPort({ id, name, manufacturer, state, type }));
+        dispatch(connectPort(input));
         input.addEventListener('midimessage', handleMessage);
       });
 
       access.outputs.forEach(output => {
         console.log({ output });
-        const { id, name, manufacturer, state, type } = output;
-        dispatch(connectPort({ id, name, manufacturer, state, type }));
+        dispatch(connectPort(output));
       });
 
       access.addEventListener('statechange', event => {
         console.log('statechange', event);
 
         const { port } = event as MIDIConnectionEvent;
-        const { id, name, manufacturer, state, type } = port;
-
-        const copy = {
-          id, name, manufacturer, state, type,
-        };
-        if (copy.state === 'connected') {
-          dispatch(connectPort({ id, name, manufacturer, state, type }));
-          if (type === 'input') {
+        if (port.state === 'connected') {
+          dispatch(connectPort(port));
+          if (port.type === 'input') {
             port.addEventListener('midimessage', handleMessage);
           }
         }
         else {
-          dispatch(disconnectPort({ id, name, manufacturer, state, type }));
+          dispatch(disconnectPort(port));
         }
       });
     })

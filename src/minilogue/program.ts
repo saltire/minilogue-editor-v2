@@ -599,7 +599,6 @@ export const PARAMETERS: ParamData[] = [
 ];
 
 // A helper to pull out the bitWidth bits starting at bitOffset from the value byte.
-/* eslint-disable no-bitwise */
 const extractBits = (value: number, bitOffset: number, bitWidth: number) => {
   const mask = ((1 << bitWidth) - 1) << bitOffset;
   return (value & mask) >>> bitOffset;
@@ -624,7 +623,7 @@ const decodeInteger = (data: Uint8Array, spec: IntegerSpec) => {
 };
 
 // Parse a minilogue program from the binary format into an object.
-const decodeProgram = (data: Uint8Array) => {
+export const decodeProgram = (data: Uint8Array) => {
   const parsed: Program = {};
   PARAMETERS.forEach(({ parameter, type, spec }) => {
     let value = null;
@@ -653,6 +652,4 @@ const decodeProgram = (data: Uint8Array) => {
   return parsed;
 };
 
-const INIT_PROGRAM = decodeProgram(INIT_PATCH);
-
-export { INIT_PROGRAM };
+export const INIT_PROGRAM = decodeProgram(INIT_PATCH);

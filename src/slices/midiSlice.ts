@@ -10,11 +10,9 @@ export type Message = {
   value: number,
 };
 
-export type Port = Pick<MIDIPort, 'id' | 'name' | 'manufacturer' | 'state' | 'type'>;
-
 export type MidiState = {
   access: MIDIAccess | null,
-  ports: { [portId: string]: Port | undefined },
+  ports: { [portId: string]: MIDIPort | undefined },
   messages: Message[],
 };
 
@@ -30,12 +28,12 @@ const midiSlice = createSlice({
   reducers: {
     storeAccess: (state, { payload: access }: PayloadAction<MIDIAccess>) => ({ ...state, access }),
 
-    connectPort: (state, { payload: port }: PayloadAction<Port>) => ({
+    connectPort: (state, { payload: port }: PayloadAction<MIDIPort>) => ({
       ...state,
       ...state.ports[port.id] ? {} : { ports: { ...state.ports, [port.id]: port } },
     }),
 
-    disconnectPort: (state, { payload: port }: PayloadAction<Port>) => ({
+    disconnectPort: (state, { payload: port }: PayloadAction<MIDIPort>) => ({
       ...state,
       ...state.ports[port.id] ? {
         ports: Object.fromEntries(Object.entries(state.ports).filter(([id]) => id !== port.id)),
