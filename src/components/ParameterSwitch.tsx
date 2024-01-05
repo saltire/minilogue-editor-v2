@@ -4,7 +4,7 @@ import './ParameterSwitch.css';
 import { useAppDispatch, useAppSelector } from '../store';
 import { setPanelParameter } from '../slices/programSlice';
 import Switch from './Switch';
-import { DISPLAY_OPTIONS, getParameterPanelLabel } from '../minilogue/display';
+import { params } from '../minilogue/params';
 import { classList } from '../utils';
 
 
@@ -23,8 +23,8 @@ export default function ParameterSwitch({
   const currentProgram = useAppSelector(({ program }) => program.currentProgram);
   const value = currentProgram[parameter] as number;
 
-  const options = DISPLAY_OPTIONS[parameter];
-  if (options.type !== 'choice') {
+  const param = params[parameter];
+  if (!('choices' in param)) {
     return null;
   }
 
@@ -33,7 +33,7 @@ export default function ParameterSwitch({
       <div className='control-wrapper'>
         <Switch
           value={value}
-          numPositions={Object.keys(options.choices).length}
+          numPositions={param.choices.length}
           vertical={vertical}
           onChange={newValue => dispatch(setPanelParameter({ parameter, value: newValue }))}
         />
@@ -54,9 +54,8 @@ export default function ParameterSwitch({
         {!labels && showLabels && (
           <div className='switch-label-wrapper'>
             <ul className='switch-labels'>
-              {Object.values(options.choices).reverse().map((label, i) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <li key={`label-${i}`} className='switch-label'>
+              {[...param.choices].reverse().map(label => (
+                <li key={label} className='switch-label'>
                   <div className='switch-value-label'>{label}</div>
                 </li>
               ))}
@@ -65,9 +64,7 @@ export default function ParameterSwitch({
         )}
       </div>
 
-      <p className='control-label label'>
-        {getParameterPanelLabel(parameter)}
-      </p>
+      <p className='control-label label'>{param.label}</p>
     </div>
   );
 }

@@ -1,7 +1,8 @@
 import { useAppDispatch, useAppSelector } from '../store';
 import { setPanelParameter } from '../slices/programSlice';
 import Knob, { KnobProps } from './Knob';
-import { getParameterDisplayValue, getParameterPanelLabel } from '../minilogue/display';
+import { getParameterDisplayValue } from '../minilogue/display';
+import { params } from '../minilogue/params';
 import { classList } from '../utils';
 
 
@@ -26,7 +27,7 @@ export default function ParameterKnob({ className, parameter, ...props }: Parame
           onChange={newValue => dispatch(setPanelParameter({ parameter, value: newValue }))}
           {...props}
         />
-        <p className='control-label label'>{getParameterPanelLabel(parameter)}</p>
+        <p className='control-label label'>{params[parameter].label}</p>
       </div>
     </div>
   );

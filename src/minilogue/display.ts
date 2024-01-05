@@ -1,4 +1,4 @@
-import * as params from './program';
+import * as params from './params';
 import { Program } from './types';
 import { mapToRange } from '../utils';
 

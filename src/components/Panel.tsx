@@ -2,7 +2,7 @@ import './Panel.css';
 import SawtoothIcon from '../assets/saw.svg';
 import SquareIcon from '../assets/square.svg';
 import TriangleIcon from '../assets/triangle.svg';
-import * as params from '../minilogue/program';
+import * as params from '../minilogue/params';
 import ActionMenu from './ActionMenu';
 import Knob from './Knob';
 import ParameterKnob from './ParameterKnob';
