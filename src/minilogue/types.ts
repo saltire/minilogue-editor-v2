@@ -1,8 +1,7 @@
 export type Program = { [param: number]: string | number | null };
 
-type BaseParamData = {
-  parameter: number,
-};
+export const INTEGER = 0;
+export const STRING = 1;
 
 export type IntegerSpec = {
   upperByteOffset?: number,
@@ -13,17 +12,29 @@ export type IntegerSpec = {
   lowerBitsWidth?: number,
 };
 
-type IntegerParamData = BaseParamData & {
-  type: 0,
+type IntegerParamData = {
+  type: typeof INTEGER,
   spec: IntegerSpec,
 };
 
-type StringParamData = BaseParamData & {
-  type: 1,
+type ChoiceParamData = IntegerParamData & {
+  choices: string[],
+  unit?: string,
+};
+
+type StringParamData = {
+  type: typeof STRING,
   spec: {
     start: number,
     end: number,
   },
 };
 
-export type ParamData = IntegerParamData | StringParamData;
+export type ParamData = ChoiceParamData | IntegerParamData | StringParamData;
+
+export type Param = {
+  id: number,
+  title: string,
+  label?: string,
+  func?: (value: number, program: Program) => number | string,
+} & ParamData;

@@ -1,8 +1,7 @@
 import { useAppDispatch, useAppSelector } from '../store';
 import { setPanelParameter } from '../slices/programSlice';
 import Knob, { KnobProps } from './Knob';
-import { getParameterDisplayValue } from '../minilogue/display';
-import { params } from '../minilogue/params';
+import { params, getParameterDisplayValue } from '../minilogue/params';
 import { classList } from '../utils';
 
 

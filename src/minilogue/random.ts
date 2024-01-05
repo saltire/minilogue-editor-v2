@@ -1,6 +1,6 @@
-import { INTEGER, params } from './params';
-import { INIT_PROGRAM, PROGRAM_NAME } from './program';
-import { IntegerSpec } from './types';
+import { PROGRAM_NAME, params } from './params';
+import { INIT_PROGRAM } from './program';
+import { INTEGER } from './types';
 
 
 const random = (range: number) => Math.floor(Math.random() * range);
@@ -21,7 +21,7 @@ const generateRandomProgram = (parameters?: number[]) => {
     else if (param.type === INTEGER) {
       const {
         upperByteOffset, upperBitsWidth = 8, lowerByteOffset, lowerBitsWidth = 2,
-      } = param.spec as IntegerSpec;
+      } = param.spec;
       let numBits = 0;
       if (upperByteOffset !== undefined) {
         numBits += upperBitsWidth;

@@ -1,3 +1,7 @@
+import { INTEGER, STRING, Param, Program } from './types';
+import { mapToRange } from '../utils';
+
+
 export const PROGRAM_NAME = 1;
 export const VCO1_PITCH = 2;
 export const VCO1_SHAPE = 3;
@@ -57,9 +61,6 @@ export const SWING = 56;
 export const DEFAULT_GATE_TIME = 57;
 export const STEP_RESOLUTION = 58;
 
-export const INTEGER = 0;
-export const STRING = 1;
-
 const WAVE_CHOICES = [
   'Square',
   'Triangle',
@@ -84,39 +85,178 @@ const THREE_WAY_CHOICES = [
   '100',
 ];
 
-export type IntegerSpec = {
-  upperByteOffset?: number,
-  upperBitsOffset?: number,
-  upperBitsWidth?: number,
-  lowerByteOffset?: number,
-  lowerBitsOffset?: number,
-  lowerBitsWidth?: number,
+const splitRanges = (
+  value: number, ranges: { fromRange: [number, number], toRange: [number, number] }[],
+) => {
+  // max exclusive?
+  const maxIndex = ranges.length - 1;
+  const { fromRange, toRange } = ranges.find(({ fromRange: range }, index) => (
+    (range[0] <= value) && (index === maxIndex ? range[1] >= value : range[1] > value)
+  )) ?? { fromRange: [0, 0], toRange: [0, 0] };
+  return mapToRange(value, fromRange[0], fromRange[1], toRange[0], toRange[1]);
 };
 
-type IntegerParamData = {
-  type: typeof INTEGER,
-  spec: IntegerSpec,
+const rangeToChoice = (value: number, ranges: { min: number, max: number, value: string }[]) => {
+  // inclusive
+  const found = ranges.find(({ min, max }) => (value >= min) && (value <= max));
+  return found?.value || '';
 };
 
-type ChoiceParamData = IntegerParamData & {
-  choices: string[],
+const pitchToCents = (value: number) => (
+  splitRanges(
+    value,
+    [
+      { fromRange: [0, 4], toRange: [-1200, -1200] },
+      { fromRange: [4, 356], toRange: [-1200, -256] },
+      { fromRange: [356, 476], toRange: [-256, -16] },
+      { fromRange: [476, 492], toRange: [-16, 0] },
+      { fromRange: [492, 532], toRange: [0, 0] },
+      { fromRange: [532, 548], toRange: [0, 16] },
+      { fromRange: [548, 668], toRange: [16, 256] },
+      { fromRange: [668, 1020], toRange: [256, 1200] },
+      { fromRange: [1020, 1023], toRange: [1200, 1200] },
+    ],
+  ));
+
+const pitchEGIntToCents = (value: number) => (
+  splitRanges(
+    value,
+    [
+      { fromRange: [0, 4], toRange: [-4800, -4800] },
+      { fromRange: [4, 356], toRange: [-4800, -1024] },
+      { fromRange: [356, 476], toRange: [-1024, -64] },
+      { fromRange: [476, 492], toRange: [-64, 0] },
+      { fromRange: [492, 532], toRange: [0, 0] },
+      { fromRange: [532, 548], toRange: [0, 64] },
+      { fromRange: [548, 668], toRange: [64, 1024] },
+      { fromRange: [668, 1020], toRange: [1024, 4800] },
+      { fromRange: [1020, 1023], toRange: [4800, 4800] },
+    ],
+  ));
+
+const cutoffEGIntToPercent = (value: number) => {
+  /*
+  0   ~ 11   : -100 (%)
+  11  ~ 492  : - ((492 - value) * (492 - value) * 4641 * 100) / 0x40000000 (%)
+  492 ~ 532  : 0 (%)
+  532 ~ 1013 : ((value - 532) * (value - 532) * 4641 * 100) / 0x40000000 (%)
+  1013~1023  : 100 (%)
+  */
+  let percent;
+  if ((value >= 0) && (value < 11)) {
+    percent = -100;
+  }
+  else if ((value >= 11) && (value < 492)) {
+    percent = -((492 - value) * (492 - value) * 4641 * 100) / 0x40000000;
+  }
+  else if ((value >= 492) && (value < 532)) {
+    percent = 0;
+  }
+  else if ((value >= 532) && (value < 1013)) {
+    percent = ((value - 532) * (value - 532) * 4641 * 100) / 0x40000000;
+  }
+  else if ((value >= 1013) && (value <= 1023)) {
+    percent = 100;
+  }
+  return percent || 0;
 };
 
-type StringParamData = {
-  type: typeof STRING,
-  spec: {
-    start: number,
-    end: number,
-  },
+const translateVoiceModeDepth = (value: number, program: Program) => {
+  switch (program[VOICE_MODE]) {
+    case 0: // POLY
+      return `${Math.round(mapToRange(value, 0, 1023, 0, 8))}`;
+    case 1: // DUO
+    case 2: // UNISON
+      return `${Math.round(mapToRange(value, 0, 1023, 0, 50))}`;
+    case 4: // CHORD
+      return rangeToChoice(
+        value,
+        [
+          { min: 0, max: 73, value: '5th' },
+          { min: 74, max: 146, value: 'sus2' },
+          { min: 147, max: 219, value: 'm' },
+          { min: 220, max: 292, value: 'Maj' },
+          { min: 293, max: 365, value: 'sus4' },
+          { min: 366, max: 438, value: 'm7' },
+          { min: 439, max: 511, value: '7' },
+          { min: 512, max: 585, value: '7sus4' },
+          { min: 586, max: 658, value: 'Maj7' },
+          { min: 659, max: 731, value: 'aug' },
+          { min: 732, max: 804, value: 'dim' },
+          { min: 805, max: 877, value: 'm7b5' },
+          { min: 878, max: 950, value: 'mMaj7' },
+          { min: 951, max: 1023, value: 'Maj7b5' },
+        ],
+      );
+    case 5: // DELAY
+      return rangeToChoice(
+        value,
+        [
+          { min: 0, max: 85, value: '1/192' },
+          { min: 86, max: 170, value: '1/128' },
+          { min: 171, max: 255, value: '1/64' },
+          { min: 256, max: 341, value: '1/48' },
+          { min: 342, max: 426, value: '1/32' },
+          { min: 427, max: 511, value: '1/24' },
+          { min: 521, max: 597, value: '1/16' },
+          { min: 598, max: 682, value: '1/12' },
+          { min: 683, max: 767, value: '1/8' },
+          { min: 768, max: 853, value: '1/6' },
+          { min: 854, max: 938, value: '3/16' },
+          { min: 939, max: 1023, value: '1/4' },
+        ],
+      );
+    case 6: // ARP
+      return rangeToChoice(
+        value,
+        [
+          { min: 0, max: 78, value: 'Manual 1' },
+          { min: 79, max: 157, value: 'Manual 2' },
+          { min: 158, max: 236, value: 'Rise 1' },
+          { min: 237, max: 315, value: 'Rise 2' },
+          { min: 316, max: 393, value: 'Fall 1' },
+          { min: 394, max: 472, value: 'Fall 2' },
+          { min: 473, max: 551, value: 'Rise Fall 1' },
+          { min: 552, max: 630, value: 'Rise Fall 2' },
+          { min: 631, max: 708, value: 'Poly 1' },
+          { min: 709, max: 787, value: 'Poly 2' },
+          { min: 788, max: 866, value: 'Random 1' },
+          { min: 867, max: 945, value: 'Random 2' },
+          { min: 946, max: 1023, value: 'Random 3' },
+        ],
+      );
+    case 7: // SIDECHAIN
+    default:
+      return `${value}`;
+  }
 };
 
-export type ParamData = ChoiceParamData | IntegerParamData | StringParamData;
-
-type Param = {
-  id: number,
-  title: string,
-  label?: string,
-} & ParamData;
+const translateLFORate = (value: number, program: Program) => {
+  if (!program[LFO_BPM_SYNC]) {
+    return `${value}`;
+  }
+  return rangeToChoice(
+    value,
+    [
+      { min: 0, max: 63, value: '4' },
+      { min: 64, max: 127, value: '2' },
+      { min: 128, max: 191, value: '1' },
+      { min: 192, max: 255, value: '3/4' },
+      { min: 256, max: 319, value: '1/2' },
+      { min: 320, max: 383, value: '3/8' },
+      { min: 384, max: 447, value: '1/3' },
+      { min: 448, max: 511, value: '1/4' },
+      { min: 512, max: 575, value: '3/16' },
+      { min: 576, max: 639, value: '1/6' },
+      { min: 640, max: 703, value: '1/8' },
+      { min: 704, max: 767, value: '1/12' },
+      { min: 768, max: 831, value: '1/16' },
+      { min: 832, max: 895, value: '1/24' },
+      { min: 896, max: 959, value: '1/32' },
+      { min: 960, max: 1023, value: '1/36' },
+    ],
+  );
+};
 
 export const params: { [index: number]: Param } = {
   [PROGRAM_NAME]: {
@@ -138,6 +278,8 @@ export const params: { [index: number]: Param } = {
       lowerByteOffset: 52,
       lowerBitsOffset: 0,
     },
+    func: pitchToCents,
+    unit: 'Cents',
   },
   [VCO1_SHAPE]: {
     id: VCO1_SHAPE,
@@ -160,6 +302,8 @@ export const params: { [index: number]: Param } = {
       lowerByteOffset: 53,
       lowerBitsOffset: 0,
     },
+    func: pitchToCents,
+    unit: 'Cents',
   },
   [VCO2_SHAPE]: {
     id: VCO2_SHAPE,
@@ -193,6 +337,8 @@ export const params: { [index: number]: Param } = {
       lowerByteOffset: 54,
       lowerBitsOffset: 2,
     },
+    func: pitchEGIntToCents,
+    unit: 'Cents',
   },
   [VCO1_LEVEL]: {
     id: VCO1_LEVEL,
@@ -259,6 +405,8 @@ export const params: { [index: number]: Param } = {
       lowerByteOffset: 56,
       lowerBitsOffset: 0,
     },
+    func: cutoffEGIntToPercent,
+    unit: '%',
   },
   [AMP_VELOCITY]: {
     id: AMP_VELOCITY,
@@ -369,6 +517,7 @@ export const params: { [index: number]: Param } = {
       lowerByteOffset: 59,
       lowerBitsOffset: 0,
     },
+    func: translateLFORate,
   },
   [LFO_INT]: {
     id: LFO_INT,
@@ -595,6 +744,7 @@ export const params: { [index: number]: Param } = {
       lowerBitsOffset: 0,
       lowerBitsWidth: 8,
     },
+    func: value => (value === 0 ? 'Off' : `${value}`), // 0,1-127 => Off,1-127
   },
   [VOICE_MODE]: {
     id: VOICE_MODE,
@@ -627,6 +777,7 @@ export const params: { [index: number]: Param } = {
       lowerByteOffset: 64,
       lowerBitsOffset: 4,
     },
+    func: translateVoiceModeDepth,
   },
   [BEND_RANGE_POSITIVE]: {
     id: BEND_RANGE_POSITIVE,
@@ -723,6 +874,8 @@ export const params: { [index: number]: Param } = {
       lowerBitsOffset: 0,
       lowerBitsWidth: 8,
     },
+    // 77~127=-25~+25
+    func: value => (((value >= 77) && (value <= 127)) ? mapToRange(value, 77, 127, -25, 25) : 0),
   },
   [SLIDER_ASSIGN]: {
     id: SLIDER_ASSIGN,
@@ -795,6 +948,7 @@ export const params: { [index: number]: Param } = {
       lowerByteOffset: 100,
       lowerBitsWidth: 8,
     },
+    func: value => value, // 100~3000=10.0~300.0
   },
   [STEP_LENGTH]: {
     id: STEP_LENGTH,
@@ -809,12 +963,13 @@ export const params: { [index: number]: Param } = {
   [SWING]: {
     id: SWING,
     title: 'Swing',
-    type: INTEGER, // -75 +75
+    type: INTEGER,
     spec: {
       lowerByteOffset: 104,
       lowerBitsOffset: 0,
       lowerBitsWidth: 8,
     },
+    func: value => mapToRange(value, 0, 127, -75, 75), // -75 +75
   },
   [DEFAULT_GATE_TIME]: {
     id: DEFAULT_GATE_TIME,
@@ -825,6 +980,8 @@ export const params: { [index: number]: Param } = {
       lowerBitsOffset: 0,
       lowerBitsWidth: 8,
     },
+    func: value => mapToRange(value, 0, 71, 0, 100), // 0-71 -> 0-100%
+    unit: '%',
   },
   [STEP_RESOLUTION]: {
     id: STEP_RESOLUTION,
@@ -843,4 +1000,18 @@ export const params: { [index: number]: Param } = {
       '1/1',
     ],
   },
+};
+
+export const getParameterDisplayValue = (program: Program, parameter: number) => {
+  const param = params[parameter];
+  const value = program[parameter];
+
+  let parsedValue = 'choices' in param ? param.choices[value as number]
+    : (param.func?.(value as number, program) ?? value);
+
+  if (typeof parsedValue === 'number') {
+    parsedValue = Math.round(parsedValue);
+  }
+
+  return `${parsedValue}${'unit' in param && param.unit ? ` ${param.unit}` : ''}`;
 };
