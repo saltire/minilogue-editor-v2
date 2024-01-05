@@ -1,4 +1,4 @@
-import { INTEGER, STRING, Param, Program } from './types';
+import { INTEGER, STRING, ParamData, Program } from './types';
 import { mapToRange } from '../utils';
 
 
@@ -258,7 +258,7 @@ const translateLFORate = (value: number, program: Program) => {
   );
 };
 
-export const params: { [index: number]: Param } = {
+export const paramData: { [index: number]: ParamData } = {
   [PROGRAM_NAME]: {
     id: PROGRAM_NAME,
     title: 'Program Name',
@@ -1003,7 +1003,7 @@ export const params: { [index: number]: Param } = {
 };
 
 export const getParameterDisplayValue = (program: Program, parameter: number) => {
-  const param = params[parameter];
+  const param = paramData[parameter];
   const value = program[parameter];
 
   let parsedValue = 'choices' in param ? param.choices[value as number]

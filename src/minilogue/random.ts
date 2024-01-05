@@ -1,4 +1,4 @@
-import { PROGRAM_NAME, params } from './params';
+import { PROGRAM_NAME, paramData } from './params';
 import { INIT_PROGRAM } from './program';
 import { INTEGER } from './types';
 
@@ -9,7 +9,7 @@ const random = (range: number) => Math.floor(Math.random() * range);
 const generateRandomProgram = (parameters?: number[]) => {
   const newProgram = { ...INIT_PROGRAM };
 
-  Object.values(params).forEach(param => {
+  Object.values(paramData).forEach(param => {
     if (parameters && !parameters.includes(param.id)) {
       return;
     }

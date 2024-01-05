@@ -3,7 +3,7 @@ import { Middleware } from '@reduxjs/toolkit';
 import { messageToParameter } from '../minilogue/midi';
 import { decodeProgram } from '../minilogue/program';
 import { isSysexMessage, parseSysexMessage } from '../minilogue/sysex';
-import { params } from '../minilogue/params';
+import { paramData } from '../minilogue/params';
 import { setCurrentProgram, setPanelParameter } from '../slices/programSlice';
 import { connectPort, disconnectPort, receiveMessage } from '../slices/midiSlice';
 
@@ -43,7 +43,7 @@ const midiMiddleware: Middleware = ({ dispatch }) => {
           if (messageType === 0xb) {
             const [parameter, translated] = messageToParameter(code, value);
             if (parameter !== undefined && translated !== undefined) {
-              console.log({ parameter: params[parameter].title, value: translated });
+              console.log({ parameter: paramData[parameter].title, value: translated });
 
               dispatch(setPanelParameter({ parameter, value: translated }));
             }

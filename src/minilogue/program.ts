@@ -1,6 +1,6 @@
 // http://www.korg.com/us/support/download/manual/0/544/2890
 
-import { params } from './params';
+import { paramData } from './params';
 import { INTEGER, STRING, IntegerSpec } from './types';
 
 
@@ -38,7 +38,7 @@ const decodeInteger = (data: Uint8Array, spec: IntegerSpec) => {
 // Parse a minilogue program from the binary format into an object.
 export const decodeProgram = (data: Uint8Array) => {
   const parsed: Program = {};
-  Object.values(params).forEach(({ id, type, spec }) => {
+  Object.values(paramData).forEach(({ id, type, spec }) => {
     let value = null;
     switch (type) {
       case INTEGER: {

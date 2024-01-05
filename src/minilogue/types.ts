@@ -30,11 +30,9 @@ type StringParamData = {
   },
 };
 
-export type ParamData = ChoiceParamData | IntegerParamData | StringParamData;
-
-export type Param = {
+export type ParamData = {
   id: number,
   title: string,
   label?: string,
   func?: (value: number, program: Program) => number | string,
-} & ParamData;
+} & (ChoiceParamData | IntegerParamData | StringParamData);

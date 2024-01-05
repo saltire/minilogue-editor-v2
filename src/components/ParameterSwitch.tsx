@@ -4,7 +4,7 @@ import './ParameterSwitch.css';
 import { useAppDispatch, useAppSelector } from '../store';
 import { setPanelParameter } from '../slices/programSlice';
 import Switch from './Switch';
-import { params } from '../minilogue/params';
+import { paramData } from '../minilogue/params';
 import { classList } from '../utils';
 
 
@@ -23,7 +23,7 @@ export default function ParameterSwitch({
   const currentProgram = useAppSelector(({ program }) => program.currentProgram);
   const value = currentProgram[parameter] as number;
 
-  const param = params[parameter];
+  const param = paramData[parameter];
   if (!('choices' in param)) {
     return null;
   }

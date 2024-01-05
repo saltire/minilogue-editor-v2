@@ -1,6 +1,6 @@
 import './LEDArray.css';
 import { useAppDispatch, useAppSelector } from '../store';
-import { params } from '../minilogue/params';
+import { paramData } from '../minilogue/params';
 import { setPanelParameter } from '../slices/programSlice';
 import { classList } from '../utils';
 
@@ -15,7 +15,7 @@ export default function LEDArray({ parameter, reverse }: LEDArrayProps) {
   const currentProgram = useAppSelector(({ program }) => program.currentProgram);
   const value = currentProgram[parameter];
 
-  const param = params[parameter];
+  const param = paramData[parameter];
   if (!('choices' in param)) {
     return null;
   }
