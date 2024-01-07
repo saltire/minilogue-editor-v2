@@ -1,4 +1,7 @@
 import * as params from './params';
+import { encodeProgram } from './program';
+import { encodeSysexData } from './sysex';
+import { Program } from './types';
 import { mapToRange } from '../utils';
 
 
@@ -99,4 +102,23 @@ export const messageToParameter = (code: number, value: number) => {
     : Math.round(mapToRange(value, 0, 127, 0, 1023));
 
   return [CODE_TO_PARAMETER[code], parameterValue];
+};
+
+const channel = 0;
+
+const CURRENT_PROGRAM_DATA_DUMP_REQUEST = 0x10; // Ask for the current program
+const CURRENT_PROGRAM_DATA_DUMP = 0x40; // Set the current program
+
+const buildMessage = (type: number, data?: Uint8Array) => [
+  0xf0, 0x42, 0x30 | channel, 0x00, 0x01, 0x2c, type, ...data ?? [], 0xf7,
+];
+
+export const requestCurrentProgram = (output: MIDIOutput) => {
+  const message = buildMessage(CURRENT_PROGRAM_DATA_DUMP_REQUEST);
+  output.send(message);
+};
+
+export const sendCurrentProgram = (output: MIDIOutput, program: Program) => {
+  const message = buildMessage(CURRENT_PROGRAM_DATA_DUMP, encodeSysexData(encodeProgram(program)));
+  output.send(message);
 };

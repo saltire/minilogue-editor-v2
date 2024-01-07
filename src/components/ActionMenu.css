@@ -1,29 +1,25 @@
 .action-menu {
-  margin: 0;
-  padding: 0;
   text-align: center;
 
-  li {
+  button {
     display: inline-block;
-    padding: 0 1em;
+    margin: 0 1em;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
 
-    .menu-button {
-      border: 0;
-      background: none;
-      cursor: pointer;
+    svg {
+      width: 30px;
+      height: 30px;
+    }
 
-      svg {
-        width: 30px;
-        height: 30px;
-      }
+    &:hover svg {
+      transform: scale(1.1);
+    }
 
-      &:hover svg {
-        transform: scale(1.1);
-      }
-
-      &:active svg {
-        transform: scale(.9);
-      }
+    &:active svg {
+      transform: scale(.9);
     }
   }
 }
