@@ -28,6 +28,10 @@ module.exports = {
         test: /\.svg$/,
         use: '@svgr/webpack',
       },
+      {
+        test: /\.woff2$/,
+        type: 'asset/resource',
+      },
 		],
 	},
   resolve: {

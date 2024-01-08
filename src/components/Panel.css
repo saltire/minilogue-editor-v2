@@ -1,18 +1,15 @@
-@import url('https://fonts.googleapis.com/css?family=Raleway:500,600,700');
-@import url('https://fonts.googleapis.com/css?family=Inconsolata');
-
 .panel {
   margin: 1em auto;
   padding: 1em 3em;
   border-radius: 15px;
   background-color: #dfdbdd;
-  font-family: Raleway, sans-serif;
+  font-family: 'National Park', sans-serif;
   font-size: 10px;
-  font-weight: 500;
+  font-weight: normal;
   text-align: center;
 
   h1, h2 {
-    font-weight: 500;
+    font-weight: normal;
 
     &.program-title {
       padding: 0 1em 1em;

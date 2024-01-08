@@ -1,10 +1,17 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:600,700,800');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:500');
 
 :root {
   --control-value-background: #2e3031;
   --control-value-background-hover: #535557;
   --control-value-background-active: #adadad;
   --value-color: #F6F5F3;
+}
+
+@font-face {
+  font-family: 'National Park';
+  font-style: normal;
+  font-weight: normal;
+  src: url('./assets/NationalPark-Medium.woff2') format('woff2');
 }
 
 html {
@@ -15,7 +22,6 @@ body {
   display: flex;
   flex-direction: column;
   font-family: 'Open Sans', sans-serif;
-  font-weight: 600;
 }
 
 #root {
