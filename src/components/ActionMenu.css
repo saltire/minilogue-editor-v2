@@ -22,4 +22,8 @@
       transform: scale(.9);
     }
   }
+
+  input[type=file] {
+    display: none;
+  }
 }

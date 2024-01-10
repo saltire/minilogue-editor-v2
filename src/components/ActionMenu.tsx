@@ -1,10 +1,12 @@
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 
 import './ActionMenu.css';
 import NewIcon from '../assets/new.svg';
+import OpenIcon from '../assets/open.svg';
 import ReceiveIcon from '../assets/receive.svg';
 import SendIcon from '../assets/send.svg';
 import ShuffleIcon from '../assets/shuffle.svg';
+import { loadLibrarianFile } from '../minilogue/library';
 import { requestCurrentProgram, sendCurrentProgram } from '../minilogue/midi';
 import { INIT_PROGRAM } from '../minilogue/program';
 import generateRandomProgram from '../minilogue/random';
@@ -24,6 +26,8 @@ export default function ActionMenu() {
     () => Object.values(ports).filter(isOutput).find(port => port.name?.includes('SOUND')),
     [ports]);
 
+  const fileInput = useRef<HTMLInputElement>(null);
+
   return (
     <div className='action-menu'>
       <Button
@@ -32,6 +36,19 @@ export default function ActionMenu() {
       >
         <NewIcon />
       </Button>
+
+      <Button
+        title='Load Program File'
+        onClick={() => fileInput.current?.click()}
+      >
+        <OpenIcon />
+      </Button>
+      <input
+        ref={fileInput}
+        type='file'
+        onChange={e => e.target.files?.[0] && loadLibrarianFile(e.target.files[0])
+          .then(library => library.programs[0] && dispatch(setCurrentProgram(library.programs[0])))}
+      />
 
       <Button
         title='Randomize Program'

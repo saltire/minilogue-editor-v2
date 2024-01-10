@@ -31,6 +31,16 @@ export type Program = {
   sequence: ProgramSequence,
 };
 
+export type Library = {
+  name?: string | null,
+  author?: string | null,
+  version?: string | null,
+  date?: string | null,
+  prefix?: string | null,
+  copyright?: string | null,
+  programs: Program[],
+};
+
 export const INTEGER = 0;
 export const STRING = 1;
 
