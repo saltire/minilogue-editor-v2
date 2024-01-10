@@ -6,10 +6,15 @@ import { Program } from '../minilogue/types';
 
 export type ProgramState = {
   currentProgram: Program,
+  displayParam: {
+    parameter: number,
+    value: number,
+  } | null,
 };
 
 const initialState: ProgramState = {
   currentProgram: INIT_PROGRAM,
+  displayParam: null,
 };
 
 const programSlice = createSlice({
@@ -17,7 +22,9 @@ const programSlice = createSlice({
   initialState,
   reducers: {
     setCurrentProgram: (state, { payload: program }: PayloadAction<Program>) => ({
-      ...state, currentProgram: program,
+      ...state,
+      currentProgram: program,
+      displayParam: null,
     }),
 
     setPanelParameter: (
@@ -28,9 +35,12 @@ const programSlice = createSlice({
         ...state.currentProgram,
         parameters: { ...state.currentProgram.parameters, [parameter]: value },
       },
+      displayParam: { parameter, value },
     }),
+
+    clearDisplayParameter: state => ({ ...state, displayParam: null }),
   },
 });
 
 export default programSlice;
-export const { setCurrentProgram, setPanelParameter } = programSlice.actions;
+export const { setCurrentProgram, setPanelParameter, clearDisplayParameter } = programSlice.actions;

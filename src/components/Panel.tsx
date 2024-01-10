@@ -3,10 +3,12 @@ import SawtoothIcon from '../assets/saw.svg';
 import SquareIcon from '../assets/square.svg';
 import TriangleIcon from '../assets/triangle.svg';
 import * as params from '../minilogue/params';
+import { useAppSelector } from '../store';
 import ActionMenu from './ActionMenu';
+import Display from './Display';
 import Knob from './Knob';
-import ParameterKnob from './ParameterKnob';
 import LEDArray from './LEDArray';
+import ParameterKnob from './ParameterKnob';
 import ParameterSwitch from './ParameterSwitch';
 
 
@@ -17,6 +19,8 @@ const WAVE_ICONS = [
 ];
 
 export default function Panel() {
+  const currentProgram = useAppSelector(({ program }) => program.currentProgram);
+
   return (
     <div>
       <ActionMenu />
@@ -24,7 +28,7 @@ export default function Panel() {
       <div className='panel'>
         <header>
           <h1 className='program-title'>
-            Program
+            {currentProgram.parameters[params.PROGRAM_NAME]}
           </h1>
         </header>
 
@@ -151,6 +155,10 @@ export default function Panel() {
               <ParameterKnob parameter={params.DELAY_TIME} />
               <ParameterKnob parameter={params.DELAY_FEEDBACK} />
               <ParameterSwitch parameter={params.DELAY_OUTPUT_ROUTING} showLabels />
+            </div>
+
+            <div id='interaction' className='panel-group'>
+              <Display />
             </div>
           </div>
         </div>

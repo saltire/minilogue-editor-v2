@@ -1,0 +1,26 @@
+.display-container {
+  display: inline-block;
+  width: 150px;
+  height: 75px;
+
+  .display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 81px;
+    height: 50px;
+    margin: 10px auto;
+    border-radius: 3px;
+    background: var(--control-value-background);
+
+    .display-contents {
+      width: 60px;
+      padding: 5px;
+      border: 1px solid var(--value-color);
+      color: var(--value-color);
+      font-family: Inconsolata, monospace;
+      text-align: center;
+      text-transform: none;
+    }
+  }
+}
