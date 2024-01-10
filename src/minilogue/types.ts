@@ -1,8 +1,34 @@
 export type ProgramParams = { [param: number]: string | number | null };
 
+export type MotionSlot = {
+  motionOn: boolean,
+  smoothOn: boolean,
+  parameterId: number,
+};
+
+export type Note = {
+  note: number,
+  velocity: number,
+  gateTime: number,
+  triggerSwitch: number,
+};
+
+export type SequenceStep = {
+  on: boolean,
+  motionOn: number[],
+  notes: Note[],
+  motions: number[][],
+  switch: boolean,
+};
+
+export type ProgramSequence = {
+  motionSlots: MotionSlot[],
+  steps: SequenceStep[],
+};
+
 export type Program = {
   parameters: ProgramParams,
-  // sequence: ProgramSequence,
+  sequence: ProgramSequence,
 };
 
 export const INTEGER = 0;

@@ -1,12 +1,12 @@
 import { PROGRAM_NAME, paramData } from './params';
 import { INIT_PROGRAM } from './program';
-import { INTEGER, ProgramParams } from './types';
+import { INTEGER, Program, ProgramParams } from './types';
 
 
 const random = (range: number) => Math.floor(Math.random() * range);
 
 // Random Minilogue program generator.
-const generateRandomProgram = (parameters?: number[]) => {
+const generateRandomProgram = (parameters?: number[]): Program => {
   const newParams: ProgramParams = {
     ...INIT_PROGRAM.parameters,
     [PROGRAM_NAME]: 'Random',
@@ -38,7 +38,10 @@ const generateRandomProgram = (parameters?: number[]) => {
 
   return {
     parameters: newParams,
-    // sequence: {},
+    sequence: {
+      motionSlots: [],
+      steps: [],
+    },
   };
 };
 
