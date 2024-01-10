@@ -21,7 +21,7 @@ export default function ParameterSwitch({
 }: ParameterSwitchProps) {
   const dispatch = useAppDispatch();
   const currentProgram = useAppSelector(({ program }) => program.currentProgram);
-  const value = currentProgram[parameter] as number;
+  const value = currentProgram.parameters[parameter] as number;
 
   const param = paramData[parameter];
   if (!('choices' in param)) {

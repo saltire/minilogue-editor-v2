@@ -1,13 +1,16 @@
 import { PROGRAM_NAME, paramData } from './params';
 import { INIT_PROGRAM } from './program';
-import { INTEGER } from './types';
+import { INTEGER, ProgramParams } from './types';
 
 
 const random = (range: number) => Math.floor(Math.random() * range);
 
 // Random Minilogue program generator.
 const generateRandomProgram = (parameters?: number[]) => {
-  const newProgram = { ...INIT_PROGRAM };
+  const newParams: ProgramParams = {
+    ...INIT_PROGRAM.parameters,
+    [PROGRAM_NAME]: 'Random',
+  };
 
   Object.values(paramData).forEach(param => {
     if (parameters && !parameters.includes(param.id)) {
@@ -16,7 +19,7 @@ const generateRandomProgram = (parameters?: number[]) => {
 
     // TODO: unify parameters and display options, for easier type narrowing?
     if (param.type === INTEGER && 'choices' in param) {
-      newProgram[param.id] = random(param.choices.length);
+      newParams[param.id] = random(param.choices.length);
     }
     else if (param.type === INTEGER) {
       const {
@@ -29,12 +32,14 @@ const generateRandomProgram = (parameters?: number[]) => {
       if (lowerByteOffset !== undefined) {
         numBits += lowerBitsWidth;
       }
-      newProgram[param.id] = random(2 ** numBits);
+      newParams[param.id] = random(2 ** numBits);
     }
   });
 
-  newProgram[PROGRAM_NAME] = 'Random';
-  return newProgram;
+  return {
+    parameters: newParams,
+    // sequence: {},
+  };
 };
 
 export default generateRandomProgram;

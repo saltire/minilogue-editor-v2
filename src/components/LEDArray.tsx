@@ -13,7 +13,7 @@ type LEDArrayProps = {
 export default function LEDArray({ parameter, reverse }: LEDArrayProps) {
   const dispatch = useAppDispatch();
   const currentProgram = useAppSelector(({ program }) => program.currentProgram);
-  const value = currentProgram[parameter];
+  const value = currentProgram.parameters[parameter];
 
   const param = paramData[parameter];
   if (!('choices' in param)) {

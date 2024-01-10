@@ -1,4 +1,4 @@
-import { INTEGER, STRING, ParamData, Program } from './types';
+import { INTEGER, STRING, ParamData, ProgramParams } from './types';
 import { mapToRange } from '../utils';
 
 
@@ -161,8 +161,8 @@ const cutoffEGIntToPercent = (value: number) => {
   return percent || 0;
 };
 
-const translateVoiceModeDepth = (value: number, program: Program) => {
-  switch (program[VOICE_MODE]) {
+const translateVoiceModeDepth = (value: number, params: ProgramParams) => {
+  switch (params[VOICE_MODE]) {
     case 0: // POLY
       return `${Math.round(mapToRange(value, 0, 1023, 0, 8))}`;
     case 1: // DUO
@@ -231,8 +231,8 @@ const translateVoiceModeDepth = (value: number, program: Program) => {
   }
 };
 
-const translateLFORate = (value: number, program: Program) => {
-  if (!program[LFO_BPM_SYNC]) {
+const translateLFORate = (value: number, params: ProgramParams) => {
+  if (!params[LFO_BPM_SYNC]) {
     return `${value}`;
   }
   return rangeToChoice(
@@ -1002,12 +1002,12 @@ export const paramData: { [index: number]: ParamData } = {
   },
 };
 
-export const getParameterDisplayValue = (program: Program, parameter: number) => {
+export const getParameterDisplayValue = (params: ProgramParams, parameter: number) => {
   const param = paramData[parameter];
-  const value = program[parameter];
+  const value = params[parameter];
 
   let parsedValue = 'choices' in param ? param.choices[value as number]
-    : (param.func?.(value as number, program) ?? value);
+    : (param.func?.(value as number, params) ?? value);
 
   if (typeof parsedValue === 'number') {
     parsedValue = Math.round(parsedValue);

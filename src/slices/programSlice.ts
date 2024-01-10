@@ -22,7 +22,13 @@ const programSlice = createSlice({
 
     setPanelParameter: (
       state, { payload: { parameter, value } }: PayloadAction<{ parameter: number, value: number }>,
-    ) => ({ ...state, currentProgram: { ...state.currentProgram, [parameter]: value } }),
+    ) => ({
+      ...state,
+      currentProgram: {
+        ...state.currentProgram,
+        parameters: { ...state.currentProgram.parameters, [parameter]: value },
+      },
+    }),
   },
 });
 

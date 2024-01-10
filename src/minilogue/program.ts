@@ -1,7 +1,7 @@
 // http://www.korg.com/us/support/download/manual/0/544/2890
 
 import { paramData } from './params';
-import { INTEGER, STRING, IntegerSpec, Program } from './types';
+import { INTEGER, STRING, IntegerSpec, Program, ProgramParams } from './types';
 
 
 const INIT_PATCH_STRING = 'UFJPR0luaXQgUHJvZ3JhbSAgICCAAIAAAID/AAD/AIAAAACA/wAAgAAAgAD/////AED//5CQMDDAMAAgPQDw/MgPIv//5QBmTfr/////////////////////////////U0VRRLAEAhAANgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==';
@@ -35,7 +35,8 @@ const decodeInteger = (data: Uint8Array, spec: IntegerSpec) => {
 
 // Parse a minilogue program from the binary format into an object.
 export const decodeProgram = (data: Uint8Array) => {
-  const parsed: Program = {};
+  const parsedParams: ProgramParams = {};
+
   Object.values(paramData).forEach(({ id, type, spec }) => {
     let value = null;
     switch (type) {
@@ -57,10 +58,13 @@ export const decodeProgram = (data: Uint8Array) => {
       default:
         break;
     }
-    parsed[id] = value;
+    parsedParams[id] = value;
   });
-  // parsed.sequence = decodeSequence(data);
-  return parsed;
+
+  return {
+    parameters: parsedParams,
+    // sequence: decodeSequence(data),
+  };
 };
 
 // A helper to put the given bidWidth bits from byte value into the buffer in the
@@ -108,7 +112,7 @@ export const encodeProgram = (program: Program) => {
   encodeString(encoded, 'PROG', 0, 3);
   encodeString(encoded, 'SEQD', 96, 99);
   Object.values(paramData).forEach(param => {
-    const value = program[param.id];
+    const value = program.parameters[param.id];
     if (param.type === INTEGER) {
       encodeInteger(encoded, value as number, param.spec);
     }

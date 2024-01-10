@@ -1,4 +1,9 @@
-export type Program = { [param: number]: string | number | null };
+export type ProgramParams = { [param: number]: string | number | null };
+
+export type Program = {
+  parameters: ProgramParams,
+  // sequence: ProgramSequence,
+};
 
 export const INTEGER = 0;
 export const STRING = 1;
@@ -34,5 +39,5 @@ export type ParamData = {
   id: number,
   title: string,
   label?: string,
-  func?: (value: number, program: Program) => number | string,
+  func?: (value: number, program: ProgramParams) => number | string,
 } & (ChoiceParamData | IntegerParamData | StringParamData);
