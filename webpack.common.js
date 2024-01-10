@@ -45,6 +45,8 @@ module.exports = {
     splitChunks: { chunks: 'all' },
   },
 	plugins: [
-		new HtmlPlugin(),
+		new HtmlPlugin({
+      favicon: './src/assets/favicon.png',
+    }),
 	],
 };
