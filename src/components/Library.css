@@ -1,23 +1,25 @@
 .library {
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-    border: 0;
+  width: 100%;
+  border-collapse: collapse;
+  border: 0;
 
-    .table-head-row {
-      border-bottom: 1px solid #e1e1e1;
+  .table-head-row {
+    border-bottom: 1px solid #999;
 
-      .table-heading {
-        color: #3f3f3f;
-        font-weight: 800;
-        vertical-align: bottom;
-      }
+    .table-heading {
+      color: #3f3f3f;
+      font-weight: 800;
+      vertical-align: bottom;
     }
+  }
 
-    .table-cell {
-      padding: 1.6em;
-      text-align: left;
-      vertical-align: top;
-    }
+  .table-row {
+    border-bottom: 1px solid #e1e1e1;
+  }
+
+  .table-cell {
+    padding: 1em;
+    text-align: left;
+    vertical-align: top;
   }
 }

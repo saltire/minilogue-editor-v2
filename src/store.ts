@@ -2,12 +2,14 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 
 import midiMiddleware from './middleware/midi';
+import librarySlice from './slices/librarySlice';
 import midiSlice from './slices/midiSlice';
 import programSlice from './slices/programSlice';
 
 
 export const store = configureStore({
   reducer: {
+    library: librarySlice.reducer,
     midi: midiSlice.reducer,
     program: programSlice.reducer,
   },

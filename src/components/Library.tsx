@@ -1,6 +1,8 @@
 import './Library.css';
 import * as params from '../minilogue/params';
-import { ProgramParams } from '../minilogue/types';
+import { Program } from '../minilogue/types';
+import { useAppSelector } from '../store';
+import LibraryMenu from './LibraryMenu';
 
 
 const parameters = [
@@ -12,14 +14,21 @@ const parameters = [
 ];
 
 const columns = parameters.map(parameter => ({
-  accessor: (program: ProgramParams) => params.getParameterDisplayValue(program, parameter),
+  parameter,
   label: params.paramData[parameter].title,
+  getValue: (program: Program) => params.getParameterDisplayValue(program.parameters, parameter),
 }));
 
+/* eslint-disable react/no-array-index-key */
 export default function Library() {
+  const library = useAppSelector(({ library: l }) => l.library);
+  // const currentProgram = useAppSelector(({ library: l }) => l.currentProgram);
+
   return (
-    <div className='library'>
-      <table className='table'>
+    <div>
+      <LibraryMenu />
+
+      <table className='library'>
         <thead>
           <tr className='table-head-row'>
             {columns.map(column => (
@@ -27,6 +36,16 @@ export default function Library() {
             ))}
           </tr>
         </thead>
+
+        <tbody>
+          {library.programs.map((program, i) => (
+            <tr key={i} className='table-row'>
+              {columns.map((column, c) => (
+                <td key={c} className='table-cell'>{column.getValue(program)}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
       </table>
     </div>
   );
