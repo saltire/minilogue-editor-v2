@@ -13,6 +13,63 @@
     }
   }
 
+  .section-nav {
+    margin: 2em 0;
+    text-align: center;
+
+    button {
+      display: inline-block;
+      margin: 0 1em;
+      border: 0;
+      background: none;
+      font-family: inherit;
+      font-size: 1em;
+      font-weight: 600;
+      cursor: pointer;
+
+      &.active {
+        border-bottom: 3px solid var(--control-value-background);
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
+        margin-right: 1em;
+        vertical-align: text-bottom;
+      }
+    }
+  }
+
+  .action-menu {
+    text-align: center;
+
+    button {
+      display: inline-block;
+      margin: 0 1em;
+      padding: 0;
+      border: 0;
+      background: none;
+      cursor: pointer;
+
+      svg {
+        width: 30px;
+        height: 30px;
+      }
+
+      &:hover svg {
+        transform: scale(1.1);
+      }
+
+      &:active svg {
+        transform: scale(.9);
+      }
+    }
+
+    input[type=file] {
+      display: none;
+    }
+  }
+
   .status {
     display: flex;
 

@@ -1,6 +1,5 @@
 import { useMemo, useRef } from 'react';
 
-import './ActionMenu.css';
 import NewIcon from '../assets/new.svg';
 import OpenIcon from '../assets/open.svg';
 import ReceiveIcon from '../assets/receive.svg';
@@ -17,7 +16,7 @@ import Button from './Button';
 
 const isOutput = (port: MIDIPort | undefined): port is MIDIOutput => port?.type === 'output';
 
-export default function ActionMenu() {
+export default function PanelMenu() {
   const dispatch = useAppDispatch();
   const ports = useAppSelector(({ midi }) => midi.ports);
   const currentProgram = useAppSelector(({ program }) => program.currentProgram);

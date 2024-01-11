@@ -4,10 +4,10 @@ import SquareIcon from '../assets/square.svg';
 import TriangleIcon from '../assets/triangle.svg';
 import * as params from '../minilogue/params';
 import { useAppSelector } from '../store';
-import ActionMenu from './ActionMenu';
 import Display from './Display';
 import Knob from './Knob';
 import LEDArray from './LEDArray';
+import PanelMenu from './PanelMenu';
 import ParameterKnob from './ParameterKnob';
 import ParameterSwitch from './ParameterSwitch';
 
@@ -23,7 +23,7 @@ export default function Panel() {
 
   return (
     <div>
-      <ActionMenu />
+      <PanelMenu />
 
       <div className='panel'>
         <header>
