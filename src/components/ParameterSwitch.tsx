@@ -28,12 +28,14 @@ export default function ParameterSwitch({
     return null;
   }
 
+  const choices = Object.values(param.choices).reverse();
+
   return (
     <div className={classList('control-group', className)}>
       <div className='control-wrapper'>
         <Switch
           value={value}
-          numPositions={param.choices.length}
+          numPositions={choices.length}
           vertical={vertical}
           onChange={newValue => dispatch(setPanelParameter({ parameter, value: newValue }))}
         />
@@ -54,7 +56,7 @@ export default function ParameterSwitch({
         {!labels && showLabels && (
           <div className='switch-label-wrapper'>
             <ul className='switch-labels'>
-              {[...param.choices].reverse().map(label => (
+              {choices.map(label => (
                 <li key={label} className='switch-label'>
                   <div className='switch-value-label'>{label}</div>
                 </li>

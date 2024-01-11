@@ -59,7 +59,7 @@ type IntegerParamData = {
 };
 
 type ChoiceParamData = IntegerParamData & {
-  choices: string[],
+  choices: { [index: number]: string },
   unit?: string,
 };
 

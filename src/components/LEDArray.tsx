@@ -20,7 +20,7 @@ export default function LEDArray({ parameter, reverse }: LEDArrayProps) {
     return null;
   }
 
-  const choices = [...param.choices];
+  const choices = Object.values(param.choices);
   if (reverse) {
     choices.reverse();
   }

@@ -19,7 +19,7 @@ const generateRandomProgram = (parameters?: number[]): Program => {
 
     // TODO: unify parameters and display options, for easier type narrowing?
     if (param.type === INTEGER && 'choices' in param) {
-      newParams[param.id] = random(param.choices.length);
+      newParams[param.id] = random(Object.values(param.choices).length);
     }
     else if (param.type === INTEGER) {
       const {
