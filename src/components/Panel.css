@@ -2,7 +2,7 @@
   margin: 1em auto;
   padding: 1em 3em;
   border-radius: 15px;
-  background-color: #dfdbdd;
+  background: linear-gradient(#ccc8ca, #e5e1e3);
   font-family: 'National Park', sans-serif;
   font-size: 10px;
   font-weight: normal;
@@ -185,7 +185,7 @@
     }
   }
 
-  button {
+  .button {
     display: inline-block;
     padding: 0;
     transition: all .1s ease-in-out;
@@ -212,7 +212,7 @@
     div {
       overflow: visible;
 
-      button {
+      .button {
         border-radius: 0;
       }
 
@@ -221,11 +221,11 @@
         height: 1em;
       }
 
-      &:first-child button {
+      &:first-child .button {
         border-radius: 3px 0 0 3px;
       }
 
-      &:last-child button {
+      &:last-child .button {
         border-radius: 0 3px 3px 0;
       }
     }
@@ -234,7 +234,7 @@
       div {
         width: 45px;
 
-        button {
+        .button {
           width: 47px;
           height: 21px;
         }

@@ -53,17 +53,17 @@ export type IntegerSpec = {
   lowerBitsWidth?: number,
 };
 
-type IntegerParamData = {
+export type IntegerParamData = {
   type: typeof INTEGER,
   spec: IntegerSpec,
 };
 
-type ChoiceParamData = IntegerParamData & {
+export type ChoiceParamData = IntegerParamData & {
   choices: { [index: number]: string },
   unit?: string,
 };
 
-type StringParamData = {
+export type StringParamData = {
   type: typeof STRING,
   spec: {
     start: number,

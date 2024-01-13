@@ -12,6 +12,7 @@ import LEDArray from './LEDArray';
 import PanelMenu from './PanelMenu';
 import ParameterKnob from './ParameterKnob';
 import ParameterSwitch from './ParameterSwitch';
+import VoiceMode from './VoiceMode';
 
 
 const WAVE_ICONS = [
@@ -193,15 +194,15 @@ export default function Panel() {
             <h2 className='panel-group-label label label-small'>Edit</h2>
             <div className='button-group button-group-small'>
               <div>
-                <button type='button' title='Edit Mode' aria-label='Edit Mode' />
+                <button type='button' className='button' title='Edit Mode' aria-label='Edit Mode' />
                 <p className='control-label label'>Edit Mode</p>
               </div>
               <div>
-                <button type='button' title='Write' aria-label='Write' />
+                <button type='button' className='button' title='Write' aria-label='Write' />
                 <p className='control-label label'>Write</p>
               </div>
               <div>
-                <button type='button' title='Exit' aria-label='Exit' />
+                <button type='button' className='button' title='Exit' aria-label='Exit' />
                 <p className='control-label label'>Exit</p>
               </div>
             </div>
@@ -211,25 +212,27 @@ export default function Panel() {
             <h2 className='panel-group-label label label-small'>Sequencer</h2>
             <div className='button-group button-group-small'>
               <div>
-                <button type='button' title='Step' aria-label='Step' />
+                <button type='button' className='button' title='Step' aria-label='Step' />
                 <p className='control-label label'>Step</p>
               </div>
               <div>
-                <button type='button' title='Play' aria-label='Play' />
+                <button type='button' className='button' title='Play' aria-label='Play' />
                 <p className='control-label label'>Play</p>
               </div>
               <div>
-                <button type='button' title='Rec' aria-label='Rec' />
+                <button type='button' className='button' title='Rec' aria-label='Rec' />
                 <p className='control-label label'>Rec</p>
               </div>
               <div>
-                <button type='button' title='Rest' aria-label='Rest' />
+                <button type='button' className='button' title='Rest' aria-label='Rest' />
                 <p className='control-label label'>Rest</p>
               </div>
             </div>
           </div>
 
-          <div id='voice-mode' className='panel-group col-13-5 row-4-2' />
+          <div id='voice-mode' className='panel-group col-13-5 row-4-2'>
+            <VoiceMode />
+          </div>
         </div>
       </div>
     </div>
