@@ -24,81 +24,65 @@
     margin-top: 2em;
     text-transform: uppercase;
 
+    .col-1-1 {
+      grid-column: 1 / span 1;
+    }
+
+    .col-2-4 {
+      grid-column: 2 / span 4;
+    }
+
+    .col-6-1 {
+      grid-column: 6 / span 1;
+    }
+
+    .col-7-2 {
+      grid-column: 7 / span 2;
+    }
+
+    .col-9-4 {
+      grid-column: 9 / span 4;
+    }
+
+    .col-13-2 {
+      grid-column: 13 / span 2;
+    }
+
+    .col-13-4 {
+      grid-column: 13 / span 4;
+    }
+
+    .col-13-5 {
+      grid-column: 13 / span 5;
+    }
+
+    .col-15-3 {
+      grid-column: 15 / span 3;
+    }
+
+    .col-17-1 {
+      grid-column: 17 / span 1;
+    }
+
+    .row-1-2 {
+      grid-row: 1 / span 2;
+    }
+
+    .row-1-3 {
+      grid-row: 1 / span 3;
+    }
+
+    .row-3-1 {
+      grid-row: 3 / span 1;
+    }
+
+    .row-4-2 {
+      grid-row: 4 / span 2;
+    }
+
     .panel-section {
       &:not(:last-child) {
         border-right: 1px solid black;
-      }
-
-      &.col-2-4 {
-        grid-column: 2 / span 4;
-      }
-
-      &.col-6-1 {
-        grid-column: 6 / span 1;
-      }
-
-      &.col-7-2 {
-        grid-column: 7 / span 2;
-      }
-
-      &.col-9-4 {
-        grid-column: 9 / span 4;
-      }
-
-      &.col-13-4 {
-        grid-column: 13 / span 4;
-      }
-
-      &.row-1-2 {
-        grid-row: 1 / span 2;
-      }
-
-      &.row-1-3 {
-        grid-row: 1 / span 3;
-      }
-
-      .control-group {
-        display: inline-block;
-        position: relative;
-        align-content: center;
-        width: 75px;
-        height: 75px;
-        margin: auto;
-        padding-bottom: 10px;
-        vertical-align: top;
-
-        &.large-knob {
-          width: 150px;
-          height: 75px;
-          margin-top: -10px;
-          margin-bottom: 10px;
-
-          .knob-value {
-            width: 70px;
-            height: 70px;
-          }
-        }
-
-        &.control-group-half-width {
-          width: 37px;
-        }
-
-        &.control-group-two-thirds-width {
-          width: 50px;
-        }
-      }
-
-      .control-label {
-        width: 100%;
-        margin: 0;
-        padding: 0;
-
-        &.control-label-top {
-          position: absolute;
-          bottom: 85px;
-          left: 10px;
-          width: auto !important;
-        }
       }
 
       .keyboard-octave-leds {
@@ -118,6 +102,14 @@
     .panel-group {
       position: relative;
 
+      &.align-left {
+        text-align: left;
+      }
+
+      &.margin-left {
+        margin-left: 20px;
+      }
+
       &.pad-left {
         padding-left: 75px;
       }
@@ -130,8 +122,121 @@
         margin: 0;
         padding: 0;
 
+        &.label-small {
+          top: 1em;
+          right: 0;
+          font-size: 1em;
+        }
+
         &.label-raised {
           margin-top: -10px;
+        }
+      }
+    }
+
+    .shift-button {
+      width: 42px;
+      height: 40px;
+      margin: 6px 0 10px;
+    }
+  }
+
+  .control-group {
+    display: inline-block;
+    position: relative;
+    align-content: center;
+    width: 75px;
+    height: 75px;
+    margin: auto;
+    padding-bottom: 10px;
+    vertical-align: top;
+
+    &.large-knob {
+      width: 150px;
+      height: 75px;
+      margin-top: -10px;
+      margin-bottom: 10px;
+
+      .knob-value {
+        width: 70px;
+        height: 70px;
+      }
+    }
+
+    &.control-group-half-width {
+      width: 37px;
+    }
+
+    &.control-group-two-thirds-width {
+      width: 50px;
+    }
+  }
+
+  .control-label {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+
+    &.control-label-top {
+      position: absolute;
+      bottom: 85px;
+      left: 10px;
+      width: auto !important;
+    }
+  }
+
+  button {
+    display: inline-block;
+    padding: 0;
+    transition: all .1s ease-in-out;
+    border: 1px solid #000;
+    border-radius: 3px;
+    background: var(--control-value-background);
+
+    &:hover {
+      transform: scale(1.05);
+      background: var(--control-value-background-hover);
+    }
+
+    &:active {
+      transform: none;
+      background: var(--control-value-background-active);
+    }
+  }
+
+  .button-group {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+
+    div {
+      overflow: visible;
+
+      button {
+        border-radius: 0;
+      }
+
+      .label {
+        display: inline-block;
+        height: 1em;
+      }
+
+      &:first-child button {
+        border-radius: 3px 0 0 3px;
+      }
+
+      &:last-child button {
+        border-radius: 0 3px 3px 0;
+      }
+    }
+
+    &.button-group-small {
+      div {
+        width: 45px;
+
+        button {
+          width: 47px;
+          height: 21px;
         }
       }
     }

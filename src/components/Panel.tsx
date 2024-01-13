@@ -38,7 +38,7 @@ export default function Panel() {
         </header>
 
         <div className='panel-controls'>
-          <div id='global' className='panel-section row-1-3'>
+          <div id='global' className='panel-section col-1-1 row-1-3'>
             <div className='control-group'>
               <div className='control-wrapper'>
                 <Knob value={1023} onChange={() => {}} />
@@ -162,7 +162,7 @@ export default function Panel() {
               <ParameterSwitch parameter={params.DELAY_OUTPUT_ROUTING} showLabels />
             </div>
 
-            <div id='interaction' className='panel-group'>
+            <div id='interaction' className='panel-group align-left'>
               <Display />
 
               <div className='control-group'>
@@ -180,6 +180,56 @@ export default function Panel() {
               </div>
             </div>
           </div>
+
+          <div id='voice-mode-depth' className='panel-group col-17-1 row-1-2'>
+            <div className='control-group'>
+              <button type='button' className='shift-button button' title='Shift' aria-label='Shift' />
+              <p className='control-label label'>Shift</p>
+            </div>
+            <ParameterKnob parameter={params.VOICE_MODE_DEPTH} />
+          </div>
+
+          <div id='app-controls' className='panel-group col-13-2 row-3-1'>
+            <h2 className='panel-group-label label label-small'>Edit</h2>
+            <div className='button-group button-group-small'>
+              <div>
+                <button type='button' title='Edit Mode' aria-label='Edit Mode' />
+                <p className='control-label label'>Edit Mode</p>
+              </div>
+              <div>
+                <button type='button' title='Write' aria-label='Write' />
+                <p className='control-label label'>Write</p>
+              </div>
+              <div>
+                <button type='button' title='Exit' aria-label='Exit' />
+                <p className='control-label label'>Exit</p>
+              </div>
+            </div>
+          </div>
+
+          <div id='sequence-controls' className='panel-group col-15-3 row-3-1 margin-left'>
+            <h2 className='panel-group-label label label-small'>Sequencer</h2>
+            <div className='button-group button-group-small'>
+              <div>
+                <button type='button' title='Step' aria-label='Step' />
+                <p className='control-label label'>Step</p>
+              </div>
+              <div>
+                <button type='button' title='Play' aria-label='Play' />
+                <p className='control-label label'>Play</p>
+              </div>
+              <div>
+                <button type='button' title='Rec' aria-label='Rec' />
+                <p className='control-label label'>Rec</p>
+              </div>
+              <div>
+                <button type='button' title='Rest' aria-label='Rest' />
+                <p className='control-label label'>Rest</p>
+              </div>
+            </div>
+          </div>
+
+          <div id='voice-mode' className='panel-group col-13-5 row-4-2' />
         </div>
       </div>
     </div>
