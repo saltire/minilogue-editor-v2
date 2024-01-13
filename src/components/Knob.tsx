@@ -1,6 +1,5 @@
 import {
-  MouseEvent as ReactMouseEvent, WheelEvent as ReactWheelEvent,
-  useCallback, useEffect, useRef, useState,
+  MouseEvent as ReactMouseEvent, WheelEvent as ReactWheelEvent, useCallback, useRef,
 } from 'react';
 
 import './Knob.css';
@@ -20,7 +19,7 @@ export type KnobProps = {
   angleOffset?: number,
   arc?: number,
   step?: number,
-  onChange?: (value: number) => void,
+  onChange: (value: number) => void,
 };
 
 const defaults = {
@@ -31,18 +30,8 @@ const defaults = {
   step: 1,
 };
 
-export default function Knob({ value: initValue, onChange, ...props }: KnobProps) {
+export default function Knob({ value, onChange, ...props }: KnobProps) {
   const { min, max, angleOffset, arc, step } = { ...defaults, ...props };
-
-  const [value, setValue] = useState(initValue);
-
-  useEffect(() => {
-    setValue(initValue);
-  }, [initValue]);
-
-  useEffect(() => {
-    onChange?.(value);
-  }, [value]);
 
   const knobElement = useRef<HTMLDivElement>(null);
   const angle = Math.round(mapToRange(value, min, max, angleOffset, angleOffset + arc));
@@ -67,10 +56,9 @@ export default function Knob({ value: initValue, onChange, ...props }: KnobProps
       const clamped = clamp(newAngle, minAngle, maxAngle);
       const mapped = Math.round(mapToRange(clamped, minAngle, maxAngle, min, max));
       const newValue = coerceToStep(mapped, min, max, step);
-
-      setValue(newValue);
+      onChange(newValue);
     }
-  }, [knobElement]);
+  }, [knobElement, onChange]);
 
   const onMouseMove = useCallback((e: MouseEvent) => {
     move(e.clientX, e.clientY);
@@ -92,13 +80,11 @@ export default function Knob({ value: initValue, onChange, ...props }: KnobProps
     e.preventDefault();
     const { deltaY } = e;
 
-    setValue(prev => {
-      let delta = step;
-      delta = (deltaY >= 0) ? -delta : delta;
-      const newValue = clamp(prev + delta, min, max);
-      return newValue;
-    });
-  }, []);
+    let delta = step;
+    delta = (deltaY >= 0) ? -delta : delta;
+    const newValue = clamp(value + delta, min, max);
+    onChange(newValue);
+  }, [value, onChange]);
 
   return (
     <div

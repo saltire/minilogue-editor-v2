@@ -36,7 +36,7 @@ export default function Panel() {
           <div id='global' className='panel-section row-1-3'>
             <div className='control-group'>
               <div className='control-wrapper'>
-                <Knob value={1023} />
+                <Knob value={1023} onChange={() => {}} />
               </div>
               <p className='control-label label'>Master</p>
             </div>

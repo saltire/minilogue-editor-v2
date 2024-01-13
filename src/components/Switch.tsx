@@ -1,6 +1,6 @@
 import {
   MouseEvent as ReactMouseEvent, WheelEvent as ReactWheelEvent,
-  useCallback, useEffect, useRef, useState,
+  useCallback, useEffect, useRef,
 } from 'react';
 
 import './Switch.css';
@@ -14,19 +14,7 @@ type SwitchProps = {
   onChange: (value: number) => void,
 };
 
-export default function Switch({
-  value: initValue, numPositions, vertical = true, onChange,
-}: SwitchProps) {
-  const [value, setValue] = useState(initValue);
-
-  useEffect(() => {
-    setValue(initValue);
-  }, [initValue]);
-
-  useEffect(() => {
-    onChange(value);
-  }, [value]);
-
+export default function Switch({ value, numPositions, vertical = true, onChange }: SwitchProps) {
   const rangeEl = useRef<HTMLDivElement>(null);
   const valueEl = useRef<HTMLDivElement>(null);
 
@@ -37,13 +25,11 @@ export default function Switch({
       const positionSize = size / numPositions;
       const relativePosition = vertical ? bottom - clientY : clientX - left;
       const positionIndex = clamp(Math.floor(relativePosition / positionSize), 0, numPositions - 1);
-      setValue(positionIndex);
+      onChange(positionIndex);
     }
   }, [rangeEl]);
 
   useEffect(() => {
-    onChange(value);
-
     if (rangeEl.current && valueEl.current) {
       const { height: rangeHeight, width: rangeWidth } = rangeEl.current.getBoundingClientRect();
       const { height: valueHeight, width: valueWidth } = valueEl.current.getBoundingClientRect();
@@ -76,18 +62,15 @@ export default function Switch({
     e.preventDefault();
     const { deltaY } = e;
 
-    setValue(prev => {
-      if (!rangeEl.current) {
-        return prev;
-      }
+    if (rangeEl.current) {
       const { height, width } = rangeEl.current.getBoundingClientRect();
       const size = vertical ? height : width;
       const positionSize = size / (numPositions - 1);
       const delta = Math.round(-deltaY / positionSize);
-      const clamped = clamp(prev + delta, 0, numPositions - 1);
-      return clamped;
-    });
-  }, [rangeEl, vertical, numPositions]);
+      const clamped = clamp(value + delta, 0, numPositions - 1);
+      onChange(clamped);
+    }
+  }, [value, rangeEl, vertical, numPositions]);
 
   return (
     <div
