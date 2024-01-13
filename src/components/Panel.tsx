@@ -3,7 +3,9 @@ import SawtoothIcon from '../assets/saw.svg';
 import SquareIcon from '../assets/square.svg';
 import TriangleIcon from '../assets/triangle.svg';
 import * as params from '../minilogue/params';
-import { useAppSelector } from '../store';
+import { setCurrentPosition } from '../slices/librarySlice';
+import { setCurrentProgram } from '../slices/programSlice';
+import { useAppDispatch, useAppSelector } from '../store';
 import Display from './Display';
 import Knob from './Knob';
 import LEDArray from './LEDArray';
@@ -19,6 +21,9 @@ const WAVE_ICONS = [
 ];
 
 export default function Panel() {
+  const dispatch = useAppDispatch();
+  const currentPosition = useAppSelector(({ library: l }) => l.currentPosition);
+  const library = useAppSelector(({ library: l }) => l.library);
   const currentProgram = useAppSelector(({ program }) => program.currentProgram);
 
   return (
@@ -159,6 +164,20 @@ export default function Panel() {
 
             <div id='interaction' className='panel-group'>
               <Display />
+
+              <div className='control-group'>
+                <div className='control-wrapper'>
+                  <Knob
+                    value={currentPosition}
+                    max={library.programs.length - 1}
+                    onChange={value => {
+                      dispatch(setCurrentPosition(value));
+                      dispatch(setCurrentProgram(library.programs[value]));
+                    }}
+                  />
+                  <p className='control-label label'>Program/Value</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

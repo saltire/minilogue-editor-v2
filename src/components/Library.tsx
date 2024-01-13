@@ -3,7 +3,7 @@ import CheckIcon from '../assets/check.svg';
 import TrashIcon from '../assets/trash.svg';
 import * as params from '../minilogue/params';
 import { Program } from '../minilogue/types';
-import { deleteLibraryProgram } from '../slices/librarySlice';
+import { deleteLibraryProgram, setCurrentPosition } from '../slices/librarySlice';
 import { setCurrentProgram } from '../slices/programSlice';
 import { useAppDispatch, useAppSelector } from '../store';
 import LibraryMenu from './LibraryMenu';
@@ -55,7 +55,10 @@ export default function Library() {
                   <Button
                     title='Load in panel'
                     aria-label='Load in panel'
-                    onClick={() => dispatch(setCurrentProgram(program))}
+                    onClick={() => {
+                      dispatch(setCurrentPosition(i));
+                      dispatch(setCurrentProgram(program));
+                    }}
                   >
                     <CheckIcon />
                   </Button>

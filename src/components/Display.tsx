@@ -1,13 +1,15 @@
 import { useEffect } from 'react';
 
 import './Display.css';
-import { getParameterDisplayValue } from '../minilogue/params';
+import { PROGRAM_NAME, getParameterDisplayValue } from '../minilogue/params';
 import { clearDisplayParameter } from '../slices/programSlice';
 import { useAppDispatch, useAppSelector } from '../store';
 
 
 export default function Display() {
   const dispatch = useAppDispatch();
+  const currentPosition = useAppSelector(({ library: l }) => l.currentPosition);
+  const library = useAppSelector(({ library: l }) => l.library);
   const currentProgram = useAppSelector(({ program }) => program.currentProgram);
   const displayParam = useAppSelector(({ program }) => program.displayParam);
 
@@ -24,11 +26,16 @@ export default function Display() {
   return (
     <div className='display-container'>
       <div className='display'>
-        {displayParam !== null && (
-          <p className='display-contents'>
-            {getParameterDisplayValue(currentProgram.parameters, displayParam.parameter)}
-          </p>
-        )}
+        <p className='display-contents'>
+          {displayParam !== null ? (
+            getParameterDisplayValue(currentProgram.parameters, displayParam.parameter)
+          ) : (
+            <>
+              {`000${currentPosition + 1}`.slice(-3)}<br />
+              {library.programs[currentPosition].parameters[PROGRAM_NAME]}
+            </>
+          )}
+        </p>
       </div>
     </div>
   );

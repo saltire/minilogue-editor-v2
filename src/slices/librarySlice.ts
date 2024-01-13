@@ -6,14 +6,14 @@ import { INIT_PROGRAM } from '../minilogue/program';
 
 export type LibraryState = {
   library: Library,
-  currentProgram: number,
+  currentPosition: number,
 };
 
 const initialState: LibraryState = {
   library: {
     programs: [INIT_PROGRAM],
   },
-  currentProgram: 0,
+  currentPosition: 0,
 };
 
 const librarySlice = createSlice({
@@ -30,8 +30,12 @@ const librarySlice = createSlice({
       }
       return { ...state, library: { ...state.library, programs } };
     },
+
+    setCurrentPosition: (state, { payload: currentPosition }: PayloadAction<number>) => ({
+      ...state, currentPosition,
+    }),
   },
 });
 
 export default librarySlice;
-export const { setLibrary, deleteLibraryProgram } = librarySlice.actions;
+export const { setLibrary, deleteLibraryProgram, setCurrentPosition } = librarySlice.actions;

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import './App.css';
 import LibraryIcon from './assets/library.svg';
 import PanelIcon from './assets/panel.svg';
+import { useAppSelector } from './store';
 import Library from './components/Library';
 import MessageLog from './components/MessageLog';
 import Panel from './components/Panel';
@@ -10,6 +11,8 @@ import Ports from './components/Ports';
 
 
 export default function App() {
+  const library = useAppSelector(({ library: l }) => l.library);
+
   const [page, setPage] = useState('panel');
 
   return (
@@ -29,7 +32,7 @@ export default function App() {
           onClick={() => setPage('library')}
         >
           <LibraryIcon />
-          Library
+          Library ({library.programs.length})
         </button>
       </div>
 
