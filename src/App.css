@@ -25,7 +25,6 @@
       font-family: inherit;
       font-size: 1em;
       font-weight: 600;
-      cursor: pointer;
 
       &.active {
         border-bottom: 3px solid var(--control-value-background);
@@ -49,7 +48,6 @@
       padding: 0;
       border: 0;
       background: none;
-      cursor: pointer;
 
       svg {
         width: 30px;

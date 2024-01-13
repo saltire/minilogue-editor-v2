@@ -1,8 +1,13 @@
 import './Library.css';
+import CheckIcon from '../assets/check.svg';
+import TrashIcon from '../assets/trash.svg';
 import * as params from '../minilogue/params';
 import { Program } from '../minilogue/types';
-import { useAppSelector } from '../store';
+import { deleteLibraryProgram } from '../slices/librarySlice';
+import { setCurrentProgram } from '../slices/programSlice';
+import { useAppDispatch, useAppSelector } from '../store';
 import LibraryMenu from './LibraryMenu';
+import Button from './Button';
 
 
 const parameters = [
@@ -21,6 +26,7 @@ const columns = parameters.map(parameter => ({
 
 /* eslint-disable react/no-array-index-key */
 export default function Library() {
+  const dispatch = useAppDispatch();
   const library = useAppSelector(({ library: l }) => l.library);
   // const currentProgram = useAppSelector(({ library: l }) => l.currentProgram);
 
@@ -43,6 +49,25 @@ export default function Library() {
               {columns.map((column, c) => (
                 <td key={c} className='table-cell'>{column.getValue(program)}</td>
               ))}
+
+              <td className='table-cell'>
+                <div className='row-actions'>
+                  <Button
+                    title='Load in panel'
+                    aria-label='Load in panel'
+                    onClick={() => dispatch(setCurrentProgram(program))}
+                  >
+                    <CheckIcon />
+                  </Button>
+                  <Button
+                    title='Delete from library'
+                    aria-label='Delete from library'
+                    onClick={() => dispatch(deleteLibraryProgram(i))}
+                  >
+                    <TrashIcon />
+                  </Button>
+                </div>
+              </td>
             </tr>
           ))}
         </tbody>

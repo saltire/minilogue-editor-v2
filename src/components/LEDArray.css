@@ -22,7 +22,6 @@
       border: 0;
       border-radius: 6px;
       background: var(--control-value-background);
-      cursor: pointer;
 
       &.led-array-light-active {
         border: 1px solid #644;

@@ -14,7 +14,31 @@
   }
 
   .table-row {
+    transition: background-color 0.3s ease;
     border-bottom: 1px solid #e1e1e1;
+
+    .row-actions {
+      visibility: hidden;
+
+      .menu-button {
+        padding: 0 .5em;
+        border: 0;
+        background: none;
+
+        svg {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+
+    &:hover {
+      background-color: #e7e7e7;
+
+      .row-actions {
+        visibility: visible;
+      }
+    }
   }
 
   .table-cell {
