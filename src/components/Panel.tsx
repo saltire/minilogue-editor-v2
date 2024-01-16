@@ -1,7 +1,11 @@
+import { useState } from 'react';
+
 import './Panel.css';
+import DownArrowIcon from '../assets/down-arrow.svg';
 import SawtoothIcon from '../assets/saw.svg';
 import SquareIcon from '../assets/square.svg';
 import TriangleIcon from '../assets/triangle.svg';
+import UpArrowIcon from '../assets/up-arrow.svg';
 import * as params from '../minilogue/params';
 import { setCurrentPosition } from '../slices/librarySlice';
 import { setCurrentProgram } from '../slices/programSlice';
@@ -13,6 +17,7 @@ import PanelMenu from './PanelMenu';
 import ParameterKnob from './ParameterKnob';
 import ParameterSwitch from './ParameterSwitch';
 import VoiceMode from './VoiceMode';
+import { classList } from '../utils';
 
 
 const WAVE_ICONS = [
@@ -26,6 +31,8 @@ export default function Panel() {
   const currentPosition = useAppSelector(({ library: l }) => l.currentPosition);
   const library = useAppSelector(({ library: l }) => l.library);
   const currentProgram = useAppSelector(({ program }) => program.currentProgram);
+
+  const [showExtraParams, setShowExtraParams] = useState(false);
 
   return (
     <div>
@@ -234,6 +241,32 @@ export default function Panel() {
             <VoiceMode />
           </div>
         </div>
+
+        <div className={classList('slide', showExtraParams && 'slide-open')}>
+          <div id='extra-parameters' className='panel-group extra-parameters'>
+            <h2 className='label'>Additional Parameters</h2>
+            <ParameterKnob parameter={params.BEND_RANGE_NEGATIVE} min={1} max={12} />
+            <ParameterKnob parameter={params.BEND_RANGE_POSITIVE} min={1} max={12} />
+            <ParameterKnob parameter={params.PROGRAM_LEVEL} min={1} max={12} />
+            <ParameterKnob parameter={params.AMP_VELOCITY} min={1} max={12} />
+            <ParameterKnob parameter={params.PORTAMENTO_TIME} min={1} max={12} />
+            <ParameterSwitch parameter={params.PORTAMENTO_MODE} />
+            <ParameterSwitch parameter={params.PORTAMENTO_BPM} />
+            <ParameterSwitch parameter={params.LFO_BPM_SYNC} />
+            <ParameterSwitch parameter={params.LFO_KEY_SYNC} />
+            <ParameterSwitch parameter={params.LFO_VOICE_SYNC} />
+          </div>
+        </div>
+
+        <button
+          type='button'
+          className='show-extra-params'
+          title={`${showExtraParams ? 'Hide' : 'Show'} Additional Parameters`}
+          aria-label={`${showExtraParams ? 'Hide' : 'Show'} Additional Parameters`}
+          onClick={() => setShowExtraParams(prev => !prev)}
+        >
+          {showExtraParams ? <UpArrowIcon /> : <DownArrowIcon />}
+        </button>
       </div>
     </div>
   );

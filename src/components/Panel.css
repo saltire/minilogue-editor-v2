@@ -241,4 +241,29 @@
       }
     }
   }
+
+  .slide {
+    max-height: 0;
+    overflow-y: hidden;
+    transition: max-height 200ms ease-in-out;
+
+    &.slide-open {
+      max-height: 160px;
+      overflow-y: visible;
+    }
+  }
+
+  .show-extra-params {
+    border: 0;
+    background: none;
+
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  .extra-parameters {
+    text-transform: uppercase;
+  }
 }
