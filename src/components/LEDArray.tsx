@@ -20,22 +20,23 @@ export default function LEDArray({ parameter, reverse }: LEDArrayProps) {
     return null;
   }
 
-  const choices = Object.values(param.choices);
+  const choices = Object.entries(param.choices)
+    .map(([key, label]) => ({ label, value: parseInt(key) }));
   if (reverse) {
     choices.reverse();
   }
 
   return (
     <ul className='led-array'>
-      {choices.map((label, i) => (
+      {choices.map(({ label, value: choiceValue }) => (
         <li key={label} className='led-array-value'>
           <button
             type='button'
             title={label}
             aria-label={label}
             className={classList('led-array-light',
-              value === i && 'led-array-light-active')}
-            onClick={() => dispatch(setPanelParameter({ parameter, value: i }))}
+              choiceValue === value && 'led-array-light-active')}
+            onClick={() => dispatch(setPanelParameter({ parameter, value: choiceValue }))}
           />
         </li>
       ))}
