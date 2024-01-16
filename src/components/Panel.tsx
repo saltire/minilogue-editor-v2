@@ -16,6 +16,7 @@ import LEDArray from './LEDArray';
 import PanelMenu from './PanelMenu';
 import ParameterKnob from './ParameterKnob';
 import ParameterSwitch from './ParameterSwitch';
+import SliderAssign from './SliderAssign';
 import VoiceMode from './VoiceMode';
 import { classList } from '../utils';
 
@@ -255,6 +256,7 @@ export default function Panel() {
             <ParameterSwitch parameter={params.LFO_BPM_SYNC} />
             <ParameterSwitch parameter={params.LFO_KEY_SYNC} />
             <ParameterSwitch parameter={params.LFO_VOICE_SYNC} />
+            <SliderAssign />
           </div>
         </div>
 

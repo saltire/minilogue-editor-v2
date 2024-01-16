@@ -170,6 +170,15 @@
     &.control-group-two-thirds-width {
       width: 50px;
     }
+
+    &.select-control {
+      width: 150px;
+      padding-top: 10px;
+
+      .label {
+        padding-top: 10px;
+      }
+    }
   }
 
   .control-label {
