@@ -39,35 +39,6 @@
     }
   }
 
-  .action-menu {
-    text-align: center;
-
-    button {
-      display: inline-block;
-      margin: 0 1em;
-      padding: 0;
-      border: 0;
-      background: none;
-
-      svg {
-        width: 30px;
-        height: 30px;
-      }
-
-      &:hover svg {
-        transform: scale(1.1);
-      }
-
-      &:active svg {
-        transform: scale(.9);
-      }
-    }
-
-    input[type=file] {
-      display: none;
-    }
-  }
-
   .status {
     display: flex;
 

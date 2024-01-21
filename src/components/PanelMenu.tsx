@@ -11,6 +11,7 @@ import { INIT_PROGRAM } from '../minilogue/program';
 import generateRandomProgram from '../minilogue/random';
 import { setCurrentProgram } from '../slices/programSlice';
 import { useAppDispatch, useAppSelector } from '../store';
+import ActionMenu from './ActionMenu';
 import Button from './Button';
 
 
@@ -28,7 +29,7 @@ export default function PanelMenu() {
   const fileInput = useRef<HTMLInputElement>(null);
 
   return (
-    <div className='action-menu'>
+    <ActionMenu>
       <Button
         title='Init Program'
         onClick={() => dispatch(setCurrentProgram(INIT_PROGRAM))}
@@ -71,6 +72,6 @@ export default function PanelMenu() {
       >
         <SendIcon />
       </Button>
-    </div>
+    </ActionMenu>
   );
 }

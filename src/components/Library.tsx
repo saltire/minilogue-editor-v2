@@ -31,10 +31,12 @@ export default function Library() {
   // const currentProgram = useAppSelector(({ library: l }) => l.currentProgram);
 
   return (
-    <div>
+    <div className='library'>
+      <h3>Library</h3>
+
       <LibraryMenu />
 
-      <table className='library'>
+      <table>
         <thead>
           <tr className='table-head-row'>
             {columns.map(column => (

@@ -1,7 +1,7 @@
 .led-array {
   display: table;
   position: absolute;
-  z-index: 100;
+  z-index: 10;
   top: 0;
   left: 65px;
   height: 60px;

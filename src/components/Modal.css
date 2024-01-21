@@ -1,0 +1,34 @@
+/* stylelint-disable selector-class-pattern */
+.ReactModal__Overlay {
+  display: flex;
+  z-index: 100;
+  align-items: stretch;
+  padding: 40px;
+
+  .ReactModal__Content {
+    display: flex;
+    position: relative !important;
+    inset: 0 !important;
+    margin: 0 auto;
+    padding: 0 !important;
+    overflow: hidden !important;
+
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 5px;
+      border: 0;
+      background: none;
+
+      svg {
+        width: 30px;
+        height: 30px;
+      }
+    }
+
+    .modal-body {
+      overflow: auto;
+    }
+  }
+}
