@@ -22,11 +22,12 @@
     }
 
     .table-row {
-      transition: background-color 0.3s ease;
+      transition: background-color 0.1s ease;
       border-bottom: 1px solid #e1e1e1;
 
       .row-actions {
-        visibility: hidden;
+        /* visibility: hidden; */
+        opacity: .25;
 
         .menu-button {
           padding: 0 .5em;
@@ -40,11 +41,16 @@
         }
       }
 
+      &.current {
+        background-color: #eee;
+      }
+
       &:hover {
-        background-color: #e7e7e7;
+        background-color: #ddd;
 
         .row-actions {
-          visibility: visible;
+          /* visibility: visible; */
+          opacity: 1;
         }
       }
     }

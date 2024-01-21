@@ -4,11 +4,10 @@ import NewIcon from '../assets/new.svg';
 import OpenIcon from '../assets/open.svg';
 import { loadLibrarianFile } from '../minilogue/library';
 import { INIT_PROGRAM } from '../minilogue/program';
-import { setCurrentProgram } from '../slices/programSlice';
+import { setLibrary } from '../slices/librarySlice';
 import { useAppDispatch } from '../store';
 import ActionMenu from './ActionMenu';
 import Button from './Button';
-import { setLibrary } from '../slices/librarySlice';
 
 
 export default function LibraryMenu() {
@@ -20,7 +19,7 @@ export default function LibraryMenu() {
     <ActionMenu>
       <Button
         title='New Library'
-        onClick={() => dispatch(setCurrentProgram(INIT_PROGRAM))}
+        onClick={() => dispatch(setLibrary({ programs: [INIT_PROGRAM] }))}
       >
         <NewIcon />
       </Button>

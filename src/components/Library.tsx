@@ -8,6 +8,7 @@ import { setCurrentProgram } from '../slices/programSlice';
 import { useAppDispatch, useAppSelector } from '../store';
 import LibraryMenu from './LibraryMenu';
 import Button from './Button';
+import { classList } from '../utils';
 
 
 const parameters = [
@@ -28,7 +29,7 @@ const columns = parameters.map(parameter => ({
 export default function Library() {
   const dispatch = useAppDispatch();
   const library = useAppSelector(({ library: l }) => l.library);
-  // const currentProgram = useAppSelector(({ library: l }) => l.currentProgram);
+  const currentPosition = useAppSelector(({ library: l }) => l.currentPosition);
 
   return (
     <div className='library'>
@@ -47,7 +48,7 @@ export default function Library() {
 
         <tbody>
           {library.programs.map((program, i) => (
-            <tr key={i} className='table-row'>
+            <tr key={i} className={classList('table-row', currentPosition === i && 'current')}>
               {columns.map((column, c) => (
                 <td key={c} className='table-cell'>{column.getValue(program)}</td>
               ))}

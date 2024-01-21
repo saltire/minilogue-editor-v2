@@ -20,7 +20,9 @@ const librarySlice = createSlice({
   name: 'library',
   initialState,
   reducers: {
-    setLibrary: (state, { payload: library }: PayloadAction<Library>) => ({ ...state, library }),
+    setLibrary: (state, { payload: library }: PayloadAction<Library>) => ({
+      ...state, library, currentPosition: 0,
+    }),
 
     deleteLibraryProgram: (state, { payload: index }: PayloadAction<number>) => {
       const programs = [...state.library.programs];
