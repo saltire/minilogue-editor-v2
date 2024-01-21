@@ -27,7 +27,7 @@ export default function Switch({ value, numPositions, vertical = true, onChange 
       const positionIndex = clamp(Math.floor(relativePosition / positionSize), 0, numPositions - 1);
       onChange(positionIndex);
     }
-  }, [rangeEl]);
+  }, [rangeEl, vertical, numPositions]);
 
   useEffect(() => {
     if (rangeEl.current && valueEl.current) {
@@ -42,24 +42,24 @@ export default function Switch({ value, numPositions, vertical = true, onChange 
     }
   }, [value, rangeEl, valueEl, vertical, numPositions]);
 
-  const onMouseMove = useCallback((e: MouseEvent) => {
-    move(e.clientX, e.clientY);
-  }, []);
-
-  const onMouseUp = useCallback(() => {
-    document.removeEventListener('mousemove', onMouseMove);
-    document.removeEventListener('mouseup', onMouseUp);
-  }, []);
-
   const onMouseDown = useCallback((e: ReactMouseEvent) => {
     move(e.clientX, e.clientY);
     e.preventDefault();
+
+    const onMouseMove = (ev: MouseEvent) => {
+      move(ev.clientX, ev.clientY);
+    };
+
+    const onMouseUp = () => {
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
-  }, []);
+  }, [move]);
 
   const onWheel = useCallback((e: ReactWheelEvent) => {
-    e.preventDefault();
     const { deltaY } = e;
 
     if (rangeEl.current) {

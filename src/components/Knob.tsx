@@ -58,33 +58,33 @@ export default function Knob({ value, onChange, ...props }: KnobProps) {
       const newValue = coerceToStep(mapped, min, max, step);
       onChange(newValue);
     }
-  }, [knobElement, onChange]);
-
-  const onMouseMove = useCallback((e: MouseEvent) => {
-    move(e.clientX, e.clientY);
-  }, []);
-
-  const onMouseUp = useCallback(() => {
-    document.removeEventListener('mousemove', onMouseMove);
-    document.removeEventListener('mouseup', onMouseUp);
-  }, []);
+  }, [knobElement, min, max, angleOffset, arc, step, onChange]);
 
   const onMouseDown = useCallback((e: ReactMouseEvent) => {
     move(e.clientX, e.clientY);
     e.preventDefault();
+
+    const onMouseMove = (ev: MouseEvent) => {
+      move(ev.clientX, ev.clientY);
+    };
+
+    const onMouseUp = () => {
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
-  }, []);
+  }, [move]);
 
   const onWheel = useCallback((e: ReactWheelEvent) => {
-    e.preventDefault();
     const { deltaY } = e;
 
     let delta = step;
     delta = (deltaY >= 0) ? -delta : delta;
     const newValue = clamp(value + delta, min, max);
     onChange(newValue);
-  }, [value, onChange]);
+  }, [value, min, max, step, onChange]);
 
   return (
     <div
