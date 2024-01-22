@@ -17,7 +17,11 @@ export default function MessageLog() {
 
   return (
     <div className='message-log' ref={container}>
-      {messages.map(message => <p key={message.timeStamp}>{JSON.stringify(message)}</p>)}
+      {messages.map(msg => (
+        <p key={`${msg.messageType}-${msg.channel}-${msg.code}-${msg.timeStamp}`}>
+          {JSON.stringify(msg)}
+        </p>
+      ))}
     </div>
   );
 }

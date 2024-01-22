@@ -24,10 +24,13 @@ export default function Switch({ value, numPositions, vertical = true, onChange 
       const size = vertical ? height : width;
       const positionSize = size / numPositions;
       const relativePosition = vertical ? bottom - clientY : clientX - left;
-      const positionIndex = clamp(Math.floor(relativePosition / positionSize), 0, numPositions - 1);
-      onChange(positionIndex);
+      const newValue = clamp(Math.floor(relativePosition / positionSize), 0, numPositions - 1);
+
+      if (newValue !== value) {
+        onChange(newValue);
+      }
     }
-  }, [rangeEl, vertical, numPositions]);
+  }, [value, rangeEl, vertical, numPositions]);
 
   useEffect(() => {
     if (rangeEl.current && valueEl.current) {
@@ -67,8 +70,11 @@ export default function Switch({ value, numPositions, vertical = true, onChange 
       const size = vertical ? height : width;
       const positionSize = size / (numPositions - 1);
       const delta = Math.round(-deltaY / positionSize);
-      const clamped = clamp(value + delta, 0, numPositions - 1);
-      onChange(clamped);
+      const newValue = clamp(value + delta, 0, numPositions - 1);
+
+      if (newValue !== value) {
+        onChange(newValue);
+      }
     }
   }, [value, rangeEl, vertical, numPositions]);
 
