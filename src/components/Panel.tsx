@@ -8,6 +8,7 @@ import TriangleIcon from '../assets/triangle.svg';
 import UpArrowIcon from '../assets/up-arrow.svg';
 import * as params from '../minilogue/params';
 import { setCurrentPosition } from '../slices/librarySlice';
+import { sendProgram } from '../slices/midiSlice';
 import { setCurrentProgram } from '../slices/programSlice';
 import { useAppDispatch, useAppSelector } from '../store';
 import Display from './Display';
@@ -182,6 +183,7 @@ export default function Panel() {
                     onChange={value => {
                       dispatch(setCurrentPosition(value));
                       dispatch(setCurrentProgram(library.programs[value]));
+                      dispatch(sendProgram(library.programs[value]));
                     }}
                   />
                   <p className='control-label label'>Program/Value</p>
