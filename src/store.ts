@@ -2,24 +2,14 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 
 import midiMiddleware from './middleware/midi';
-import librarySlice from './slices/librarySlice';
-import midiSlice from './slices/midiSlice';
-import programSlice from './slices/programSlice';
+import { rootReducer, RootState } from './reducer';
 
 
 export const store = configureStore({
-  reducer: {
-    library: librarySlice.reducer,
-    midi: midiSlice.reducer,
-    program: programSlice.reducer,
-  },
+  reducer: rootReducer,
   middleware: getDefaultMiddleware => getDefaultMiddleware({ serializableCheck: false })
     .concat(midiMiddleware),
 });
 
-export type AppStore = typeof store;
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
-
-export const useAppDispatch = () => useDispatch<AppStore['dispatch']>();
+export const useAppDispatch = () => useDispatch<typeof store.dispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;

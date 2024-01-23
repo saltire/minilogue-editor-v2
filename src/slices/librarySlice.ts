@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { Library } from '../minilogue/types';
 import { INIT_PROGRAM } from '../minilogue/program';
+import { Library } from '../minilogue/types';
 
 
 export type LibraryState = {

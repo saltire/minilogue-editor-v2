@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import './Panel.css';
 import DownArrowIcon from '../assets/down-arrow.svg';
@@ -6,9 +6,9 @@ import SawtoothIcon from '../assets/saw.svg';
 import SquareIcon from '../assets/square.svg';
 import TriangleIcon from '../assets/triangle.svg';
 import UpArrowIcon from '../assets/up-arrow.svg';
+import { getOutputPort, sendCurrentProgram } from '../minilogue/midi';
 import * as params from '../minilogue/params';
 import { setCurrentPosition } from '../slices/librarySlice';
-import { sendProgram } from '../slices/midiSlice';
 import { setCurrentProgram } from '../slices/programSlice';
 import { useAppDispatch, useAppSelector } from '../store';
 import Display from './Display';
@@ -32,7 +32,10 @@ export default function Panel() {
   const dispatch = useAppDispatch();
   const currentPosition = useAppSelector(({ library: l }) => l.currentPosition);
   const library = useAppSelector(({ library: l }) => l.library);
+  const ports = useAppSelector(({ midi }) => midi.ports);
   const currentProgram = useAppSelector(({ program }) => program.currentProgram);
+
+  const output = useMemo(() => getOutputPort(ports), [ports]);
 
   const [showExtraParams, setShowExtraParams] = useState(false);
 
@@ -183,7 +186,9 @@ export default function Panel() {
                     onChange={value => {
                       dispatch(setCurrentPosition(value));
                       dispatch(setCurrentProgram(library.programs[value]));
-                      dispatch(sendProgram(library.programs[value]));
+                      if (output) {
+                        sendCurrentProgram(output, library.programs[value]);
+                      }
                     }}
                   />
                   <p className='control-label label'>Program/Value</p>

@@ -1,11 +1,15 @@
 import { Middleware } from '@reduxjs/toolkit';
 
-import { messageToParameter } from '../minilogue/midi';
+import {
+  CLOCK, CONTROL_CHANGE, PROGRAM_CHANGE,
+  messageToParameter,
+} from '../minilogue/midi';
+import { paramData } from '../minilogue/params';
 import { decodeProgram } from '../minilogue/program';
 import { isSysexMessage, parseSysexMessage } from '../minilogue/sysex';
-import { paramData } from '../minilogue/params';
-import { setCurrentProgram, setPanelParameter } from '../slices/programSlice';
+import { RootState } from '../reducer';
 import { connectPort, disconnectPort, receiveMessage } from '../slices/midiSlice';
+import { setCurrentProgram, setPanelParameter } from '../slices/programSlice';
 
 
 /* eslint-disable no-param-reassign, no-bitwise */
@@ -14,7 +18,7 @@ const accessPromise = 'requestMIDIAccess' in navigator
   ? navigator.requestMIDIAccess({ sysex: true })
   : Promise.reject(new Error('WebMIDI access not available.'));
 
-const midiMiddleware: Middleware = ({ dispatch }) => {
+const midiMiddleware: Middleware<object, RootState> = ({ dispatch }) => {
   accessPromise
     .then(access => {
       // console.log({ access });
@@ -32,15 +36,18 @@ const midiMiddleware: Middleware = ({ dispatch }) => {
           }
         }
 
-        // Ignore clock messages for now.
-        else if (data[0] !== 0xf8) {
-          console.log('message', event);
+        else {
           const [status, code, value] = data;
           const messageType = status >>> 4;
           const channel = status & 0b00001111;
-          // console.log({ messageType, channel, code, value });
 
-          if (messageType === 0xb) {
+          if (messageType === CLOCK) {
+            return;
+          }
+
+          if (messageType === CONTROL_CHANGE) {
+            // TODO: handle bank / program change
+
             const [parameter, translated] = messageToParameter(code, value);
             if (parameter !== undefined && translated !== undefined) {
               console.log({ parameter: paramData[parameter].title, value: translated });
@@ -48,9 +55,18 @@ const midiMiddleware: Middleware = ({ dispatch }) => {
               dispatch(setPanelParameter({ parameter, value: translated }));
             }
           }
-          // else if (messageType === 0xc) {
-          //   console.log({ program: code + 1 });
-          // }
+          else if (messageType === PROGRAM_CHANGE) {
+            console.log({ program: code + 1 });
+
+            // const { midi: { ports } } = getState();
+            // const output = getOutputPort(ports);
+            // if (output) {
+            //   requestCurrentProgram(output);
+            // }
+          }
+          else {
+            console.log({ messageType, channel, code, value });
+          }
 
           dispatch(receiveMessage({
             targetId, messageType, channel, code, value, timeStamp,

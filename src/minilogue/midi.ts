@@ -1,9 +1,17 @@
 import * as params from './params';
 import { encodeProgram } from './program';
-import { encodeSysexData } from './sysex';
-import { Program } from './types';
+import {
+  CURRENT_PROGRAM_DATA_DUMP, CURRENT_PROGRAM_DATA_DUMP_REQUEST, PROGRAM_DATA_DUMP_REQUEST,
+  encodeProgramIndex, encodeSysexData,
+} from './sysex';
+import { PortsMap, Program } from './types';
 import { mapToRange } from '../utils';
 
+
+// MIDI message types
+export const CONTROL_CHANGE = 0xb;
+export const PROGRAM_CHANGE = 0xc;
+export const CLOCK = 0xf;
 
 export const CODE_TO_PARAMETER: { [index: number]: number } = {
   16: params.AMP_EG_ATTACK,
@@ -106,19 +114,22 @@ export const messageToParameter = (code: number, value: number) => {
 
 const channel = 0;
 
-const CURRENT_PROGRAM_DATA_DUMP_REQUEST = 0x10; // Ask for the current program
-const CURRENT_PROGRAM_DATA_DUMP = 0x40; // Set the current program
-
 const buildMessage = (type: number, data?: Uint8Array) => [
   0xf0, 0x42, 0x30 | channel, 0x00, 0x01, 0x2c, type, ...data ?? [], 0xf7,
 ];
 
 export const requestCurrentProgram = (output: MIDIOutput) => {
-  const message = buildMessage(CURRENT_PROGRAM_DATA_DUMP_REQUEST);
-  output.send(message);
+  output.send(buildMessage(CURRENT_PROGRAM_DATA_DUMP_REQUEST));
+};
+
+export const requestProgram = (output: MIDIOutput, index: number) => {
+  output.send(buildMessage(PROGRAM_DATA_DUMP_REQUEST, encodeProgramIndex(index)));
 };
 
 export const sendCurrentProgram = (output: MIDIOutput, program: Program) => {
-  const message = buildMessage(CURRENT_PROGRAM_DATA_DUMP, encodeSysexData(encodeProgram(program)));
-  output.send(message);
+  output.send(buildMessage(CURRENT_PROGRAM_DATA_DUMP, encodeSysexData(encodeProgram(program))));
 };
+
+export const getOutputPort = (ports: PortsMap) => Object.values(ports)
+  .filter((port: MIDIPort | undefined): port is MIDIOutput => port?.type === 'output')
+  .find(port => port.name?.includes('SOUND'));

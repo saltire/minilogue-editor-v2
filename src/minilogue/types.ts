@@ -77,3 +77,5 @@ export type ParamData = {
   label?: string,
   func?: (value: number, program: ProgramParams) => number | string,
 } & (ChoiceParamData | IntegerParamData | StringParamData);
+
+export type PortsMap = { [portId: string]: MIDIPort | undefined };

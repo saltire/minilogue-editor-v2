@@ -6,9 +6,9 @@ import ReceiveIcon from '../assets/receive.svg';
 import SendIcon from '../assets/send.svg';
 import ShuffleIcon from '../assets/shuffle.svg';
 import { loadLibrarianFile } from '../minilogue/library';
+import { getOutputPort, requestCurrentProgram, sendCurrentProgram } from '../minilogue/midi';
 import { INIT_PROGRAM } from '../minilogue/program';
 import generateRandomProgram from '../minilogue/random';
-import { getOutputPort, requestProgram, sendProgram } from '../slices/midiSlice';
 import { setCurrentProgram } from '../slices/programSlice';
 import { useAppDispatch, useAppSelector } from '../store';
 import ActionMenu from './ActionMenu';
@@ -56,7 +56,7 @@ export default function PanelMenu() {
       <Button
         title='Request Program'
         disabled={!output}
-        onClick={() => dispatch(requestProgram)}
+        onClick={() => output && requestCurrentProgram(output)}
       >
         <ReceiveIcon />
       </Button>
@@ -64,7 +64,7 @@ export default function PanelMenu() {
       <Button
         title='Send Program'
         disabled={!output}
-        onClick={() => dispatch(sendProgram(currentProgram))}
+        onClick={() => output && sendCurrentProgram(output, currentProgram)}
       >
         <SendIcon />
       </Button>
