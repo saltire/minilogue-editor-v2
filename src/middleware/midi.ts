@@ -3,10 +3,15 @@ import { Middleware } from '@reduxjs/toolkit';
 import { CLOCK, CONTROL_CHANGE, PROGRAM_CHANGE, messageToParameter } from '../minilogue/midi';
 import { paramData } from '../minilogue/params';
 import { decodeProgram } from '../minilogue/program';
-import { isSysexMessage, parseSysexMessage } from '../minilogue/sysex';
+import {
+  CURRENT_PROGRAM_DATA_DUMP, PROGRAM_DATA_DUMP, GLOBAL_DATA_DUMP,
+  DATA_FORMAT_ERROR, DATA_LOAD_COMPLETED, DATA_LOAD_ERROR,
+  decodeProgramIndex, decodeSysexData, getSysexFunction,
+} from '../minilogue/sysex';
 import { RootState } from '../reducer';
 import { connectPort, disconnectPort, receiveMessage } from '../slices/midiSlice';
 import { setCurrentProgram, setPanelParameter } from '../slices/programSlice';
+import { setLibraryProgram } from '../slices/librarySlice';
 
 
 /* eslint-disable no-param-reassign, no-bitwise */
@@ -26,10 +31,28 @@ const midiMiddleware: Middleware<object, RootState> = ({ dispatch }) => {
         const targetId = (target as MIDIPort).id;
 
         // Sysex message
-        if (isSysexMessage(data)) {
-          const program = parseSysexMessage(data);
-          if (program) {
-            dispatch(setCurrentProgram(decodeProgram(program)));
+        const func = getSysexFunction(data);
+        if (func !== undefined) {
+          if (func === CURRENT_PROGRAM_DATA_DUMP) {
+            const program = decodeProgram(decodeSysexData(data.slice(7, -1)));
+            dispatch(setCurrentProgram(program));
+          }
+          else if (func === PROGRAM_DATA_DUMP) {
+            const index = decodeProgramIndex(data.slice(7, 9));
+            const program = decodeProgram(decodeSysexData(data.slice(9, -1)));
+            dispatch(setLibraryProgram({ index, program }));
+          }
+          else if (func === GLOBAL_DATA_DUMP) {
+            console.log('Global data dump');
+          }
+          else if (func === DATA_FORMAT_ERROR) {
+            console.warn('Data format error');
+          }
+          else if (func === DATA_LOAD_COMPLETED) {
+            console.log('Data load completed');
+          }
+          else if (func === DATA_LOAD_ERROR) {
+            console.warn('Data load error');
           }
         }
 

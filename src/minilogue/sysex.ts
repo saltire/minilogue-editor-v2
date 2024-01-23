@@ -12,14 +12,14 @@ export const DATA_LOAD_ERROR = 0x24;
 export const HIGH_BIT_MASK = 0b10000000;
 export const LOW_BITS_MASK = 0b01111111;
 
-export const isSysexMessage = (data: Uint8Array) => (
+export const getSysexFunction = (data: Uint8Array) => ((
   (data[0] === 0xf0)
   && (data[1] === 0x42)
   && (data[2] === 0x30)
   && (data[3] === 0x00)
   && (data[4] === 0x01)
-  && (data[5] === 0x2c)
-);
+  && (data[5] === 0x2c))
+  ? data[6] : undefined);
 
 // Decode the 7-bit MIDI sysex data into an 8-bit data array.
 export const decodeSysexData = (data: Uint8Array) => {
@@ -53,36 +53,12 @@ export const encodeSysexData = (data: Uint8Array) => {
   return output;
 };
 
+export const decodeProgramIndex = (data: Uint8Array) => (
+  (data[0] & LOW_BITS_MASK) | ((data[1] << 7) & HIGH_BIT_MASK));
+
 export const encodeProgramIndex = (number: number) => {
   const data = new Uint8Array(2);
   data[0] = number & LOW_BITS_MASK;
   data[1] = (number & HIGH_BIT_MASK) >>> 7;
   return data;
-};
-
-export const parseSysexMessage = (data: Uint8Array) => {
-  if (data[6] === CURRENT_PROGRAM_DATA_DUMP) {
-    console.log('Current program data dump');
-    return decodeSysexData(data.slice(7, -1));
-  }
-
-  if (data[6] === PROGRAM_DATA_DUMP) {
-    console.log('Program data dump');
-    return decodeSysexData(data.slice(9, -1));
-  }
-
-  if (data[6] === GLOBAL_DATA_DUMP) {
-    console.log('Global data dump');
-  }
-  else if (data[6] === DATA_FORMAT_ERROR) {
-    console.warn('Data format error');
-  }
-  else if (data[6] === DATA_LOAD_COMPLETED) {
-    console.log('Data load completed');
-  }
-  else if (data[6] === DATA_LOAD_ERROR) {
-    console.warn('Data load error');
-  }
-
-  return undefined;
 };

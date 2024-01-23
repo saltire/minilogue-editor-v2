@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { INIT_PROGRAM } from '../minilogue/program';
-import { Library } from '../minilogue/types';
+import { Library, Program } from '../minilogue/types';
 
 
 export type LibraryState = {
@@ -16,6 +16,11 @@ const initialState: LibraryState = {
   currentPosition: 0,
 };
 
+type ProgramParams = {
+  index: number,
+  program: Program,
+};
+
 const librarySlice = createSlice({
   name: 'library',
   initialState,
@@ -25,6 +30,12 @@ const librarySlice = createSlice({
       library,
       currentPosition: 0,
     }),
+
+    setLibraryProgram: (state, { payload: { index, program } }: PayloadAction<ProgramParams>) => {
+      const programs = [...state.library.programs];
+      programs[index] = program;
+      return { ...state, library: { ...state.library, programs } };
+    },
 
     deleteLibraryProgram: (state, { payload: index }: PayloadAction<number>) => {
       const programs = [...state.library.programs];
@@ -43,4 +54,6 @@ const librarySlice = createSlice({
 });
 
 export default librarySlice;
-export const { setLibrary, deleteLibraryProgram, setCurrentPosition } = librarySlice.actions;
+export const {
+  setLibrary, setLibraryProgram, deleteLibraryProgram, setCurrentPosition,
+} = librarySlice.actions;

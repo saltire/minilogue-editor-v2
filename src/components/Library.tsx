@@ -40,6 +40,7 @@ export default function Library() {
       <table>
         <thead>
           <tr className='table-head-row'>
+            <th className='table-cell table-heading'>#</th>
             {columns.map(column => (
               <th key={column.label} className='table-cell table-heading'>{column.label}</th>
             ))}
@@ -49,6 +50,8 @@ export default function Library() {
         <tbody>
           {library.programs.map((program, i) => (
             <tr key={i} className={classList('table-row', currentPosition === i && 'current')}>
+              <td className='table-cell'>{i + 1}</td>
+
               {columns.map((column, c) => (
                 <td key={c} className='table-cell'>{column.getValue(program)}</td>
               ))}
