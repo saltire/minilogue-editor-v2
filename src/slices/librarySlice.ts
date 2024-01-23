@@ -21,7 +21,9 @@ const librarySlice = createSlice({
   initialState,
   reducers: {
     setLibrary: (state, { payload: library }: PayloadAction<Library>) => ({
-      ...state, library, currentPosition: 0,
+      ...state,
+      library,
+      currentPosition: 0,
     }),
 
     deleteLibraryProgram: (state, { payload: index }: PayloadAction<number>) => {
@@ -34,7 +36,8 @@ const librarySlice = createSlice({
     },
 
     setCurrentPosition: (state, { payload: currentPosition }: PayloadAction<number>) => ({
-      ...state, currentPosition,
+      ...state,
+      currentPosition,
     }),
   },
 });

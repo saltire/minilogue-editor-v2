@@ -2,16 +2,20 @@ import * as params from './params';
 import { encodeProgram } from './program';
 import {
   CURRENT_PROGRAM_DATA_DUMP, CURRENT_PROGRAM_DATA_DUMP_REQUEST, PROGRAM_DATA_DUMP_REQUEST,
-  encodeProgramIndex, encodeSysexData,
+  HIGH_BIT_MASK, LOW_BITS_MASK,
+  encodeProgramIndex, encodeSysexData, GLOBAL_DATA_DUMP_REQUEST,
 } from './sysex';
 import { PortsMap, Program } from './types';
-import { mapToRange } from '../utils';
+import { mapToRange, toHex } from '../utils';
 
 
 // MIDI message types
 export const CONTROL_CHANGE = 0xb;
 export const PROGRAM_CHANGE = 0xc;
 export const CLOCK = 0xf;
+
+export const BANK_SELECT_HIGH = 0x0;
+export const BANK_SELECT_LOW = 0x20;
 
 export const CODE_TO_PARAMETER: { [index: number]: number } = {
   16: params.AMP_EG_ATTACK,
@@ -119,11 +123,17 @@ const buildMessage = (type: number, data?: Uint8Array) => [
 ];
 
 export const requestCurrentProgram = (output: MIDIOutput) => {
+  console.log(toHex(buildMessage(CURRENT_PROGRAM_DATA_DUMP_REQUEST)));
   output.send(buildMessage(CURRENT_PROGRAM_DATA_DUMP_REQUEST));
 };
 
 export const requestProgram = (output: MIDIOutput, index: number) => {
+  console.log(toHex(buildMessage(PROGRAM_DATA_DUMP_REQUEST, encodeProgramIndex(index))));
   output.send(buildMessage(PROGRAM_DATA_DUMP_REQUEST, encodeProgramIndex(index)));
+};
+
+export const requestGlobalData = (output: MIDIOutput) => {
+  output.send(buildMessage(GLOBAL_DATA_DUMP_REQUEST));
 };
 
 export const sendCurrentProgram = (output: MIDIOutput, program: Program) => {
@@ -133,3 +143,11 @@ export const sendCurrentProgram = (output: MIDIOutput, program: Program) => {
 export const getOutputPort = (ports: PortsMap) => Object.values(ports)
   .filter((port: MIDIPort | undefined): port is MIDIOutput => port?.type === 'output')
   .find(port => port.name?.includes('SOUND'));
+
+export type BitsData = {
+  high?: number,
+  low?: number,
+};
+export const updateBits = (current: number | undefined, { high, low }: BitsData) => (
+  ((high !== undefined ? (high << 7) : (current ?? 0)) & HIGH_BIT_MASK)
+  | ((low ?? current ?? 0) & LOW_BITS_MASK));

@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
+import { BitsData, updateBits } from '../minilogue/midi';
 import { PortsMap } from '../minilogue/types';
 
 
@@ -16,6 +17,8 @@ export type MidiState = {
   access: MIDIAccess | null,
   ports: PortsMap,
   messages: Message[],
+  deviceBank?: number,
+  deviceProgram?: number,
 };
 
 const initialState: MidiState = {
@@ -46,8 +49,20 @@ const midiSlice = createSlice({
       ...state,
       messages: [...state.messages.slice(-99), message],
     }),
+
+    updateBank: (state, { payload }: PayloadAction<BitsData>) => ({
+      ...state,
+      deviceBank: updateBits(state.deviceBank, payload),
+    }),
+
+    setProgram: (state, { payload: deviceProgram }: PayloadAction<number>) => ({
+      ...state,
+      deviceProgram,
+    }),
   },
 });
 
 export default midiSlice;
-export const { storeAccess, connectPort, disconnectPort, receiveMessage } = midiSlice.actions;
+export const {
+  storeAccess, connectPort, disconnectPort, receiveMessage, updateBank, setProgram,
+} = midiSlice.actions;

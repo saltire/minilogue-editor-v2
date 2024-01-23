@@ -12,3 +12,5 @@ export const mapToRange = (
   const scale = (value - inLow) / fromRange;
   return (toRange * scale) + outLow;
 };
+
+export const toHex = (data: number[] | Uint8Array) => Array.from(data).map(val => val.toString(16));

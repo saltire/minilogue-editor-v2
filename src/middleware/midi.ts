@@ -1,9 +1,6 @@
 import { Middleware } from '@reduxjs/toolkit';
 
-import {
-  CLOCK, CONTROL_CHANGE, PROGRAM_CHANGE,
-  messageToParameter,
-} from '../minilogue/midi';
+import { CLOCK, CONTROL_CHANGE, PROGRAM_CHANGE, messageToParameter } from '../minilogue/midi';
 import { paramData } from '../minilogue/params';
 import { decodeProgram } from '../minilogue/program';
 import { isSysexMessage, parseSysexMessage } from '../minilogue/sysex';
@@ -46,7 +43,12 @@ const midiMiddleware: Middleware<object, RootState> = ({ dispatch }) => {
           }
 
           if (messageType === CONTROL_CHANGE) {
-            // TODO: handle bank / program change
+            // if (code === BANK_SELECT_HIGH) {
+            //   dispatch(updateBank({ high: value }));
+            // }
+            // else if (code === BANK_SELECT_LOW) {
+            //   dispatch(updateBank({ low: value }));
+            // }
 
             const [parameter, translated] = messageToParameter(code, value);
             if (parameter !== undefined && translated !== undefined) {
@@ -58,10 +60,12 @@ const midiMiddleware: Middleware<object, RootState> = ({ dispatch }) => {
           else if (messageType === PROGRAM_CHANGE) {
             console.log({ program: code + 1 });
 
-            // const { midi: { ports } } = getState();
+            // const { midi: { ports, deviceBank } } = getState();
+            // dispatch(setProgram(code));
+
             // const output = getOutputPort(ports);
             // if (output) {
-            //   requestCurrentProgram(output);
+            //   requestProgram(output, (deviceBank ?? 0) * 100 + code);
             // }
           }
           else {
@@ -75,18 +79,18 @@ const midiMiddleware: Middleware<object, RootState> = ({ dispatch }) => {
       };
 
       access.inputs.forEach(input => {
-        console.log({ input });
+        // console.log({ input });
         dispatch(connectPort(input));
         input.addEventListener('midimessage', handleMessage);
       });
 
       access.outputs.forEach(output => {
-        console.log({ output });
+        // console.log({ output });
         dispatch(connectPort(output));
       });
 
       access.addEventListener('statechange', event => {
-        console.log('statechange', event);
+        // console.log('statechange', event);
 
         const { port } = event as MIDIConnectionEvent;
         if (port.state === 'connected') {

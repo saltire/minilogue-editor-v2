@@ -9,12 +9,13 @@ export const DATA_FORMAT_ERROR = 0x26;
 export const DATA_LOAD_COMPLETED = 0x23;
 export const DATA_LOAD_ERROR = 0x24;
 
-const HIGH_BIT_MASK = 0b10000000;
-const LOW_BITS_MASK = 0b01111111;
+export const HIGH_BIT_MASK = 0b10000000;
+export const LOW_BITS_MASK = 0b01111111;
 
 export const isSysexMessage = (data: Uint8Array) => (
   (data[0] === 0xf0)
   && (data[1] === 0x42)
+  && (data[2] === 0x30)
   && (data[3] === 0x00)
   && (data[4] === 0x01)
   && (data[5] === 0x2c)
@@ -61,12 +62,12 @@ export const encodeProgramIndex = (number: number) => {
 
 export const parseSysexMessage = (data: Uint8Array) => {
   if (data[6] === CURRENT_PROGRAM_DATA_DUMP) {
-    // console.log('Current program data dump');
+    console.log('Current program data dump');
     return decodeSysexData(data.slice(7, -1));
   }
 
   if (data[6] === PROGRAM_DATA_DUMP) {
-    // console.log('Program data dump');
+    console.log('Program data dump');
     return decodeSysexData(data.slice(9, -1));
   }
 
