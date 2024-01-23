@@ -4,6 +4,10 @@ export const clamp = (value: number, min: number, max: number) => (
 export const classList = (...classes: (string | number | boolean | null | undefined)[]) => classes
   .filter(Boolean).join(' ');
 
+export const delay = (timeout: number) => new Promise<void>(resolve => {
+  setTimeout(resolve, timeout);
+});
+
 export const mapToRange = (
   value: number, inLow: number, inHigh: number, outLow: number, outHigh: number,
 ) => {
@@ -12,5 +16,11 @@ export const mapToRange = (
   const scale = (value - inLow) / fromRange;
   return (toRange * scale) + outLow;
 };
+
+export const range = (length: number) => [...Array(length).keys()];
+
+export const series = <T>(array: T[], func: (item: T, index: number) => void) => array.reduce(
+  (lastPromise, item, index) => lastPromise.then(() => func(item, index)),
+  Promise.resolve());
 
 export const toHex = (data: number[] | Uint8Array) => Array.from(data).map(val => val.toString(16));

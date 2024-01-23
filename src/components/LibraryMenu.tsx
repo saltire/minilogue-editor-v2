@@ -1,19 +1,28 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 import NewIcon from '../assets/new.svg';
 import OpenIcon from '../assets/open.svg';
+import ReceiveIcon from '../assets/receive.svg';
+import SendIcon from '../assets/send.svg';
 import { loadLibrarianFile } from '../minilogue/library';
+import { getOutputPort, requestLibrary, sendLibrary } from '../minilogue/midi';
 import { INIT_PROGRAM } from '../minilogue/program';
 import { setLibrary } from '../slices/librarySlice';
-import { useAppDispatch } from '../store';
+import { useAppDispatch, useAppSelector } from '../store';
 import ActionMenu from './ActionMenu';
 import Button from './Button';
 
 
 export default function LibraryMenu() {
   const dispatch = useAppDispatch();
+  const library = useAppSelector(({ library: l }) => l.library);
+  const ports = useAppSelector(({ midi }) => midi.ports);
+
+  const output = getOutputPort(ports);
 
   const fileInput = useRef<HTMLInputElement>(null);
+
+  const [pending, setPending] = useState(false);
 
   return (
     <ActionMenu>
@@ -34,8 +43,38 @@ export default function LibraryMenu() {
         ref={fileInput}
         type='file'
         onChange={e => e.target.files?.[0] && loadLibrarianFile(e.target.files[0])
-          .then(library => dispatch(setLibrary(library)))}
+          .then(newLib => dispatch(setLibrary(newLib)))}
       />
+
+      <Button
+        title='Request Library'
+        disabled={!output || pending}
+        onClick={() => {
+          if (output) {
+            setPending(true);
+            requestLibrary(output)
+              .catch(console.error)
+              .finally(() => setPending(false));
+          }
+        }}
+      >
+        <ReceiveIcon />
+      </Button>
+
+      <Button
+        title='Send Library'
+        disabled={!output || pending}
+        onClick={() => {
+          if (output) {
+            setPending(true);
+            sendLibrary(output, library)
+              .catch(console.error)
+              .finally(() => setPending(false));
+          }
+        }}
+      >
+        <SendIcon />
+      </Button>
     </ActionMenu>
   );
 }

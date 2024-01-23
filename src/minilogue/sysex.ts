@@ -56,9 +56,7 @@ export const encodeSysexData = (data: Uint8Array) => {
 export const decodeProgramIndex = (data: Uint8Array) => (
   (data[0] & LOW_BITS_MASK) | ((data[1] << 7) & HIGH_BIT_MASK));
 
-export const encodeProgramIndex = (number: number) => {
-  const data = new Uint8Array(2);
-  data[0] = number & LOW_BITS_MASK;
-  data[1] = (number & HIGH_BIT_MASK) >>> 7;
-  return data;
-};
+export const encodeProgramIndex = (number: number) => new Uint8Array([
+  number & LOW_BITS_MASK,
+  (number & HIGH_BIT_MASK) >>> 7,
+]);

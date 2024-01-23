@@ -1,6 +1,9 @@
 import { Middleware } from '@reduxjs/toolkit';
 
-import { CLOCK, CONTROL_CHANGE, PROGRAM_CHANGE, messageToParameter } from '../minilogue/midi';
+import {
+  BANK_SELECT_HIGH, BANK_SELECT_LOW, CLOCK, CONTROL_CHANGE, PROGRAM_CHANGE,
+  messageToParameter,
+} from '../minilogue/midi';
 import { paramData } from '../minilogue/params';
 import { decodeProgram } from '../minilogue/program';
 import {
@@ -9,7 +12,9 @@ import {
   decodeProgramIndex, decodeSysexData, getSysexFunction,
 } from '../minilogue/sysex';
 import { RootState } from '../reducer';
-import { connectPort, disconnectPort, receiveMessage } from '../slices/midiSlice';
+import {
+  connectPort, disconnectPort, receiveMessage, setProgram, updateBank,
+} from '../slices/midiSlice';
 import { setCurrentProgram, setPanelParameter } from '../slices/programSlice';
 import { setLibraryProgram } from '../slices/librarySlice';
 
@@ -20,7 +25,7 @@ const accessPromise = 'requestMIDIAccess' in navigator
   ? navigator.requestMIDIAccess({ sysex: true })
   : Promise.reject(new Error('WebMIDI access not available.'));
 
-const midiMiddleware: Middleware<object, RootState> = ({ dispatch }) => {
+const midiMiddleware: Middleware<object, RootState> = ({ dispatch, getState }) => {
   accessPromise
     .then(access => {
       // console.log({ access });
@@ -66,12 +71,12 @@ const midiMiddleware: Middleware<object, RootState> = ({ dispatch }) => {
           }
 
           if (messageType === CONTROL_CHANGE) {
-            // if (code === BANK_SELECT_HIGH) {
-            //   dispatch(updateBank({ high: value }));
-            // }
-            // else if (code === BANK_SELECT_LOW) {
-            //   dispatch(updateBank({ low: value }));
-            // }
+            if (code === BANK_SELECT_HIGH) {
+              dispatch(updateBank({ high: value }));
+            }
+            else if (code === BANK_SELECT_LOW) {
+              dispatch(updateBank({ low: value }));
+            }
 
             const [parameter, translated] = messageToParameter(code, value);
             if (parameter !== undefined && translated !== undefined) {
@@ -81,14 +86,15 @@ const midiMiddleware: Middleware<object, RootState> = ({ dispatch }) => {
             }
           }
           else if (messageType === PROGRAM_CHANGE) {
-            console.log({ program: code + 1 });
+            const { midi: { deviceBank } } = getState();
+            dispatch(setProgram(code));
 
-            // const { midi: { ports, deviceBank } } = getState();
-            // dispatch(setProgram(code));
+            const index = (deviceBank ?? 0) * 100 + code;
+            console.log({ program: index + 1 });
 
             // const output = getOutputPort(ports);
             // if (output) {
-            //   requestProgram(output, (deviceBank ?? 0) * 100 + code);
+            //   requestProgram(output, index);
             // }
           }
           else {

@@ -1,12 +1,13 @@
 import * as params from './params';
 import { encodeProgram } from './program';
 import {
-  CURRENT_PROGRAM_DATA_DUMP, CURRENT_PROGRAM_DATA_DUMP_REQUEST, PROGRAM_DATA_DUMP_REQUEST,
+  CURRENT_PROGRAM_DATA_DUMP, CURRENT_PROGRAM_DATA_DUMP_REQUEST,
+  PROGRAM_DATA_DUMP, PROGRAM_DATA_DUMP_REQUEST,
   HIGH_BIT_MASK, LOW_BITS_MASK,
   encodeProgramIndex, encodeSysexData, GLOBAL_DATA_DUMP_REQUEST,
 } from './sysex';
-import { PortsMap, Program } from './types';
-import { mapToRange, toHex } from '../utils';
+import { Library, PortsMap, Program } from './types';
+import { delay, mapToRange, range, series } from '../utils';
 
 
 // MIDI message types
@@ -118,19 +119,22 @@ export const messageToParameter = (code: number, value: number) => {
 
 const channel = 0;
 
-const buildMessage = (type: number, data?: Uint8Array) => [
+const buildMessage = (type: number, data?: number[] | Uint8Array) => [
   0xf0, 0x42, 0x30 | channel, 0x00, 0x01, 0x2c, type, ...data ?? [], 0xf7,
 ];
 
 export const requestCurrentProgram = (output: MIDIOutput) => {
-  console.log(toHex(buildMessage(CURRENT_PROGRAM_DATA_DUMP_REQUEST)));
   output.send(buildMessage(CURRENT_PROGRAM_DATA_DUMP_REQUEST));
 };
 
 export const requestProgram = (output: MIDIOutput, index: number) => {
-  console.log(toHex(buildMessage(PROGRAM_DATA_DUMP_REQUEST, encodeProgramIndex(index))));
   output.send(buildMessage(PROGRAM_DATA_DUMP_REQUEST, encodeProgramIndex(index)));
 };
+
+export const requestLibrary = (output: MIDIOutput) => series(range(200), async i => {
+  requestProgram(output, i);
+  await delay(100); // TODO: listen for response before proceeding to next request.
+});
 
 export const requestGlobalData = (output: MIDIOutput) => {
   output.send(buildMessage(GLOBAL_DATA_DUMP_REQUEST));
@@ -139,6 +143,19 @@ export const requestGlobalData = (output: MIDIOutput) => {
 export const sendCurrentProgram = (output: MIDIOutput, program: Program) => {
   output.send(buildMessage(CURRENT_PROGRAM_DATA_DUMP, encodeSysexData(encodeProgram(program))));
 };
+
+export const sendProgram = (output: MIDIOutput, index: number, program: Program) => {
+  output.send(buildMessage(PROGRAM_DATA_DUMP, [
+    ...encodeProgramIndex(index),
+    ...encodeSysexData(encodeProgram(program)),
+  ]));
+};
+
+export const sendLibrary = (output: MIDIOutput, library: Library) => series(library.programs,
+  async (program, i) => {
+    sendProgram(output, i, program);
+    await delay(100); // TODO: listen for response before proceeding to next request.
+  });
 
 export const getOutputPort = (ports: PortsMap) => Object.values(ports)
   .filter((port: MIDIPort | undefined): port is MIDIOutput => port?.type === 'output')

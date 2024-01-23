@@ -1,6 +1,9 @@
 import './Library.css';
 import CheckIcon from '../assets/check.svg';
+import ReceiveIcon from '../assets/receive.svg';
+import SendIcon from '../assets/send.svg';
 import TrashIcon from '../assets/trash.svg';
+import { getOutputPort, requestProgram, sendProgram } from '../minilogue/midi';
 import * as params from '../minilogue/params';
 import { Program } from '../minilogue/types';
 import { deleteLibraryProgram, setCurrentPosition } from '../slices/librarySlice';
@@ -30,6 +33,9 @@ export default function Library() {
   const dispatch = useAppDispatch();
   const library = useAppSelector(({ library: l }) => l.library);
   const currentPosition = useAppSelector(({ library: l }) => l.currentPosition);
+  const ports = useAppSelector(({ midi }) => midi.ports);
+
+  const output = getOutputPort(ports);
 
   return (
     <div className='library'>
@@ -68,6 +74,23 @@ export default function Library() {
                   >
                     <CheckIcon />
                   </Button>
+
+                  <Button
+                    title='Request program'
+                    aria-label='Request program'
+                    onClick={() => output && requestProgram(output, i)}
+                  >
+                    <ReceiveIcon />
+                  </Button>
+
+                  <Button
+                    title='Send program'
+                    aria-label='Send program'
+                    onClick={() => output && sendProgram(output, i, program)}
+                  >
+                    <SendIcon />
+                  </Button>
+
                   <Button
                     title='Delete from library'
                     aria-label='Delete from library'
