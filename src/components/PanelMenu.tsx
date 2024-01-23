@@ -17,6 +17,7 @@ import Button from './Button';
 
 export default function PanelMenu() {
   const dispatch = useAppDispatch();
+  const pending = useAppSelector(({ midi }) => midi.pending);
   const ports = useAppSelector(({ midi }) => midi.ports);
   const currentProgram = useAppSelector(({ program }) => program.currentProgram);
 
@@ -55,7 +56,7 @@ export default function PanelMenu() {
 
       <Button
         title='Request Program'
-        disabled={!output}
+        disabled={!output || pending}
         onClick={() => output && requestCurrentProgram(output)}
       >
         <ReceiveIcon />
@@ -63,7 +64,7 @@ export default function PanelMenu() {
 
       <Button
         title='Send Program'
-        disabled={!output}
+        disabled={!output || pending}
         onClick={() => output && sendCurrentProgram(output, currentProgram)}
       >
         <SendIcon />

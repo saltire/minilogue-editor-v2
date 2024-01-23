@@ -33,6 +33,7 @@ export default function Library() {
   const dispatch = useAppDispatch();
   const library = useAppSelector(({ library: l }) => l.library);
   const currentPosition = useAppSelector(({ library: l }) => l.currentPosition);
+  const pending = useAppSelector(({ midi }) => midi.pending);
   const ports = useAppSelector(({ midi }) => midi.ports);
 
   const output = getOutputPort(ports);
@@ -67,6 +68,7 @@ export default function Library() {
                   <Button
                     title='Load in panel'
                     aria-label='Load in panel'
+                    disabled={pending}
                     onClick={() => {
                       dispatch(setCurrentPosition(i));
                       dispatch(setCurrentProgram(program));
@@ -78,6 +80,7 @@ export default function Library() {
                   <Button
                     title='Request program'
                     aria-label='Request program'
+                    disabled={pending}
                     onClick={() => output && requestProgram(output, i)}
                   >
                     <ReceiveIcon />
@@ -86,6 +89,7 @@ export default function Library() {
                   <Button
                     title='Send program'
                     aria-label='Send program'
+                    disabled={pending}
                     onClick={() => output && sendProgram(output, i, program)}
                   >
                     <SendIcon />
@@ -94,6 +98,7 @@ export default function Library() {
                   <Button
                     title='Delete from library'
                     aria-label='Delete from library'
+                    disabled={pending}
                     onClick={() => dispatch(deleteLibraryProgram(i))}
                   >
                     <TrashIcon />

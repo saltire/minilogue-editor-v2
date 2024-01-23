@@ -19,6 +19,7 @@ export type MidiState = {
   messages: Message[],
   deviceBank?: number,
   deviceProgram?: number,
+  pending?: boolean,
 };
 
 const initialState: MidiState = {
@@ -59,10 +60,12 @@ const midiSlice = createSlice({
       ...state,
       deviceProgram,
     }),
+
+    setPending: (state, { payload: pending }: PayloadAction<boolean>) => ({ ...state, pending }),
   },
 });
 
 export default midiSlice;
 export const {
-  storeAccess, connectPort, disconnectPort, receiveMessage, updateBank, setProgram,
+  storeAccess, connectPort, disconnectPort, receiveMessage, updateBank, setProgram, setPending,
 } = midiSlice.actions;
