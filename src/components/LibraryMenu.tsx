@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 
+import AddIcon from '../assets/add.svg';
 import NewIcon from '../assets/new.svg';
 import OpenIcon from '../assets/open.svg';
 import ReceiveIcon from '../assets/receive.svg';
@@ -7,7 +8,7 @@ import SendIcon from '../assets/send.svg';
 import { loadLibrarianFile } from '../minilogue/library';
 import { getOutputPort, requestLibrary, sendLibrary } from '../minilogue/midi';
 import { INIT_PROGRAM } from '../minilogue/program';
-import { setLibrary } from '../slices/librarySlice';
+import { appendLibraryProgram, setLibrary } from '../slices/librarySlice';
 import { setPending } from '../slices/midiSlice';
 import { useAppDispatch, useAppSelector } from '../store';
 import ActionMenu from './ActionMenu';
@@ -27,14 +28,14 @@ export default function LibraryMenu() {
   return (
     <ActionMenu>
       <Button
-        title='New Library'
+        title='New library'
         onClick={() => dispatch(setLibrary({ programs: [INIT_PROGRAM] }))}
       >
         <NewIcon />
       </Button>
 
       <Button
-        title='Load Library File'
+        title='Load library file'
         onClick={() => fileInput.current?.click()}
       >
         <OpenIcon />
@@ -47,7 +48,16 @@ export default function LibraryMenu() {
       />
 
       <Button
-        title='Request Library'
+        title='Add program to library'
+        disabled={pending}
+        onClick={() => dispatch(appendLibraryProgram())}
+      >
+        <AddIcon />
+      </Button>
+
+
+      <Button
+        title='Request library'
         disabled={!output || pending}
         onClick={() => {
           if (output) {
@@ -62,7 +72,7 @@ export default function LibraryMenu() {
       </Button>
 
       <Button
-        title='Send Library'
+        title='Send library'
         disabled={!output || pending}
         onClick={() => {
           if (output) {

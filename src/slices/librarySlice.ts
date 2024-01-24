@@ -37,6 +37,11 @@ const librarySlice = createSlice({
       return { ...state, library: { ...state.library, programs } };
     },
 
+    appendLibraryProgram: state => ({
+      ...state,
+      library: { ...state.library, programs: [...state.library.programs, INIT_PROGRAM] },
+    }),
+
     deleteLibraryProgram: (state, { payload: index }: PayloadAction<number>) => {
       const programs = [...state.library.programs];
       programs.splice(index, 1);
@@ -55,5 +60,5 @@ const librarySlice = createSlice({
 
 export default librarySlice;
 export const {
-  setLibrary, setLibraryProgram, deleteLibraryProgram, setCurrentPosition,
+  setLibrary, setLibraryProgram, appendLibraryProgram, deleteLibraryProgram, setCurrentPosition,
 } = librarySlice.actions;

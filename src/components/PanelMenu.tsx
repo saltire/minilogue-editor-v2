@@ -28,14 +28,14 @@ export default function PanelMenu() {
   return (
     <ActionMenu>
       <Button
-        title='Init Program'
+        title='Init program'
         onClick={() => dispatch(setCurrentProgram(INIT_PROGRAM))}
       >
         <NewIcon />
       </Button>
 
       <Button
-        title='Load Program File'
+        title='Load program file'
         onClick={() => fileInput.current?.click()}
       >
         <OpenIcon />
@@ -48,14 +48,14 @@ export default function PanelMenu() {
       />
 
       <Button
-        title='Randomize Program'
+        title='Randomize program'
         onClick={() => dispatch(setCurrentProgram(generateRandomProgram()))}
       >
         <ShuffleIcon />
       </Button>
 
       <Button
-        title='Request Program'
+        title='Request program'
         disabled={!output || pending}
         onClick={() => output && requestCurrentProgram(output)}
       >
@@ -63,7 +63,7 @@ export default function PanelMenu() {
       </Button>
 
       <Button
-        title='Send Program'
+        title='Send program'
         disabled={!output || pending}
         onClick={() => output && sendCurrentProgram(output, currentProgram)}
       >

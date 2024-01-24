@@ -16,6 +16,7 @@ export default function Button({ title, disabled, onClick, children }: ButtonPro
       className='menu-button'
       type='button'
       title={title}
+      aria-label={title}
       disabled={disabled}
       onClick={onClick}
     >

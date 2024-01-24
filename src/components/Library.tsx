@@ -63,11 +63,10 @@ export default function Library() {
                 <td key={c} className='table-cell'>{column.getValue(program)}</td>
               ))}
 
-              <td className='table-cell'>
+              <td className='table-cell' aria-label='Actions'>
                 <div className='row-actions'>
                   <Button
                     title='Load in panel'
-                    aria-label='Load in panel'
                     disabled={pending}
                     onClick={() => {
                       dispatch(setCurrentPosition(i));
@@ -79,7 +78,6 @@ export default function Library() {
 
                   <Button
                     title='Request program'
-                    aria-label='Request program'
                     disabled={pending}
                     onClick={() => output && requestProgram(output, i)}
                   >
@@ -88,7 +86,6 @@ export default function Library() {
 
                   <Button
                     title='Send program'
-                    aria-label='Send program'
                     disabled={pending}
                     onClick={() => output && sendProgram(output, i, program)}
                   >
@@ -97,7 +94,6 @@ export default function Library() {
 
                   <Button
                     title='Delete from library'
-                    aria-label='Delete from library'
                     disabled={pending}
                     onClick={() => dispatch(deleteLibraryProgram(i))}
                   >
