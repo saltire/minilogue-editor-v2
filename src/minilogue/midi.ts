@@ -133,7 +133,7 @@ export const requestProgram = (output: MIDIOutput, index: number) => {
 
 export const requestLibrary = (output: MIDIOutput) => series(range(200), async i => {
   requestProgram(output, i);
-  await delay(100); // TODO: listen for response before proceeding to next request.
+  await delay(150); // TODO: listen for response before proceeding to next request.
 });
 
 export const requestGlobalData = (output: MIDIOutput) => {
@@ -154,7 +154,7 @@ export const sendProgram = (output: MIDIOutput, index: number, program: Program)
 export const sendLibrary = (output: MIDIOutput, library: Library) => series(library.programs,
   async (program, i) => {
     sendProgram(output, i, program);
-    await delay(100); // TODO: listen for response before proceeding to next request.
+    await delay(150); // TODO: listen for response before proceeding to next request.
   });
 
 export const getOutputPort = (ports: PortsMap) => Object.values(ports)
