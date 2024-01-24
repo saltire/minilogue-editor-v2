@@ -5,7 +5,7 @@ import OpenIcon from '../assets/open.svg';
 import ReceiveIcon from '../assets/receive.svg';
 import SendIcon from '../assets/send.svg';
 import ShuffleIcon from '../assets/shuffle.svg';
-import { loadLibrarianFile } from '../minilogue/library';
+import { loadLibraryFile } from '../minilogue/library';
 import { getOutputPort, requestCurrentProgram, sendCurrentProgram } from '../minilogue/midi';
 import { INIT_PROGRAM } from '../minilogue/program';
 import generateRandomProgram from '../minilogue/random';
@@ -43,7 +43,7 @@ export default function PanelMenu() {
       <input
         ref={fileInput}
         type='file'
-        onChange={e => e.target.files?.[0] && loadLibrarianFile(e.target.files[0])
+        onChange={e => e.target.files?.[0] && loadLibraryFile(e.target.files[0])
           .then(library => library.programs[0] && dispatch(setCurrentProgram(library.programs[0])))}
       />
 

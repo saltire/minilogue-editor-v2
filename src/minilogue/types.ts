@@ -39,6 +39,7 @@ export type Library = {
   prefix?: string | null,
   copyright?: string | null,
   programs: Program[],
+  favorites?: number[],
 };
 
 export const INTEGER = 0;

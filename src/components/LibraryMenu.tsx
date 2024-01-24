@@ -1,11 +1,13 @@
 import { useRef } from 'react';
+import { saveAs } from 'file-saver';
 
 import AddIcon from '../assets/add.svg';
 import NewIcon from '../assets/new.svg';
 import OpenIcon from '../assets/open.svg';
 import ReceiveIcon from '../assets/receive.svg';
+import SaveIcon from '../assets/save.svg';
 import SendIcon from '../assets/send.svg';
-import { loadLibrarianFile } from '../minilogue/library';
+import { createLibraryFile, loadLibraryFile } from '../minilogue/library';
 import { getOutputPort, requestLibrary, sendLibrary } from '../minilogue/midi';
 import { INIT_PROGRAM } from '../minilogue/program';
 import { appendLibraryProgram, setLibrary } from '../slices/librarySlice';
@@ -43,9 +45,17 @@ export default function LibraryMenu() {
       <input
         ref={fileInput}
         type='file'
-        onChange={e => e.target.files?.[0] && loadLibrarianFile(e.target.files[0])
+        onChange={e => e.target.files?.[0] && loadLibraryFile(e.target.files[0])
           .then(newLib => dispatch(setLibrary(newLib)))}
       />
+
+      <Button
+        title='Save library file'
+        onClick={() => createLibraryFile(library)
+          .then(blob => saveAs(blob, `${library.name || 'Library'}.mnlglib`))}
+      >
+        <SaveIcon />
+      </Button>
 
       <Button
         title='Add program to library'
