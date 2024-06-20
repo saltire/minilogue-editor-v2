@@ -15,7 +15,7 @@ export const LOW_BITS_MASK = 0b01111111;
 export const getSysexFunction = (data: Uint8Array) => ((
   (data[0] === 0xf0)
   && (data[1] === 0x42)
-  && (data[2] === 0x30)
+  && (data[2] === 0x30 || data[2] === 0x31) // Not sure why this varies.
   && (data[3] === 0x00)
   && (data[4] === 0x01)
   && (data[5] === 0x2c))

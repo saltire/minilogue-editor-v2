@@ -13,7 +13,8 @@ import {
 } from '../minilogue/sysex';
 import { RootState } from '../reducer';
 import {
-  connectPort, disconnectPort, receiveMessage, setProgram, updateBank,
+  connectInput, connectOutput, disconnectInput, disconnectOutput,
+  receiveMessage, setProgram, updateBank,
 } from '../slices/midiSlice';
 import { setCurrentProgram, setPanelParameter } from '../slices/programSlice';
 import { setLibraryProgram } from '../slices/librarySlice';
@@ -69,7 +70,6 @@ const midiMiddleware: Middleware<object, RootState> = ({ dispatch, getState }) =
           if (messageType === CLOCK) {
             return;
           }
-
           if (messageType === CONTROL_CHANGE) {
             if (code === BANK_SELECT_HIGH) {
               dispatch(updateBank({ high: value }));
@@ -92,7 +92,7 @@ const midiMiddleware: Middleware<object, RootState> = ({ dispatch, getState }) =
             const index = (deviceBank ?? 0) * 100 + code;
             console.log({ program: index + 1 });
 
-            // const output = getOutputPort(ports);
+            // const output = useOutputPort();
             // if (output) {
             //   requestProgram(output, index);
             // }
@@ -101,21 +101,24 @@ const midiMiddleware: Middleware<object, RootState> = ({ dispatch, getState }) =
             console.log({ messageType, channel, code, value });
           }
 
+          const { midi: { inputs } } = getState();
+          const input = inputs[targetId];
+
           dispatch(receiveMessage({
-            targetId, messageType, channel, code, value, timeStamp,
+            targetId, input: input?.name, messageType, channel, code, value, timeStamp,
           }));
         }
       };
 
-      access.inputs.forEach(input => {
+      access.inputs.forEach(port => {
         // console.log({ input });
-        dispatch(connectPort(input));
-        input.addEventListener('midimessage', handleMessage);
+        dispatch(connectInput(port));
+        port.addEventListener('midimessage', handleMessage);
       });
 
-      access.outputs.forEach(output => {
+      access.outputs.forEach(port => {
         // console.log({ output });
-        dispatch(connectPort(output));
+        dispatch(connectOutput({ port, select: port.name === 'minilogue SOUND' }));
       });
 
       access.addEventListener('statechange', event => {
@@ -123,13 +126,14 @@ const midiMiddleware: Middleware<object, RootState> = ({ dispatch, getState }) =
 
         const { port } = event as MIDIConnectionEvent;
         if (port.state === 'connected') {
-          dispatch(connectPort(port));
+          dispatch(port.type === 'input' ? connectInput(port)
+            : connectOutput({ port, select: port.name === 'minilogue SOUND' }));
           if (port.type === 'input') {
             port.addEventListener('midimessage', handleMessage);
           }
         }
         else {
-          dispatch(disconnectPort(port));
+          dispatch(port.type === 'input' ? disconnectInput(port) : disconnectOutput(port));
         }
       });
     })

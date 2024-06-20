@@ -6,17 +6,34 @@ import {
   HIGH_BIT_MASK, LOW_BITS_MASK,
   encodeProgramIndex, encodeSysexData, GLOBAL_DATA_DUMP_REQUEST,
 } from './sysex';
-import { Library, PortsMap, Program } from './types';
+import { Library, Program } from './types';
 import { delay, mapToRange, range, series } from '../utils';
 
 
+const KORG_ID = 0x42;
+
 // MIDI message types
+export const NOTE_OFF = 0x8;
+export const NOTE_ON = 0x9;
 export const CONTROL_CHANGE = 0xb;
 export const PROGRAM_CHANGE = 0xc;
 export const CLOCK = 0xf;
 
 export const BANK_SELECT_HIGH = 0x0;
 export const BANK_SELECT_LOW = 0x20;
+
+export const messageTypes: { [index: number]: string } = {
+  [NOTE_OFF]: 'Note Off',
+  [NOTE_ON]: 'Note On',
+  [CONTROL_CHANGE]: 'Control',
+  [PROGRAM_CHANGE]: 'Program',
+  [CLOCK]: 'Clock',
+};
+
+export const codes: { [index: number]: string } = {
+  [BANK_SELECT_HIGH]: 'Bank select',
+  [BANK_SELECT_LOW]: 'Bank select (fine)',
+};
 
 export const CODE_TO_PARAMETER: { [index: number]: number } = {
   16: params.AMP_EG_ATTACK,
@@ -117,10 +134,10 @@ export const messageToParameter = (code: number, value: number) => {
   return [CODE_TO_PARAMETER[code], parameterValue];
 };
 
-const channel = 0;
+const channel = 1;
 
 const buildMessage = (type: number, data?: number[] | Uint8Array) => [
-  0xf0, 0x42, 0x30 | channel, 0x00, 0x01, 0x2c, type, ...data ?? [], 0xf7,
+  0xf0, KORG_ID, 0x30 | channel, 0x00, 0x01, 0x2c, type, ...data ?? [], 0xf7,
 ];
 
 export const requestCurrentProgram = (output: MIDIOutput) => {
@@ -156,10 +173,6 @@ export const sendLibrary = (output: MIDIOutput, library: Library) => series(libr
     sendProgram(output, i, program);
     await delay(150); // TODO: listen for response before proceeding to next request.
   });
-
-export const getOutputPort = (ports: PortsMap) => Object.values(ports)
-  .filter((port: MIDIPort | undefined): port is MIDIOutput => port?.type === 'output')
-  .find(port => port.name?.includes('SOUND'));
 
 export type BitsData = {
   high?: number,

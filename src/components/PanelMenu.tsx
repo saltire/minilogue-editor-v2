@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react';
+import { useRef } from 'react';
 
 import NewIcon from '../assets/new.svg';
 import OpenIcon from '../assets/open.svg';
@@ -6,11 +6,11 @@ import ReceiveIcon from '../assets/receive.svg';
 import SendIcon from '../assets/send.svg';
 import ShuffleIcon from '../assets/shuffle.svg';
 import { loadLibraryFile } from '../minilogue/library';
-import { getOutputPort, requestCurrentProgram, sendCurrentProgram } from '../minilogue/midi';
+import { requestCurrentProgram, sendCurrentProgram } from '../minilogue/midi';
 import { INIT_PROGRAM } from '../minilogue/program';
 import generateRandomProgram from '../minilogue/random';
 import { setCurrentProgram } from '../slices/programSlice';
-import { useAppDispatch, useAppSelector } from '../store';
+import { useAppDispatch, useAppSelector, useOutputPort } from '../store';
 import ActionMenu from './ActionMenu';
 import Button from './Button';
 
@@ -18,10 +18,8 @@ import Button from './Button';
 export default function PanelMenu() {
   const dispatch = useAppDispatch();
   const pending = useAppSelector(({ midi }) => midi.pending);
-  const ports = useAppSelector(({ midi }) => midi.ports);
   const currentProgram = useAppSelector(({ program }) => program.currentProgram);
-
-  const output = useMemo(() => getOutputPort(ports), [ports]);
+  const output = useOutputPort();
 
   const fileInput = useRef<HTMLInputElement>(null);
 

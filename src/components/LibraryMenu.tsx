@@ -8,11 +8,11 @@ import ReceiveIcon from '../assets/receive.svg';
 import SaveIcon from '../assets/save.svg';
 import SendIcon from '../assets/send.svg';
 import { createLibraryFile, loadLibraryFile } from '../minilogue/library';
-import { getOutputPort, requestLibrary, sendLibrary } from '../minilogue/midi';
+import { requestLibrary, sendLibrary } from '../minilogue/midi';
 import { INIT_PROGRAM } from '../minilogue/program';
 import { appendLibraryProgram, setLibrary } from '../slices/librarySlice';
 import { setPending } from '../slices/midiSlice';
-import { useAppDispatch, useAppSelector } from '../store';
+import { useAppDispatch, useAppSelector, useOutputPort } from '../store';
 import ActionMenu from './ActionMenu';
 import Button from './Button';
 
@@ -21,9 +21,7 @@ export default function LibraryMenu() {
   const dispatch = useAppDispatch();
   const library = useAppSelector(({ library: l }) => l.library);
   const pending = useAppSelector(({ midi }) => midi.pending);
-  const ports = useAppSelector(({ midi }) => midi.ports);
-
-  const output = getOutputPort(ports);
+  const output = useOutputPort();
 
   const fileInput = useRef<HTMLInputElement>(null);
 

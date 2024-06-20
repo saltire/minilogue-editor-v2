@@ -1,23 +1,29 @@
-import { useAppSelector } from '../store';
+import { useAppDispatch, useAppSelector } from '../store';
+import { setOutputId } from '../slices/midiSlice';
 
 
 export default function Ports() {
-  const ports = useAppSelector(({ midi }) => midi.ports);
-
-  const inputs = Object.values(ports).filter(port => port?.type === 'input');
-  const outputs = Object.values(ports).filter(port => port?.type === 'output');
+  const dispatch = useAppDispatch();
+  const inputs = useAppSelector(({ midi }) => midi.inputs);
+  const outputs = useAppSelector(({ midi }) => midi.outputs);
+  const outputId = useAppSelector(({ midi }) => midi.outputId);
 
   return (
     <div className='ports'>
-      {inputs.map(port => port && (
+      {Object.values(inputs).map(port => port && (
         <div key={port.id}>
           (INPUT) {port.name}
         </div>
       ))}
 
-      {outputs.map(port => port && (
+      {Object.values(outputs).map(port => port && (
         <div key={port.id}>
-          (OUTPUT) {port.name}
+          <input
+            type='radio'
+            checked={outputId === port.id}
+            onChange={() => dispatch(setOutputId(port.id))}
+          />
+          {} (OUTPUT) {port.name}
         </div>
       ))}
     </div>

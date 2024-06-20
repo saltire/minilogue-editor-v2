@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import './Panel.css';
 import DownArrowIcon from '../assets/down-arrow.svg';
@@ -6,11 +6,11 @@ import SawtoothIcon from '../assets/saw.svg';
 import SquareIcon from '../assets/square.svg';
 import TriangleIcon from '../assets/triangle.svg';
 import UpArrowIcon from '../assets/up-arrow.svg';
-import { getOutputPort, sendCurrentProgram } from '../minilogue/midi';
+import { sendCurrentProgram } from '../minilogue/midi';
 import * as params from '../minilogue/params';
 import { setCurrentPosition } from '../slices/librarySlice';
 import { setCurrentProgram } from '../slices/programSlice';
-import { useAppDispatch, useAppSelector } from '../store';
+import { useAppDispatch, useAppSelector, useOutputPort } from '../store';
 import Display from './Display';
 import Knob from './Knob';
 import LEDArray from './LEDArray';
@@ -32,10 +32,8 @@ export default function Panel() {
   const dispatch = useAppDispatch();
   const currentPosition = useAppSelector(({ library: l }) => l.currentPosition);
   const library = useAppSelector(({ library: l }) => l.library);
-  const ports = useAppSelector(({ midi }) => midi.ports);
   const currentProgram = useAppSelector(({ program }) => program.currentProgram);
-
-  const output = useMemo(() => getOutputPort(ports), [ports]);
+  const output = useOutputPort();
 
   const [showExtraParams, setShowExtraParams] = useState(false);
 

@@ -3,14 +3,14 @@ import CheckIcon from '../assets/check.svg';
 import ReceiveIcon from '../assets/receive.svg';
 import SendIcon from '../assets/send.svg';
 import TrashIcon from '../assets/trash.svg';
-import { getOutputPort, requestProgram, sendProgram } from '../minilogue/midi';
+import { requestProgram, sendProgram } from '../minilogue/midi';
 import * as params from '../minilogue/params';
 import { Program } from '../minilogue/types';
 import { deleteLibraryProgram, setCurrentPosition } from '../slices/librarySlice';
 import { setCurrentProgram } from '../slices/programSlice';
-import { useAppDispatch, useAppSelector } from '../store';
-import LibraryMenu from './LibraryMenu';
+import { useAppDispatch, useAppSelector, useOutputPort } from '../store';
 import Button from './Button';
+import LibraryMenu from './LibraryMenu';
 import { classList } from '../utils';
 
 
@@ -34,9 +34,7 @@ export default function Library() {
   const library = useAppSelector(({ library: l }) => l.library);
   const currentPosition = useAppSelector(({ library: l }) => l.currentPosition);
   const pending = useAppSelector(({ midi }) => midi.pending);
-  const ports = useAppSelector(({ midi }) => midi.ports);
-
-  const output = getOutputPort(ports);
+  const output = useOutputPort();
 
   return (
     <div className='library'>

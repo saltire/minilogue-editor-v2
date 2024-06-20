@@ -6,6 +6,7 @@ import { PortsMap } from '../minilogue/types';
 
 export type Message = {
   targetId: string,
+  input?: string | null,
   timeStamp: number,
   messageType: number,
   channel: number,
@@ -15,7 +16,9 @@ export type Message = {
 
 export type MidiState = {
   access: MIDIAccess | null,
-  ports: PortsMap,
+  inputs: PortsMap,
+  outputs: PortsMap,
+  outputId?: string,
   messages: Message[],
   deviceBank?: number,
   deviceProgram?: number,
@@ -24,8 +27,14 @@ export type MidiState = {
 
 const initialState: MidiState = {
   access: null,
-  ports: {},
+  inputs: {},
+  outputs: {},
   messages: [],
+};
+
+type ConnectPortPayload = {
+  port: MIDIPort,
+  select?: boolean,
 };
 
 const midiSlice = createSlice({
@@ -34,17 +43,32 @@ const midiSlice = createSlice({
   reducers: {
     storeAccess: (state, { payload: access }: PayloadAction<MIDIAccess>) => ({ ...state, access }),
 
-    connectPort: (state, { payload: port }: PayloadAction<MIDIPort>) => ({
+    connectInput: (state, { payload: port }: PayloadAction<MIDIPort>) => ({
       ...state,
-      ...state.ports[port.id] ? {} : { ports: { ...state.ports, [port.id]: port } },
+      ...state.inputs[port.id] ? {} : { inputs: { ...state.inputs, [port.id]: port } },
     }),
 
-    disconnectPort: (state, { payload: port }: PayloadAction<MIDIPort>) => ({
+    connectOutput: (state, { payload: { port, select } }: PayloadAction<ConnectPortPayload>) => ({
       ...state,
-      ...state.ports[port.id] ? {
-        ports: Object.fromEntries(Object.entries(state.ports).filter(([id]) => id !== port.id)),
+      ...state.outputs[port.id] ? {} : { outputs: { ...state.outputs, [port.id]: port } },
+      ...select ? { outputId: port.id } : {},
+    }),
+
+    disconnectInput: (state, { payload: port }: PayloadAction<MIDIPort>) => ({
+      ...state,
+      ...state.inputs[port.id] ? {
+        inputs: Object.fromEntries(Object.entries(state.inputs).filter(([id]) => id !== port.id)),
       } : {},
     }),
+
+    disconnectOutput: (state, { payload: port }: PayloadAction<MIDIPort>) => ({
+      ...state,
+      ...state.outputs[port.id] ? {
+        outputs: Object.fromEntries(Object.entries(state.outputs).filter(([id]) => id !== port.id)),
+      } : {},
+    }),
+
+    setOutputId: (state, { payload: outputId }: PayloadAction<string>) => ({ ...state, outputId }),
 
     receiveMessage: (state, { payload: message }: PayloadAction<Message>) => ({
       ...state,
@@ -67,5 +91,6 @@ const midiSlice = createSlice({
 
 export default midiSlice;
 export const {
-  storeAccess, connectPort, disconnectPort, receiveMessage, updateBank, setProgram, setPending,
+  storeAccess, connectInput, connectOutput, disconnectInput, disconnectOutput, setOutputId,
+  receiveMessage, updateBank, setProgram, setPending,
 } = midiSlice.actions;
