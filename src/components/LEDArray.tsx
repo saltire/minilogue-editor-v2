@@ -1,7 +1,7 @@
 import './LEDArray.css';
 import { useAppDispatch, useAppSelector } from '../store';
 import { paramData } from '../minilogue/params';
-import { setPanelParameter } from '../slices/programSlice';
+import { setParameter } from '../slices/programSlice';
 import { classList } from '../utils';
 
 
@@ -36,7 +36,7 @@ export default function LEDArray({ parameter, reverse }: LEDArrayProps) {
             aria-label={label}
             className={classList('led-array-light',
               choiceValue === value && 'led-array-light-active')}
-            onClick={() => dispatch(setPanelParameter({ parameter, value: choiceValue }))}
+            onClick={() => dispatch(setParameter(parameter, choiceValue))}
           />
         </li>
       ))}

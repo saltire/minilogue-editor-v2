@@ -1,7 +1,9 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
+import { sendParameter } from '../minilogue/midi';
 import { INIT_PROGRAM } from '../minilogue/program';
 import { Program } from '../minilogue/types';
+import type { Thunk } from '../reducer';
 
 
 export type ProgramState = {
@@ -44,3 +46,14 @@ const programSlice = createSlice({
 
 export default programSlice;
 export const { setCurrentProgram, setPanelParameter, clearDisplayParameter } = programSlice.actions;
+
+export const setParameter = (parameter: number, value: number): Thunk => (
+  (dispatch, getState) => {
+    const { midi: { outputs, outputId, channel } } = getState();
+
+    dispatch(setPanelParameter({ parameter, value }));
+
+    if (outputId && outputs[outputId]) {
+      sendParameter(outputs[outputId] as MIDIOutput, channel, parameter, value);
+    }
+  });

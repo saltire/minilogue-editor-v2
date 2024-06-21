@@ -77,11 +77,9 @@ const midiMiddleware: Middleware<object, RootState> = ({ dispatch, getState }) =
             else if (code === BANK_SELECT_LOW) {
               dispatch(updateBank({ low: value }));
             }
-
-            const [parameter, translated] = messageToParameter(code, value);
-            if (parameter !== undefined && translated !== undefined) {
+            else {
+              const [parameter, translated] = messageToParameter(code, value);
               console.log({ parameter: paramData[parameter].title, value: translated });
-
               dispatch(setPanelParameter({ parameter, value: translated }));
             }
           }

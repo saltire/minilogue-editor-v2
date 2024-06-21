@@ -77,6 +77,12 @@ export const CODE_TO_PARAMETER: { [index: number]: number } = {
   88: params.DELAY_OUTPUT_ROUTING,
 };
 
+const PARAMETER_TO_CODE: { [index: number]: number } = Object.keys(CODE_TO_PARAMETER).reduce(
+  (obj, key) => {
+    const intKey = parseInt(key);
+    return { ...obj, [CODE_TO_PARAMETER[intKey]]: intKey };
+  }, {});
+
 const toTwoChoice = (value: number) => [0, 127].indexOf(value);
 const toThreeChoice = (value: number) => [0, 64, 127].indexOf(value);
 const toFourChoice = (value: number) => [0, 42, 84, 127].indexOf(value);
@@ -86,8 +92,8 @@ const threeChoiceToMIDIValue = (choice: number) => [0, 64, 127][choice];
 const fourChoiceToMIDIValue = (choice: number) => [0, 42, 84, 127][choice];
 
 type Conversions = {
-  to: (value: number) => number | undefined,
-  from: (value: number) => number | undefined,
+  to: (value: number) => number,
+  from: (value: number) => number,
 };
 
 const TWO_CHOICE_CONVERSIONS = {
@@ -124,6 +130,16 @@ const CODE_TO_CONVERSIONS: { [index: number]: Conversions } = {
   90: THREE_CHOICE_CONVERSIONS,
   91: THREE_CHOICE_CONVERSIONS,
   92: THREE_CHOICE_CONVERSIONS,
+};
+
+export const parameterToMessage = (parameter: number, value: number) => {
+  const code = PARAMETER_TO_CODE[parameter];
+  return [
+    code,
+    code in CODE_TO_CONVERSIONS
+      ? CODE_TO_CONVERSIONS[code].from(value)
+      : Math.round(mapToRange(value, 0, 1023, 0, 127)),
+  ];
 };
 
 export const messageToParameter = (code: number, value: number) => {
@@ -168,6 +184,12 @@ export const sendProgram = (
     ...encodeProgramIndex(index),
     ...encodeSysexData(encodeProgram(program)),
   ]));
+};
+
+export const sendParameter = (
+  output: MIDIOutput, channel: number, parameter: number, value: number,
+) => {
+  output.send([0xb0 | channel, ...parameterToMessage(parameter, value)]);
 };
 
 export const sendLibrary = (output: MIDIOutput, channel: number, library: Library) => series(

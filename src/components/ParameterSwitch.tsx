@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 import './ParameterSwitch.css';
 import { useAppDispatch, useAppSelector } from '../store';
-import { setPanelParameter } from '../slices/programSlice';
+import { setParameter } from '../slices/programSlice';
 import Switch from './Switch';
 import { paramData } from '../minilogue/params';
 import { classList } from '../utils';
@@ -37,7 +37,7 @@ export default function ParameterSwitch({
           value={value}
           numPositions={choices.length}
           vertical={vertical}
-          onChange={newValue => dispatch(setPanelParameter({ parameter, value: newValue }))}
+          onChange={newValue => dispatch(setParameter(parameter, newValue))}
         />
 
         {labels && (

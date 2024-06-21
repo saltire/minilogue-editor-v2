@@ -13,7 +13,7 @@ import { VOICE_MODE, paramData } from '../minilogue/params';
 import { ChoiceParamData } from '../minilogue/types';
 import { useAppDispatch, useAppSelector } from '../store';
 import { classList } from '../utils';
-import { setPanelParameter } from '../slices/programSlice';
+import { setParameter } from '../slices/programSlice';
 
 
 const icons = [
@@ -34,7 +34,7 @@ export default function VoiceMode() {
 
   const value = currentProgram.parameters[VOICE_MODE];
   const onChange = useCallback((newValue: number) => dispatch(
-    setPanelParameter({ parameter: VOICE_MODE, value: newValue })), []);
+    setParameter(VOICE_MODE, newValue)), []);
 
   return (
     <div className='voice-mode-container'>

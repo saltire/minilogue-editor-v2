@@ -3,7 +3,7 @@ import Select from 'react-select';
 import { SLIDER_ASSIGN, paramData } from '../minilogue/params';
 import { ChoiceParamData } from '../minilogue/types';
 import { useAppDispatch, useAppSelector } from '../store';
-import { setPanelParameter } from '../slices/programSlice';
+import { setParameter } from '../slices/programSlice';
 
 
 const options = Object.entries((paramData[SLIDER_ASSIGN] as ChoiceParamData).choices)
@@ -23,7 +23,7 @@ export default function SliderAssign() {
           value={selected}
           options={options}
           onChange={option => option && dispatch(
-            setPanelParameter({ parameter: SLIDER_ASSIGN, value: option.value }))}
+            setParameter(SLIDER_ASSIGN, option.value))}
         />
       </div>
       <p className='control-label label'>Slider Assign</p>
