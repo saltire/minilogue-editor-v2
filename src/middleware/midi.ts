@@ -13,6 +13,7 @@ import {
 } from '../minilogue/sysex';
 import { RootState } from '../reducer';
 import {
+  Message,
   connectInput, connectOutput, disconnectInput, disconnectOutput,
   receiveMessage, setProgram, updateBank,
 } from '../slices/midiSlice';
@@ -35,6 +36,9 @@ const midiMiddleware: Middleware<object, RootState> = ({ dispatch, getState }) =
       const handleMessage = (event: Event) => {
         const { data, timeStamp, target } = event as MIDIMessageEvent;
         const targetId = (target as MIDIPort).id;
+
+        const { midi: { inputs } } = getState();
+        const input = inputs[targetId];
 
         // Sysex message
         const func = getSysexFunction(data);
@@ -67,19 +71,25 @@ const midiMiddleware: Middleware<object, RootState> = ({ dispatch, getState }) =
           const messageType = status >>> 4;
           const channel = status & 0b00001111;
 
+          const message: Message = {
+            timeStamp, input: input?.name || targetId, channel, messageType, code, value,
+          };
+
           if (messageType === CLOCK) {
             return;
           }
           if (messageType === CONTROL_CHANGE) {
             if (code === BANK_SELECT_HIGH) {
+              message.code = 'Bank select';
               dispatch(updateBank({ high: value }));
             }
             else if (code === BANK_SELECT_LOW) {
+              message.code = 'Bank select (fine)';
               dispatch(updateBank({ low: value }));
             }
             else {
               const [parameter, translated] = messageToParameter(code, value);
-              console.log({ parameter: paramData[parameter].title, value: translated });
+              message.code = paramData[parameter].title;
               dispatch(setPanelParameter({ parameter, value: translated }));
             }
           }
@@ -99,12 +109,7 @@ const midiMiddleware: Middleware<object, RootState> = ({ dispatch, getState }) =
             console.log({ messageType, channel, code, value });
           }
 
-          const { midi: { inputs } } = getState();
-          const input = inputs[targetId];
-
-          dispatch(receiveMessage({
-            targetId, input: input?.name, messageType, channel, code, value, timeStamp,
-          }));
+          dispatch(receiveMessage(message));
         }
       };
 

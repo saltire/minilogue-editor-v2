@@ -5,13 +5,12 @@ import { PortsMap } from '../minilogue/types';
 
 
 export type Message = {
-  targetId: string,
-  input?: string | null,
   timeStamp: number,
-  messageType: number,
+  input: string,
   channel: number,
-  code: number,
-  value: number,
+  messageType: number,
+  code: number | string,
+  value?: number,
 };
 
 export type MidiState = {

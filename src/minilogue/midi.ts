@@ -30,11 +30,6 @@ export const messageTypes: { [index: number]: string } = {
   [CLOCK]: 'Clock',
 };
 
-export const codes: { [index: number]: string } = {
-  [BANK_SELECT_HIGH]: 'Bank select',
-  [BANK_SELECT_LOW]: 'Bank select (fine)',
-};
-
 export const CODE_TO_PARAMETER: { [index: number]: number } = {
   16: params.AMP_EG_ATTACK,
   17: params.AMP_EG_DECAY,

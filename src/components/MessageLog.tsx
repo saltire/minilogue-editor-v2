@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 
 import './MessageLog.css';
-import { codes, messageTypes } from '../minilogue/midi';
+import { messageTypes } from '../minilogue/midi';
 import { useAppSelector } from '../store';
 
 
@@ -21,10 +21,10 @@ export default function MessageLog() {
       {messages.map(msg => (
         <p key={`${msg.messageType}-${msg.channel}-${msg.code}-${msg.timeStamp}`}>
           [{Math.floor(msg.timeStamp)}] {}
-          {msg.input || msg.targetId}: {}
+          {msg.input}: {}
           {messageTypes[msg.messageType] || msg.messageType} {}
-          {codes[msg.code] || msg.code} {'> '}
-          {msg.value}
+          {msg.code} {}
+          {msg.value !== undefined && `> ${msg.value}`}
         </p>
       ))}
     </div>
