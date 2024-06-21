@@ -10,7 +10,7 @@ import { sendCurrentProgram } from '../minilogue/midi';
 import * as params from '../minilogue/params';
 import { setCurrentPosition } from '../slices/librarySlice';
 import { setCurrentProgram } from '../slices/programSlice';
-import { useAppDispatch, useAppSelector, useOutputPort } from '../store';
+import { useAppDispatch, useAppSelector, useOutput } from '../store';
 import Display from './Display';
 import Knob from './Knob';
 import LEDArray from './LEDArray';
@@ -33,7 +33,7 @@ export default function Panel() {
   const currentPosition = useAppSelector(({ library: l }) => l.currentPosition);
   const library = useAppSelector(({ library: l }) => l.library);
   const currentProgram = useAppSelector(({ program }) => program.currentProgram);
-  const output = useOutputPort();
+  const [output, channel] = useOutput();
 
   const [showExtraParams, setShowExtraParams] = useState(false);
 
@@ -185,7 +185,7 @@ export default function Panel() {
                       dispatch(setCurrentPosition(value));
                       dispatch(setCurrentProgram(library.programs[value]));
                       if (output) {
-                        sendCurrentProgram(output, library.programs[value]);
+                        sendCurrentProgram(output, channel, library.programs[value]);
                       }
                     }}
                   />

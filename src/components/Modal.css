@@ -28,6 +28,7 @@
     }
 
     .modal-body {
+      min-width: 600px;
       overflow: auto;
     }
   }

@@ -134,43 +134,46 @@ export const messageToParameter = (code: number, value: number) => {
   return [CODE_TO_PARAMETER[code], parameterValue];
 };
 
-const channel = 1;
-
-const buildMessage = (type: number, data?: number[] | Uint8Array) => [
+const buildSysexMessage = (channel: number, type: number, data?: number[] | Uint8Array) => [
   0xf0, KORG_ID, 0x30 | channel, 0x00, 0x01, 0x2c, type, ...data ?? [], 0xf7,
 ];
 
-export const requestCurrentProgram = (output: MIDIOutput) => {
-  output.send(buildMessage(CURRENT_PROGRAM_DATA_DUMP_REQUEST));
+export const requestCurrentProgram = (output: MIDIOutput, channel: number) => {
+  output.send(buildSysexMessage(channel, CURRENT_PROGRAM_DATA_DUMP_REQUEST));
 };
 
-export const requestProgram = (output: MIDIOutput, index: number) => {
-  output.send(buildMessage(PROGRAM_DATA_DUMP_REQUEST, encodeProgramIndex(index)));
+export const requestProgram = (output: MIDIOutput, channel: number, index: number) => {
+  output.send(buildSysexMessage(channel, PROGRAM_DATA_DUMP_REQUEST, encodeProgramIndex(index)));
 };
 
-export const requestLibrary = (output: MIDIOutput) => series(range(200), async i => {
-  requestProgram(output, i);
-  await delay(150); // TODO: listen for response before proceeding to next request.
-});
+export const requestLibrary = (output: MIDIOutput, channel: number) => series(range(200),
+  async i => {
+    requestProgram(output, channel, i);
+    await delay(150); // TODO: listen for response before proceeding to next request.
+  });
 
-export const requestGlobalData = (output: MIDIOutput) => {
-  output.send(buildMessage(GLOBAL_DATA_DUMP_REQUEST));
+export const requestGlobalData = (output: MIDIOutput, channel: number) => {
+  output.send(buildSysexMessage(channel, GLOBAL_DATA_DUMP_REQUEST));
 };
 
-export const sendCurrentProgram = (output: MIDIOutput, program: Program) => {
-  output.send(buildMessage(CURRENT_PROGRAM_DATA_DUMP, encodeSysexData(encodeProgram(program))));
+export const sendCurrentProgram = (output: MIDIOutput, channel: number, program: Program) => {
+  output.send(buildSysexMessage(channel, CURRENT_PROGRAM_DATA_DUMP,
+    encodeSysexData(encodeProgram(program))));
 };
 
-export const sendProgram = (output: MIDIOutput, index: number, program: Program) => {
-  output.send(buildMessage(PROGRAM_DATA_DUMP, [
+export const sendProgram = (
+  output: MIDIOutput, channel: number, index: number, program: Program,
+) => {
+  output.send(buildSysexMessage(channel, PROGRAM_DATA_DUMP, [
     ...encodeProgramIndex(index),
     ...encodeSysexData(encodeProgram(program)),
   ]));
 };
 
-export const sendLibrary = (output: MIDIOutput, library: Library) => series(library.programs,
+export const sendLibrary = (output: MIDIOutput, channel: number, library: Library) => series(
+  library.programs,
   async (program, i) => {
-    sendProgram(output, i, program);
+    sendProgram(output, channel, i, program);
     await delay(150); // TODO: listen for response before proceeding to next request.
   });
 

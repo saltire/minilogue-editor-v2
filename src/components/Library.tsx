@@ -8,7 +8,7 @@ import * as params from '../minilogue/params';
 import { Program } from '../minilogue/types';
 import { deleteLibraryProgram, setCurrentPosition } from '../slices/librarySlice';
 import { setCurrentProgram } from '../slices/programSlice';
-import { useAppDispatch, useAppSelector, useOutputPort } from '../store';
+import { useAppDispatch, useAppSelector, useOutput } from '../store';
 import Button from './Button';
 import LibraryMenu from './LibraryMenu';
 import { classList } from '../utils';
@@ -34,7 +34,7 @@ export default function Library() {
   const library = useAppSelector(({ library: l }) => l.library);
   const currentPosition = useAppSelector(({ library: l }) => l.currentPosition);
   const pending = useAppSelector(({ midi }) => midi.pending);
-  const output = useOutputPort();
+  const [output, channel] = useOutput();
 
   return (
     <div className='library'>
@@ -77,7 +77,7 @@ export default function Library() {
                   <Button
                     title='Request program'
                     disabled={pending}
-                    onClick={() => output && requestProgram(output, i)}
+                    onClick={() => output && requestProgram(output, channel, i)}
                   >
                     <ReceiveIcon />
                   </Button>
@@ -85,7 +85,7 @@ export default function Library() {
                   <Button
                     title='Send program'
                     disabled={pending}
-                    onClick={() => output && sendProgram(output, i, program)}
+                    onClick={() => output && sendProgram(output, channel, i, program)}
                   >
                     <SendIcon />
                   </Button>

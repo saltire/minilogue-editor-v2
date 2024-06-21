@@ -12,7 +12,7 @@ import { requestLibrary, sendLibrary } from '../minilogue/midi';
 import { INIT_PROGRAM } from '../minilogue/program';
 import { appendLibraryProgram, setLibrary } from '../slices/librarySlice';
 import { setPending } from '../slices/midiSlice';
-import { useAppDispatch, useAppSelector, useOutputPort } from '../store';
+import { useAppDispatch, useAppSelector, useOutput } from '../store';
 import ActionMenu from './ActionMenu';
 import Button from './Button';
 
@@ -21,7 +21,7 @@ export default function LibraryMenu() {
   const dispatch = useAppDispatch();
   const library = useAppSelector(({ library: l }) => l.library);
   const pending = useAppSelector(({ midi }) => midi.pending);
-  const output = useOutputPort();
+  const [output, channel] = useOutput();
 
   const fileInput = useRef<HTMLInputElement>(null);
 
@@ -70,7 +70,7 @@ export default function LibraryMenu() {
         onClick={() => {
           if (output) {
             dispatch(setPending(true));
-            requestLibrary(output)
+            requestLibrary(output, channel)
               .catch(console.error)
               .finally(() => dispatch(setPending(false)));
           }
@@ -85,7 +85,7 @@ export default function LibraryMenu() {
         onClick={() => {
           if (output) {
             dispatch(setPending(true));
-            sendLibrary(output, library)
+            sendLibrary(output, channel, library)
               .catch(console.error)
               .finally(() => dispatch(setPending(false)));
           }

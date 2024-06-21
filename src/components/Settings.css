@@ -1,0 +1,29 @@
+.Settings {
+  padding: 20px;
+
+  h3 {
+    margin-top: 0;
+    text-align: center;
+  }
+
+  label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+
+    > * {
+      flex: 1 1 0px;
+    }
+
+    span {
+      text-align: right;
+    }
+
+    input {
+      padding: 4px 4px 4px 8px;
+      font-family: inherit;
+      font-size: inherit;
+    }
+  }
+}

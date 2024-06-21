@@ -17,8 +17,12 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 // custom hooks
 
-export const useOutputPort = () => {
+export const useOutput = (): [MIDIOutput | undefined, number] => {
   const outputs = useAppSelector(({ midi }) => midi.outputs);
   const outputId = useAppSelector(({ midi }) => midi.outputId);
-  return outputId ? outputs[outputId] as MIDIOutput | undefined : undefined;
+  const channel = useAppSelector(({ midi }) => midi.channel);
+  return [
+    outputId ? outputs[outputId] as MIDIOutput | undefined : undefined,
+    channel,
+  ];
 };

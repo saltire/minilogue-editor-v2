@@ -10,7 +10,7 @@ import { requestCurrentProgram, sendCurrentProgram } from '../minilogue/midi';
 import { INIT_PROGRAM } from '../minilogue/program';
 import generateRandomProgram from '../minilogue/random';
 import { setCurrentProgram } from '../slices/programSlice';
-import { useAppDispatch, useAppSelector, useOutputPort } from '../store';
+import { useAppDispatch, useAppSelector, useOutput } from '../store';
 import ActionMenu from './ActionMenu';
 import Button from './Button';
 
@@ -19,7 +19,7 @@ export default function PanelMenu() {
   const dispatch = useAppDispatch();
   const pending = useAppSelector(({ midi }) => midi.pending);
   const currentProgram = useAppSelector(({ program }) => program.currentProgram);
-  const output = useOutputPort();
+  const [output, channel] = useOutput();
 
   const fileInput = useRef<HTMLInputElement>(null);
 
@@ -55,7 +55,7 @@ export default function PanelMenu() {
       <Button
         title='Request program'
         disabled={!output || pending}
-        onClick={() => output && requestCurrentProgram(output)}
+        onClick={() => output && requestCurrentProgram(output, channel)}
       >
         <ReceiveIcon />
       </Button>
@@ -63,7 +63,7 @@ export default function PanelMenu() {
       <Button
         title='Send program'
         disabled={!output || pending}
-        onClick={() => output && sendCurrentProgram(output, currentProgram)}
+        onClick={() => output && sendCurrentProgram(output, channel, currentProgram)}
       >
         <SendIcon />
       </Button>

@@ -1,13 +1,15 @@
 import { useState } from 'react';
 
 import './App.css';
+import ConfigurationIcon from './assets/configuration.svg';
 import LibraryIcon from './assets/library.svg';
 import { useAppSelector } from './store';
 import Library from './components/Library';
 import MessageLog from './components/MessageLog';
+import Modal from './components/Modal';
 import Panel from './components/Panel';
 import Ports from './components/Ports';
-import Modal from './components/Modal';
+import Settings from './components/Settings';
 
 
 export default function App() {
@@ -18,12 +20,14 @@ export default function App() {
   return (
     <div className='App'>
       <div className='section-nav'>
-        <button
-          type='button'
-          onClick={() => setPopup('library')}
-        >
+        <button type='button' onClick={() => setPopup('library')}>
           <LibraryIcon />
           Library ({library.programs.length})
+        </button>
+
+        <button type='button' onClick={() => setPopup('settings')}>
+          <ConfigurationIcon />
+          Settings
         </button>
       </div>
 
@@ -32,6 +36,7 @@ export default function App() {
       {popup && (
         <Modal onClose={() => setPopup(null)}>
           {popup === 'library' && <Library />}
+          {popup === 'settings' && <Settings />}
         </Modal>
       )}
 

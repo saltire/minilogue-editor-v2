@@ -19,6 +19,7 @@ export type MidiState = {
   inputs: PortsMap,
   outputs: PortsMap,
   outputId?: string,
+  channel: number,
   messages: Message[],
   deviceBank?: number,
   deviceProgram?: number,
@@ -29,6 +30,7 @@ const initialState: MidiState = {
   access: null,
   inputs: {},
   outputs: {},
+  channel: 0,
   messages: [],
 };
 
@@ -70,6 +72,8 @@ const midiSlice = createSlice({
 
     setOutputId: (state, { payload: outputId }: PayloadAction<string>) => ({ ...state, outputId }),
 
+    setChannel: (state, { payload: channel }: PayloadAction<number>) => ({ ...state, channel }),
+
     receiveMessage: (state, { payload: message }: PayloadAction<Message>) => ({
       ...state,
       messages: [...state.messages.slice(-99), message],
@@ -92,5 +96,5 @@ const midiSlice = createSlice({
 export default midiSlice;
 export const {
   storeAccess, connectInput, connectOutput, disconnectInput, disconnectOutput, setOutputId,
-  receiveMessage, updateBank, setProgram, setPending,
+  setChannel, receiveMessage, updateBank, setProgram, setPending,
 } = midiSlice.actions;

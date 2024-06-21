@@ -30,6 +30,7 @@ module.exports = {
       groups: [['builtin', 'external'], ['sibling', 'parent']],
       'newlines-between': 'always',
     }],
+    'jsx-a11y/label-has-associated-control': [2, { assert: 'either' }],
     'jsx-quotes': [2, 'prefer-single'],
     'no-bitwise': 0,
     'no-cond-assign': [2, 'except-parens'],
