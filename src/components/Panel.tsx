@@ -17,6 +17,7 @@ import LEDArray from './LEDArray';
 import PanelMenu from './PanelMenu';
 import ParameterKnob from './ParameterKnob';
 import ParameterSwitch from './ParameterSwitch';
+import Sequence from './Sequence';
 import SliderAssign from './SliderAssign';
 import VoiceMode from './VoiceMode';
 import { classList } from '../utils';
@@ -274,6 +275,8 @@ export default function Panel() {
         >
           {showExtraParams ? <UpArrowIcon /> : <DownArrowIcon />}
         </button>
+
+        <Sequence />
       </div>
     </div>
   );

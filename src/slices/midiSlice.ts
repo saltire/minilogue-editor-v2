@@ -28,7 +28,7 @@ const initialState: MidiState = {
   access: null,
   inputs: {},
   outputs: {},
-  channel: 0,
+  channel: 2, // TODO: store this in local storage
   messages: [],
 };
 

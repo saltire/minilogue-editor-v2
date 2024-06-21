@@ -40,12 +40,28 @@ const programSlice = createSlice({
       displayParam: { parameter, value },
     }),
 
+    setMotionSlotParameter: (
+      state, { payload: { index, parameter } }: PayloadAction<{ index: number, parameter: number }>,
+    ) => ({
+      ...state,
+      currentProgram: {
+        ...state.currentProgram,
+        sequence: {
+          ...state.currentProgram.sequence,
+          motionSlots: state.currentProgram.sequence.motionSlots
+            .map((slot, i) => (i !== index ? slot : { ...slot, parameterId: parameter })),
+        },
+      },
+    }),
+
     clearDisplayParameter: state => ({ ...state, displayParam: null }),
   },
 });
 
 export default programSlice;
-export const { setCurrentProgram, setPanelParameter, clearDisplayParameter } = programSlice.actions;
+export const {
+  setCurrentProgram, setPanelParameter, setMotionSlotParameter, clearDisplayParameter,
+} = programSlice.actions;
 
 export const setParameter = (parameter: number, value: number): Thunk => (
   (dispatch, getState) => {

@@ -1,0 +1,24 @@
+.Sequence {
+  text-transform: uppercase;
+
+  .grid {
+    display: grid;
+    grid-template-columns: auto repeat(16, 1fr);
+    gap: 1px;
+    border: 1px solid black;
+    background-color: black;
+
+    > div {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: .75rem .25rem;
+      background-color: white;
+      line-height: 1rem;
+
+      &.fill-value {
+        background: linear-gradient(to top, #ccc var(--fill-value), white var(--fill-value));
+      }
+    }
+  }
+}

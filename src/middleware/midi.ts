@@ -1,7 +1,7 @@
 import { Middleware } from '@reduxjs/toolkit';
 
 import {
-  BANK_SELECT_HIGH, BANK_SELECT_LOW, CLOCK, CONTROL_CHANGE, PROGRAM_CHANGE,
+  BANK_SELECT_HIGH, BANK_SELECT_LOW, CLOCK, CONTROL_CHANGE, NOTE_OFF, NOTE_ON, PROGRAM_CHANGE,
   messageToParameter,
 } from '../minilogue/midi';
 import { paramData } from '../minilogue/params';
@@ -19,6 +19,7 @@ import {
 } from '../slices/midiSlice';
 import { setCurrentPosition, setLibraryProgram } from '../slices/librarySlice';
 import { setCurrentProgram, setPanelParameter } from '../slices/programSlice';
+import { toNote } from '../utils';
 
 
 /* eslint-disable no-param-reassign, no-bitwise */
@@ -107,6 +108,9 @@ const midiMiddleware: Middleware<object, RootState> = ({ dispatch, getState }) =
             // if (output) {
             //   requestProgram(output, outputChannel, index);
             // }
+          }
+          else if ([NOTE_ON, NOTE_OFF].includes(messageType)) {
+            message.code = toNote(code);
           }
           else {
             console.log({ messageType, channel, code, value });

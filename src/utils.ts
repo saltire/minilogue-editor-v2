@@ -24,3 +24,7 @@ export const series = <T>(array: T[], func: (item: T, index: number) => void) =>
   Promise.resolve());
 
 export const toHex = (data: number[] | Uint8Array) => Array.from(data).map(val => val.toString(16));
+
+export const toNote = (code: number) => (
+  ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'][code % 12]
+  + (Math.floor(code / 12) - 1));
