@@ -15,10 +15,10 @@ import { RootState } from '../reducer';
 import {
   Message,
   connectInput, connectOutput, disconnectInput, disconnectOutput,
-  receiveMessage, setProgram, updateBank,
+  receiveMessage, updateBank,
 } from '../slices/midiSlice';
+import { setCurrentPosition, setLibraryProgram } from '../slices/librarySlice';
 import { setCurrentProgram, setPanelParameter } from '../slices/programSlice';
-import { setLibraryProgram } from '../slices/librarySlice';
 
 
 /* eslint-disable no-param-reassign, no-bitwise */
@@ -94,15 +94,18 @@ const midiMiddleware: Middleware<object, RootState> = ({ dispatch, getState }) =
             }
           }
           else if (messageType === PROGRAM_CHANGE) {
-            const { midi: { deviceBank } } = getState();
-            dispatch(setProgram(code));
+            const { library: { library: { programs } }, midi: { deviceBank } } = getState();
 
-            const index = (deviceBank ?? 0) * 100 + code;
-            console.log({ program: index + 1 });
+            const position = (deviceBank ?? 0) * 100 + code;
+            console.log({ program: position + 1 });
+            if (programs[position]) {
+              dispatch(setCurrentProgram(programs[position]));
+              dispatch(setCurrentPosition(position));
+            }
 
-            // const output = useOutputPort();
+            // const output = outputId && outputs[outputId] as MIDIOutput;
             // if (output) {
-            //   requestProgram(output, index);
+            //   requestProgram(output, outputChannel, index);
             // }
           }
           else {
