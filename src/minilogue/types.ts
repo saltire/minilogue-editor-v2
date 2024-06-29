@@ -1,3 +1,5 @@
+import { ComponentType, SVGProps } from 'react';
+
 export type ProgramParams = { [param: number]: string | number | null };
 
 export type MotionSlot = {
@@ -61,6 +63,7 @@ export type IntegerParamData = {
 
 export type ChoiceParamData = IntegerParamData & {
   choices: { [index: number]: string },
+  choiceIcons?: { [index: number]: ComponentType<SVGProps<SVGSVGElement>> },
   unit?: string,
 };
 

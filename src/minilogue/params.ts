@@ -1,5 +1,18 @@
+import { createElement } from 'react';
+
 import { INTEGER, STRING, ParamData, ProgramParams } from './types';
 import { mapToRange } from '../utils';
+import PolyIcon from '../assets/poly.svg';
+import DuoIcon from '../assets/duo.svg';
+import UnisonIcon from '../assets/unison.svg';
+import MonoIcon from '../assets/mono.svg';
+import ChordIcon from '../assets/chord.svg';
+import ArpIcon from '../assets/arp.svg';
+import DelayIcon from '../assets/delay.svg';
+import SidechainIcon from '../assets/sidechain.svg';
+import SawtoothIcon from '../assets/saw.svg';
+import SquareIcon from '../assets/square.svg';
+import TriangleIcon from '../assets/triangle.svg';
 
 
 export const PROGRAM_NAME = 1;
@@ -65,6 +78,11 @@ const WAVE_CHOICES = [
   'Square',
   'Triangle',
   'Sawtooth',
+];
+const WAVE_ICONS = [
+  SquareIcon,
+  TriangleIcon,
+  SawtoothIcon,
 ];
 
 const OCTAVE_CHOICES = [
@@ -586,6 +604,7 @@ export const paramData: { [index: number]: ParamData } = {
       lowerBitsWidth: 2,
     },
     choices: WAVE_CHOICES,
+    choiceIcons: WAVE_ICONS,
   },
   [VCO2_OCTAVE]: {
     id: VCO2_OCTAVE,
@@ -610,6 +629,7 @@ export const paramData: { [index: number]: ParamData } = {
       lowerBitsWidth: 2,
     },
     choices: WAVE_CHOICES,
+    choiceIcons: WAVE_ICONS,
   },
   [SYNC]: {
     id: SYNC,
@@ -717,6 +737,7 @@ export const paramData: { [index: number]: ParamData } = {
       lowerBitsWidth: 2,
     },
     choices: WAVE_CHOICES,
+    choiceIcons: WAVE_ICONS,
   },
   [DELAY_OUTPUT_ROUTING]: {
     id: DELAY_OUTPUT_ROUTING,
@@ -765,6 +786,16 @@ export const paramData: { [index: number]: ParamData } = {
       'Delay',
       'Arp',
       'Sidechain',
+    ],
+    choiceIcons: [
+      PolyIcon,
+      DuoIcon,
+      UnisonIcon,
+      MonoIcon,
+      ChordIcon,
+      ArpIcon,
+      DelayIcon,
+      SidechainIcon,
     ],
   },
   [VOICE_MODE_DEPTH]: {
@@ -1054,6 +1085,11 @@ export const getParameterDisplayValue = (params: ProgramParams, parameter: numbe
   const param = paramData[parameter];
   const value = params[parameter];
 
+  if ('choiceIcons' in param && param.choiceIcons) {
+    return createElement(param.choiceIcons[value as number],
+      { 'aria-label': param.choices[value as number] });
+  }
+
   let parsedValue = 'choices' in param ? param.choices[value as number]
     : (param.func?.(value as number, params) ?? value);
 
@@ -1061,5 +1097,5 @@ export const getParameterDisplayValue = (params: ProgramParams, parameter: numbe
     parsedValue = Math.round(parsedValue);
   }
 
-  return `${parsedValue}${'unit' in param && param.unit ? ` ${param.unit}` : ''}`;
+  return `${parsedValue ?? ''}${'unit' in param && param.unit ? ` ${param.unit}` : ''}`;
 };
