@@ -19,12 +19,14 @@ export const mapToRange = (
 
 export const range = (length: number) => [...Array(length).keys()];
 
-export const series = <T>(array: T[], func: (item: T, index: number) => void) => array.reduce(
-  (lastPromise, item, index) => lastPromise.then(() => func(item, index)),
-  Promise.resolve());
+export const series = <T>(array: T[], func: (item: T, index: number) => Promise<void>) =>
+  array.reduce(
+    (lastPromise, item, index) => lastPromise.then(() => func(item, index)),
+    Promise.resolve());
 
 export const toHex = (data: number[] | Uint8Array) => Array.from(data).map(val => val.toString(16));
 
-export const toNote = (code: number) => (
-  ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'][code % 12]
-  + (Math.floor(code / 12) - 1));
+export const toNote = (code: number) => [
+  ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'][code % 12],
+  Math.floor(code / 12) - 1,
+].join('');

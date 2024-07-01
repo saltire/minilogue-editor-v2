@@ -38,6 +38,10 @@ const midiMiddleware: Middleware<object, RootState> = ({ dispatch, getState }) =
         const { data, timeStamp, target } = event as MIDIMessageEvent;
         const targetId = (target as MIDIPort).id;
 
+        if (!data) {
+          return;
+        }
+
         const { midi: { inputs } } = getState();
         const input = inputs[targetId];
 
@@ -135,14 +139,14 @@ const midiMiddleware: Middleware<object, RootState> = ({ dispatch, getState }) =
         // console.log('statechange', event);
 
         const { port } = event as MIDIConnectionEvent;
-        if (port.state === 'connected') {
+        if (port?.state === 'connected') {
           dispatch(port.type === 'input' ? connectInput(port)
             : connectOutput({ port, select: port.name === 'minilogue SOUND' }));
           if (port.type === 'input') {
             port.addEventListener('midimessage', handleMessage);
           }
         }
-        else {
+        else if (port) {
           dispatch(port.type === 'input' ? disconnectInput(port) : disconnectOutput(port));
         }
       });

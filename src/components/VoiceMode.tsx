@@ -33,8 +33,8 @@ export default function VoiceMode() {
   const currentProgram = useAppSelector(({ program }) => program.currentProgram);
 
   const value = currentProgram.parameters[VOICE_MODE];
-  const onChange = useCallback((newValue: number) => dispatch(
-    setParameter(VOICE_MODE, newValue)), []);
+  const onChange = useCallback((newValue: number) => dispatch(setParameter(VOICE_MODE, newValue)),
+    [dispatch]);
 
   return (
     <div className='voice-mode-container'>

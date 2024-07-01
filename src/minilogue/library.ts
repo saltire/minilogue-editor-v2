@@ -205,7 +205,7 @@ const createPresetInformation = (library: Library) => {
 
   const createAndAppend = (nodeType: string, text?: string | null) => {
     const child = doc.createElement(nodeType);
-    const textElement = doc.createTextNode(text || '');
+    const textElement = doc.createTextNode(text ?? '');
     child.appendChild(textElement);
     root.appendChild(child);
   };
@@ -229,7 +229,7 @@ const createProgramInformation = () => {
 
   const createAndAppend = (nodeType: string, text?: string) => {
     const child = doc.createElement(nodeType);
-    const textElement = doc.createTextNode(text || '');
+    const textElement = doc.createTextNode(text ?? '');
     child.appendChild(textElement);
     root.appendChild(child);
   };

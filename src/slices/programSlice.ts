@@ -63,7 +63,7 @@ export const {
   setCurrentProgram, setPanelParameter, setMotionSlotParameter, clearDisplayParameter,
 } = programSlice.actions;
 
-export const setParameter = (parameter: number, value: number): Thunk => (
+export const setParameter = (parameter: number, value: number): Thunk =>
   (dispatch, getState) => {
     const { midi: { outputs, outputId, channel } } = getState();
 
@@ -72,4 +72,4 @@ export const setParameter = (parameter: number, value: number): Thunk => (
     if (outputId && outputs[outputId]) {
       sendParameter(outputs[outputId] as MIDIOutput, channel, parameter, value);
     }
-  });
+  };

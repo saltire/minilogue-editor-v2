@@ -117,7 +117,7 @@ const splitRanges = (
 const rangeToChoice = (value: number, ranges: { min: number, max: number, value: string }[]) => {
   // inclusive
   const found = ranges.find(({ min, max }) => (value >= min) && (value <= max));
-  return found?.value || '';
+  return found?.value ?? '';
 };
 
 const pitchToCents = (value: number) => (

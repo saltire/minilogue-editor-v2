@@ -21,7 +21,7 @@ export default function Display() {
       };
     }
     return undefined;
-  }, [displayParam]);
+  }, [dispatch, displayParam]);
 
   return (
     <div className='display-container'>

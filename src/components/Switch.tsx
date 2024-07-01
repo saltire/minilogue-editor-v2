@@ -30,7 +30,7 @@ export default function Switch({ value, numPositions, vertical = true, onChange 
         onChange(newValue);
       }
     }
-  }, [value, rangeEl, vertical, numPositions]);
+  }, [value, rangeEl, vertical, numPositions, onChange]);
 
   useEffect(() => {
     if (rangeEl.current && valueEl.current) {
@@ -76,7 +76,7 @@ export default function Switch({ value, numPositions, vertical = true, onChange 
         onChange(newValue);
       }
     }
-  }, [value, rangeEl, vertical, numPositions]);
+  }, [value, rangeEl, vertical, numPositions, onChange]);
 
   return (
     <div
