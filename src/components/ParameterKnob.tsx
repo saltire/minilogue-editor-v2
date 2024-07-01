@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '../store';
 import { setParameter } from '../slices/programSlice';
 import Knob, { KnobProps } from './Knob';
-import { paramData, getParameterDisplayValue } from '../minilogue/params';
+import { paramData, getParameterDisplayString } from '../minilogue/params';
 import { classList } from '../utils';
 
 
@@ -18,7 +18,7 @@ export default function ParameterKnob({ className, parameter, ...props }: Parame
   return (
     <div
       className={classList('control-group', className)}
-      title={getParameterDisplayValue(currentProgram, parameter)}
+      title={getParameterDisplayString(currentProgram, parameter)}
     >
       <div className='control-wrapper'>
         <Knob

@@ -1081,14 +1081,9 @@ export const motionParameterIds: { [index: number]: string } = {
   78: 'Gate Time',
 };
 
-export const getParameterDisplayValue = (params: ProgramParams, parameter: number) => {
+export const getParameterDisplayString = (params: ProgramParams, parameter: number) => {
   const param = paramData[parameter];
   const value = params[parameter];
-
-  if ('choiceIcons' in param && param.choiceIcons) {
-    return createElement(param.choiceIcons[value as number],
-      { 'aria-label': param.choices[value as number] });
-  }
 
   let parsedValue = 'choices' in param ? param.choices[value as number]
     : (param.func?.(value as number, params) ?? value);
@@ -1098,4 +1093,16 @@ export const getParameterDisplayValue = (params: ProgramParams, parameter: numbe
   }
 
   return `${parsedValue ?? ''}${'unit' in param && param.unit ? ` ${param.unit}` : ''}`;
+};
+
+export const getParameterDisplayStringOrIcon = (params: ProgramParams, parameter: number) => {
+  const param = paramData[parameter];
+  const value = params[parameter];
+
+  if ('choiceIcons' in param && param.choiceIcons) {
+    return createElement(param.choiceIcons[value as number],
+      { 'aria-label': param.choices[value as number] });
+  }
+
+  return getParameterDisplayString(params, parameter);
 };

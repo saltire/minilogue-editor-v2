@@ -25,7 +25,8 @@ const parameters = [
 const columns = parameters.map(parameter => ({
   parameter,
   label: params.paramData[parameter].title,
-  getValue: (program: Program) => params.getParameterDisplayValue(program.parameters, parameter),
+  getValue: (program: Program) => params.getParameterDisplayStringOrIcon(program.parameters,
+    parameter),
 }));
 
 /* eslint-disable react/no-array-index-key */

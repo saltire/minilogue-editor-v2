@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import './Display.css';
-import { PROGRAM_NAME, getParameterDisplayValue } from '../minilogue/params';
+import { PROGRAM_NAME, getParameterDisplayString } from '../minilogue/params';
 import { clearDisplayParameter } from '../slices/programSlice';
 import { useAppDispatch, useAppSelector } from '../store';
 
@@ -28,7 +28,7 @@ export default function Display() {
       <div className='display'>
         <p className='display-contents'>
           {displayParam !== null ? (
-            getParameterDisplayValue(currentProgram.parameters, displayParam.parameter)
+            getParameterDisplayString(currentProgram.parameters, displayParam.parameter)
           ) : (
             <>
               {`000${currentPosition + 1}`.slice(-3)}<br />
